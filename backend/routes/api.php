@@ -24,6 +24,8 @@ Route::get('country', [CustomController::class, 'getCountry']);
 Route::get('state/{country_id}', [CustomController::class, 'getState']);
 Route::get('city/{state_id}', [CustomController::class, 'getCity']);
 
+Route::post('providers', [CustomController::class, 'getTarotProviders']);
+
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('logout', [AuthController::class, 'Logout']);
     Route::get('/TokenVerify', function () {

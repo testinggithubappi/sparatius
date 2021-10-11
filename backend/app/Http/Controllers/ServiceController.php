@@ -84,6 +84,9 @@ class ServiceController extends Controller
         try {
             foreach ($request->selectService as $service) {
                 // $service_profile = ServiceProfile::where('id', Auth::user()->id)->update($request->all());
+                echo "<pre>";
+                print_r($service);
+                die();
                 if ($service['priceaudio'] != "") {
                     $services = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'audio', 'price' => $service['priceaudio'], 'status' => '1');
                 }
