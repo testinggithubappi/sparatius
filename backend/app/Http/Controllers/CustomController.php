@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
+use App\Models\Rating;
+use App\Models\Service;
+use App\Models\ServiceLookUp;
+use App\Models\ServiceProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class CustomController extends Controller
 {
-    public function getCountry(Request $request)
+    public function getCountry()
     {
         return Country::get();
     }
@@ -22,9 +26,25 @@ class CustomController extends Controller
     {
         return City::where('state_id', $request->state_id)->get();
     }
-
     public function getTarotProviders(Request $request)
     {
-        // $providers = User::where('roleType' =>  'provider');
+        $providers = User::where('roleType', 'provider')->get();
+        $type = Service::where('slug', $request->slug)->first();
+        $i = 0;
+        foreach ($providers as $provider) {
+            $rating = array();
+            $provider->profile = ServiceProfile::where('userId', $provider->id)->get();
+            $provider->lookup = ServiceLookUp::leftjoin('rating', 'rating.serviceId', 'serviceslookup.id')->where(['userId' => $provider->id, 'serviceId' => $type->id])->get();
+            if (empty(($provider->lookup)->toArray())) {
+                unset($providers[$i]);
+            } else {
+                foreach ($provider->lookup as $lookup) {
+                    $rating[] = Rating::where('serviceId', $lookup->id)->avg('ratingScore');
+                }
+                $provider->rating = $rating;
+            }
+            $i++;
+        }
+        return response()->json(['data', $providers]);
     }
 }
