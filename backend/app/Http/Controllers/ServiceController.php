@@ -140,8 +140,35 @@ class ServiceController extends Controller
         $data = User::leftjoin('serviceproviderprofile as profile', 'profile.userId', 'users.id')
             ->select('users.*', 'profile.*')
             ->where('users.id', Auth::user()->id)
-            ->get()->makeHidden(['profile.id', 'profile.userId']);
+            ->first()->makeHidden(['profile.id', 'profile.userId']);
         $services = ServiceLookUp::where('userId', Auth::user()->id)->get();
-        return response()->json(['status' => '200', 'msg' => 'Profile data', 'profile' => $data, 'services' => $services]);
+        foreach ($services as $service) {
+            if ($service->serviceId == '1') {
+                $services2[0]['value'] = "1";
+                $services2[0]['label'] = Service::where('type', '1')->select('name')->first()->name;
+                if ($service->chatType == "audio") {
+                    $services2[0]['priceaudio'] = $service->price;
+                }
+                if ($service->chatType == "text") {
+                    $services2[0]['pricechat'] = $service->price;
+                }
+                if ($service->chatType == "video") {
+                    $services2[0]['pricevideo'] = $service->price;
+                }
+            } else {
+                $services2[1]['value'] = "2";
+                $services2[1]['label'] = Service::where('type', '2')->select('name')->first()->name;
+                if ($service->chatType == "audio") {
+                    $services2[1]['priceaudio'] = $service->price;
+                }
+                if ($service->chatType == "text") {
+                    $services2[1]['pricechat'] = $service->price;
+                }
+                if ($service->chatType == "video") {
+                    $services2[1]['pricevideo'] = $service->price;
+                }
+            }
+        }
+        return response()->json(['status' => '200', 'msg' => 'Profile data', 'profile' => $data, 'services' => $services, 'services2' => $services2]);
     }
 }
