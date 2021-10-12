@@ -45,15 +45,7 @@ class ServiceController extends Controller
     public function providerProfileVideo(Request $request)
     {
         $name = "";
-        // $validator = Validator::make(
-        //     $request->all(),
-        //     [
-        //         'file' => ['required|mimes:mp4,mpeg|max:10240'],
-        //     ]
-        // );
-        // if ($validator->fails()) {
-        //     return response()->json(['status' => '422', 'msg' => $validator->getMessageBag()]);
-        // } else {
+        return response()->json(['status' => '200', 'msg' => 'Profile Video Uploaded Successfully', 'data' => $request->all()]);
         try {
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
@@ -66,7 +58,6 @@ class ServiceController extends Controller
         } catch (Exception $e) {
             return response()->json(['status' => '400', 'msg' => $e->getMessage()]);
         }
-        // }
     }
 
     public function providerProfileServices(Request $request)
@@ -146,5 +137,15 @@ class ServiceController extends Controller
                 return response()->json(['status' => '400', 'msg' => $e->getMessage()]);
             }
         }
+    }
+
+    public function providerProfileData(Request $request)
+    {
+        $data = User::leftjoin('serviceproviderprofile as profile', 'profile.userId', 'users.id')
+            // ->leftjoin('serviceslookup as lookup', 'lookup.userId', 'users.id')
+            ->select('users.*', 'profile.*')
+            ->where('users.id', Auth::user()->id)
+            ->first()->makeHidden(['profile.id', 'profile.userId']);
+        return response()->json(['status' => '200', 'msg' => 'Profile data', 'profile' => $data]);
     }
 }

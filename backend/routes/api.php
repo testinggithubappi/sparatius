@@ -35,6 +35,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('/profile_video', [ServiceController::class, 'providerProfileVideo'])->name('/profile_video');
     Route::post('/profile_service', [ServiceController::class, 'providerProfileServices'])->name('/profile_service');
     Route::post('/profile_detail', [ServiceController::class, 'providerProfileDetails'])->name('/profile_detail');
+    Route::post('/profile_data', [ServiceController::class, 'providerProfileData'])->name('/profile_data');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

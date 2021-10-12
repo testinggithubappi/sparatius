@@ -13,7 +13,7 @@ function TarotReaders(props) {
     getProviderList();
   }, []);
   const [checked, setChecked] = React.useState(false);
-  const [providerList, setproviderList] = React.useState([]);
+  const [providerList, setproviderList] = React.useState({});
   const [registerInput, setRegister] = useState({
     keyword: "",
     Rating: "",
@@ -25,7 +25,7 @@ function TarotReaders(props) {
     RangeEnd: "",
   });
 
-  const getProviderList = async () => {
+  const getProviderList = async (path = "/api/providers") => {
     let data = {
       slug: props.match.params.slug,
       keyword: registerInput.keyword,
@@ -37,11 +37,11 @@ function TarotReaders(props) {
       RangeStart: registerInput.RangeStart,
       RangeEnd: registerInput.RangeEnd,
     };
-    let response = await axios
-      .post(`/api/providers`, data)
-      .then((data) => data);
-    // response = await response.data.services;
-    // setproviderList(response);
+    console.log(path);
+    let response = await axios.post(`${path}`, data).then((data) => data);
+    response = await response.data.data;
+    console.log(response);
+    setproviderList(response);
   };
 
   // const SearchProviderfilter = () => {
@@ -86,6 +86,11 @@ function TarotReaders(props) {
   };
 
   console.log(props);
+  let paginationCountArr = [];
+  for (let i = 0; i < providerList?.total / providerList?.per_page; i++) {
+    paginationCountArr.push(i);
+  }
+  console.log(paginationCountArr);
   return (
     <div>
       <Navbar />
@@ -396,7 +401,7 @@ function TarotReaders(props) {
                     <button
                       href="#"
                       className="thm-btn uppercase margin-top-2 col-md-6 text-center "
-                      onClick={getProviderList}
+                      onClick={() => getProviderList()}
                     >
                       Apply
                     </button>
@@ -410,7 +415,7 @@ function TarotReaders(props) {
                 </div>
               </div>
             </div>
-            {providerList.map((item) => (
+            {providerList?.data?.map((item) => (
               <div className="col-md-4">
                 <div className="reading-profile">
                   <div className="reading-profile-inner">
@@ -448,7 +453,7 @@ function TarotReaders(props) {
                   </div>
                   <div className="text-center">
                     <h3>
-                      <a href="#">Psychic Alexandra</a>
+                      <a href="#">{item.firstName}</a>
                     </h3>
                     <small className="color-black">
                       Leading UK Tarot Readings
@@ -521,6 +526,53 @@ function TarotReaders(props) {
                 </div>
               </div>
             ))}
+
+            <nav aria-label="..." className="text-center">
+              <ul className="pagination font-p">
+                <li className="page-item">
+                  {" "}
+                  <button
+                    className="page-link"
+                    tabindex="-1"
+                    disabled={providerList.prev_page_url ? !true : !false}
+                    onClick={() => getProviderList(providerList.prev_page_url)}
+                    tabindex="-1"
+                  >
+                    Previous
+                  </button>
+                </li>
+                {providerList
+                  ? paginationCountArr.map((x, i) => {
+                      return (
+                        <li className="page-item">
+                          <button
+                            className={`page-link ${
+                              providerList?.current_page == i + 1
+                                ? "active"
+                                : ""
+                            }`}
+                            to="#"
+                            onClick={() => {
+                              getProviderList(providerList.links[i + 1].url);
+                            }}
+                          >
+                            {i + 1}
+                          </button>
+                        </li>
+                      );
+                    })
+                  : null}
+                <li className="page-item">
+                  <button
+                    className="page-link"
+                    onClick={() => getProviderList(providerList.next_page_url)}
+                    disabled={providerList.next_page_url ? !true : !false}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </section>

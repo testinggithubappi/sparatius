@@ -52,23 +52,28 @@ function EditAdvisorProfile(props) {
   }, []);
 
   const getEditProfile = async () => {
-    let response = await axios
-      .post(`/api/getAdvisorEditProfile`)
-      .then((data) => data);
-    response = await response.data.getAdvisorEditProfile;
+    let response = await axios.post(`/api/profile_data`).then((data) => data);
+    let responsedata = response.data.profile;
+    console.log(responsedata, "RESPOSSS");
+    // setRegister({ firstname: responsedata.firstname });
+
+    // setRegister({ ...registerInput, firstname: response.firstname });
+
     setRegister({
-      firstname: response.firstname,
-      lastname: response.lastname,
-      contactno: response.contactno,
-      email: response.contactno,
-      state: response.state,
-      country: response.country,
-      city: response.city,
-      zipcode: registerInput.zipcode,
-      gender: response.gender,
-      yearexperience: response.yearexperience,
-      yearjoined: response.selectDate,
+      ...registerInput,
+      firstname: responsedata?.firstName,
+      lastname: responsedata?.LastName,
+      contactno: responsedata?.contactNo,
+      email: responsedata?.contactno,
+      state: responsedata?.stateId,
+      country: responsedata?.countryId,
+      city: responsedata?.cityId,
+      zipcode: responsedata?.zipCode,
+      // gender: responsedata?.gender,
+      yearexperience: responsedata?.yearexperience,
     });
+
+    setStartDate(new Date(responsedata?.joinedDate));
   };
 
   const changeHandler = (event) => {
@@ -256,7 +261,7 @@ function EditAdvisorProfile(props) {
     // const d = new Date(moment(value).format("yyyy-MM-d"));
     setStartDate(value);
   };
-
+  console.log("registerInput", registerInput);
   return (
     <div>
       <Navbar parentCallback={handleCallback} />
@@ -490,6 +495,7 @@ function EditAdvisorProfile(props) {
                       aria-label="Default select example"
                       name="gender"
                       onChange={handleChange}
+                      value={registerInput.gender}
                     >
                       <option value="" selected>
                         Gender
@@ -508,6 +514,7 @@ function EditAdvisorProfile(props) {
                       aria-label="Default select example"
                       name="country"
                       onChange={handleChangeCountry}
+                      value={registerInput.country}
                     >
                       <option value="">Select Country</option>
                       {CountryList.map((item) => (
@@ -524,8 +531,9 @@ function EditAdvisorProfile(props) {
                     <select
                       className="form-select select-field"
                       aria-label="Default select example"
-                      name="country"
+                      name="state"
                       onChange={handleChangeState}
+                      value={registerInput.state}
                     >
                       <option value="">Select State</option>
                       {registerInput.stateList.map((item) => (
@@ -544,6 +552,7 @@ function EditAdvisorProfile(props) {
                       aria-label="Default select example"
                       name="city"
                       onChange={handleChange}
+                      value={registerInput.city}
                     >
                       <option selected>Select City</option>
                       {registerInput.cityList.map((item) => (
@@ -563,6 +572,7 @@ function EditAdvisorProfile(props) {
                       placeholder="Code"
                       name="zipcode"
                       onChange={handleInput}
+                      value={registerInput.zipcode}
                     />
                   </div>
                 </div>
@@ -576,6 +586,7 @@ function EditAdvisorProfile(props) {
                       placeholder="Year of Experience"
                       name="yearexperience"
                       onChange={handleInput}
+                      value={registerInput.yearexperience}
                     />
                   </div>
                 </div>
