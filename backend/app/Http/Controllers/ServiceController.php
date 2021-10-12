@@ -135,13 +135,13 @@ class ServiceController extends Controller
         }
     }
 
-    public function providerProfileData(Request $request)
+    public function providerProfileData()
     {
         $data = User::leftjoin('serviceproviderprofile as profile', 'profile.userId', 'users.id')
-            ->leftjoin('serviceslookup as lookup', 'lookup.userId', 'users.id')
             ->select('users.*', 'profile.*')
-            ->where('users.id', $request->id)
+            ->where('users.id', Auth::user()->id)
             ->get()->makeHidden(['profile.id', 'profile.userId']);
-        return response()->json(['status' => '200', 'msg' => 'Profile data', 'profile' => $data]);
+        $services = ServiceLookUp::where('userId', Auth::user()->id)->get();
+        return response()->json(['status' => '200', 'msg' => 'Profile data', 'profile' => $data, 'services' => $services]);
     }
 }
