@@ -87,17 +87,17 @@ class ServiceController extends Controller
                 // echo "<pre>";
 
                 if ($service['priceaudio'] != "") {
-                    $services = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'audio', 'price' => $service['priceaudio'], 'status' => '1');
+                    $services[] = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'audio', 'price' => $service['priceaudio'], 'status' => '1');
                 }
                 if ($service['pricevideo'] != "") {
-                    $services = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'video', 'price' => $service['pricevideo'], 'status' => '1');
+                    $services[] = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'video', 'price' => $service['pricevideo'], 'status' => '1');
                 }
                 if ($service['pricechat'] != "") {
-                    $services = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'text', 'price' => $service['pricechat'], 'status' => '1');
+                    $services[] = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'text', 'price' => $service['pricechat'], 'status' => '1');
                 }
             }
-            var_dump($services);
-            die();
+            // var_dump($services);
+            // die();
             $lookup = ServiceLookUp::insert($services);
             return response()->json(['status' => '200', 'msg' => 'Service  Created Successfully', 'data' => $lookup]);
         } catch (Exception $e) {

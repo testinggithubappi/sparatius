@@ -7,6 +7,8 @@ import Footer from "../../layouts/frontend/Footer";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import VideoThumbnail from "react-video-thumbnail";
+import moment from "moment";
 import {
   getCountrytList,
   getStatetList,
@@ -230,21 +232,29 @@ function EditAdvisorProfile(props) {
   };
 
   // const dateChanged = (d) => {
-  //   // const selectedDate = new Date(d); // pass in date param here
-  //   // const formattedDate = `${selectedDate.getFullYear()}-${
-  //   //   selectedDate.getMonth() + 1
-  //   // }-${selectedDate.getDate()}`;
+  //   const selectedDate = new Date(d); // pass in date param here
+  //   const formattedDate = `${selectedDate.getFullYear()}-${
+  //     selectedDate.getMonth() + 1
+  //   }-${selectedDate.getDate()}`;
+  //   console.log(formattedDate);
+
+  //   const formatteddddDate = moment(formattedDate).format("yyyy-MM-d");
+  //   // setRegister({ ...registerInput, selectDate: formattedDate });
   //   // console.log(formattedDate);
 
-  //   const selectedDate = d.format();
-  //   setRegister({ ...registerInput, selectDate: selectedDate });
+  //   // console.log(new Date(formattedDate));
+  //   // var momentObj = moment(formattedDate);
 
-  //   setStartDate(selectedDate);
+  //   setStartDate(formatteddddDate);
   // };
 
   const dateChanged = (value, e) => {
     console.log(value); // this will be a moment date object
-    console.log(e.target.value); // this will be a string value in datepicker input field
+    console.log(e.target); // this will be a string value in datepicker input field
+    console.log(moment(value).format("yyyy-MM-dd"));
+    setRegister({ ...registerInput, selectDate: value });
+    // const d = new Date(moment(value).format("yyyy-MM-d"));
+    setStartDate(value);
   };
 
   return (
@@ -402,6 +412,13 @@ function EditAdvisorProfile(props) {
                     <div></div>
                   </div>
                 </div>
+
+                {/* <VideoThumbnail
+                  videoUrl="https://dl.dropboxusercontent.com/s/7b21gtvsvicavoh/statue-of-admiral-yi-no-audio.mp4?dl=1"
+                  thumbnailHandler={(thumbnail) => console.log(thumbnail)}
+                  width={120}
+                  height={80}
+                /> */}
                 <div className="clearfix submit-box">
                   <div className="pull-right">
                     <button
