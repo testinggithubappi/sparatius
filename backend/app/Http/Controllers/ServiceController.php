@@ -84,9 +84,8 @@ class ServiceController extends Controller
         try {
             foreach ($request->selectService as $service) {
                 // $service_profile = ServiceProfile::where('id', Auth::user()->id)->update($request->all());
-                echo "<pre>";
-                print_r($service);
-                die();
+                // echo "<pre>";
+
                 if ($service['priceaudio'] != "") {
                     $services = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'audio', 'price' => $service['priceaudio'], 'status' => '1');
                 }
@@ -97,6 +96,8 @@ class ServiceController extends Controller
                     $services = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'text', 'price' => $service['pricechat'], 'status' => '1');
                 }
             }
+            var_dump($services);
+            die();
             $lookup = ServiceLookUp::insert($services);
             return response()->json(['status' => '200', 'msg' => 'Service  Created Successfully', 'data' => $lookup]);
         } catch (Exception $e) {

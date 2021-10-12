@@ -46,8 +46,28 @@ function EditAdvisorProfile(props) {
   console.log(registerInput);
   useEffect(() => {
     getCountry();
-    console.log(props);
+    getEditProfile();
   }, []);
+
+  const getEditProfile = async () => {
+    let response = await axios
+      .post(`/api/getAdvisorEditProfile`)
+      .then((data) => data);
+    response = await response.data.getAdvisorEditProfile;
+    setRegister({
+      firstname: response.firstname,
+      lastname: response.lastname,
+      contactno: response.contactno,
+      email: response.contactno,
+      state: response.state,
+      country: response.country,
+      city: response.city,
+      zipcode: registerInput.zipcode,
+      gender: response.gender,
+      yearexperience: response.yearexperience,
+      yearjoined: response.selectDate,
+    });
+  };
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -209,20 +229,24 @@ function EditAdvisorProfile(props) {
     setFeilds([...value]);
   };
 
-  const dateChanged = (d) => {
-    const selectedDate = new Date(d); // pass in date param here
-    const formattedDate = `${selectedDate.getFullYear()}-${
-      selectedDate.getMonth() + 1
-    }-${selectedDate.getDate()}`;
-    console.log(formattedDate);
+  // const dateChanged = (d) => {
+  //   // const selectedDate = new Date(d); // pass in date param here
+  //   // const formattedDate = `${selectedDate.getFullYear()}-${
+  //   //   selectedDate.getMonth() + 1
+  //   // }-${selectedDate.getDate()}`;
+  //   // console.log(formattedDate);
 
-    setRegister({ ...registerInput, selectDate: formattedDate });
+  //   const selectedDate = d.format();
+  //   setRegister({ ...registerInput, selectDate: selectedDate });
 
-    setStartDate(selectedDate);
+  //   setStartDate(selectedDate);
+  // };
+
+  const dateChanged = (value, e) => {
+    console.log(value); // this will be a moment date object
+    console.log(e.target.value); // this will be a string value in datepicker input field
   };
 
-  console.log(registerInput);
-  // console.log(registerInput);
   return (
     <div>
       <Navbar parentCallback={handleCallback} />
@@ -543,7 +567,7 @@ function EditAdvisorProfile(props) {
                   <div className="form-grp bg-white">
                     <DatePicker
                       selected={startDate}
-                      onChange={dateChanged}
+                      onChange={(value, e) => dateChanged(value, e)}
                       dateFormat="d MMM yyyy"
                     />
                   </div>

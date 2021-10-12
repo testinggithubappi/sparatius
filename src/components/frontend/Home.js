@@ -18,6 +18,7 @@ import review2img from "../../assets/frontend/img/resources/review-2.jpg";
 import review3img from "../../assets/frontend/img/resources/review-3.jpg";
 
 function Home(props) {
+  console.log(props);
   return (
     <div>
       <Navbar />
