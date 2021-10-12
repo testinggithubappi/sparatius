@@ -45,15 +45,7 @@ class ServiceController extends Controller
     public function providerProfileVideo(Request $request)
     {
         $name = "";
-        // $validator = Validator::make(
-        //     $request->all(),
-        //     [
-        //         'file' => ['required|mimes:mp4,mpeg|max:10240'],
-        //     ]
-        // );
-        // if ($validator->fails()) {
-        //     return response()->json(['status' => '422', 'msg' => $validator->getMessageBag()]);
-        // } else {
+        return response()->json(['status' => '200', 'msg' => 'Profile Video Uploaded Successfully', 'data' => $request->all()]);
         try {
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
@@ -66,7 +58,6 @@ class ServiceController extends Controller
         } catch (Exception $e) {
             return response()->json(['status' => '400', 'msg' => $e->getMessage()]);
         }
-        // }
     }
 
     public function providerProfileServices(Request $request)
@@ -84,17 +75,14 @@ class ServiceController extends Controller
         try {
             foreach ($request->selectService as $service) {
                 // $service_profile = ServiceProfile::where('id', Auth::user()->id)->update($request->all());
-                echo "<pre>";
-                print_r($service);
-                die();
                 if ($service['priceaudio'] != "") {
-                    $services = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'audio', 'price' => $service['priceaudio'], 'status' => '1');
+                    $services[] = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'audio', 'price' => $service['priceaudio'], 'status' => '1');
                 }
                 if ($service['pricevideo'] != "") {
-                    $services = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'video', 'price' => $service['pricevideo'], 'status' => '1');
+                    $services[] = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'video', 'price' => $service['pricevideo'], 'status' => '1');
                 }
                 if ($service['pricechat'] != "") {
-                    $services = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'text', 'price' => $service['pricechat'], 'status' => '1');
+                    $services[] = array('userId' => Auth::user()->id, 'serviceId' => $service['value'], "chatType" => 'text', 'price' => $service['pricechat'], 'status' => '1');
                 }
             }
             $lookup = ServiceLookUp::insert($services);
@@ -145,5 +133,15 @@ class ServiceController extends Controller
                 return response()->json(['status' => '400', 'msg' => $e->getMessage()]);
             }
         }
+    }
+
+    public function providerProfileData(Request $request)
+    {
+        $data = User::leftjoin('serviceproviderprofile as profile', 'profile.userId', 'users.id')
+            ->leftjoin('serviceslookup as lookup', 'lookup.userId', 'users.id')
+            ->select('users.*', 'profile.*')
+            ->where('users.id', $request->id)
+            ->get()->makeHidden(['profile.id', 'profile.userId']);
+        return response()->json(['status' => '200', 'msg' => 'Profile data', 'profile' => $data]);
     }
 }
