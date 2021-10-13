@@ -13,13 +13,18 @@ function Eclassess(props) {
   useEffect(() => {
     getEClassessList();
   }, []);
-  const getEClassessList = async () => {
+  const getEClassessList = async (path = "/api/e_classes") => {
     // $data = {};
 
-    let response = await axios.post(`/api/eclassess`).then((data) => data);
-    response = await response.data.eclassess;
+    let response = await axios.post(`${path}`).then((data) => data);
+    response = await response.data.data;
     setElassessList(response);
   };
+
+  let paginationCountArr = [];
+  for (let i = 0; i < getElassessList?.total / getElassessList?.per_page; i++) {
+    paginationCountArr.push(i);
+  }
 
   return (
     <div>
@@ -33,7 +38,7 @@ function Eclassess(props) {
       <section className="sec-pad faq-page shop-sidebar sidebar-page">
         <div className="container">
           <div className="row">
-            {getElassessList.map((item) => (
+            {getElassessList?.data?.map((item) => (
               <div className="col-md-4">
                 <div className="reading-profile">
                   <div className="reading-profile-inner">
@@ -44,7 +49,11 @@ function Eclassess(props) {
                     >
                       <i className="fa fa-play-circle" aria-hidden="true"></i>
                       <img
-                        src={readingsprofileImg}
+                        src={
+                          item.eclassImage
+                            ? item.eclassImage
+                            : readingsprofileImg
+                        }
                         className="img-responsive readings-profile-img"
                       />
                     </Link>
@@ -75,15 +84,20 @@ function Eclassess(props) {
                   </div>
                   <div className="text-center">
                     <h3>
-                      <Link to="#">Psychic Alexandra</Link>
+                      <Link to={`/ecourse-detail/` + item.id}>
+                        {item.eclassName}
+                      </Link>
                     </h3>
-                    <small className="color-black">$59.00</small>
+                    <small className="color-black">${item.Price}</small>
                   </div>
 
                   <div className="readingsContainerPrice">
                     <div className="text-center ">
                       <h3 className="margin-top-1">
-                        <Link to="#" className="text-white">
+                        <Link
+                          to={`/ecourse-detail/` + item.id}
+                          className="text-white"
+                        >
                           Enroll Course
                         </Link>
                       </h3>
@@ -97,31 +111,51 @@ function Eclassess(props) {
               <ul className="pagination font-p">
                 <li className="page-item">
                   {" "}
-                  <Link className="page-link" to="#" tabindex="-1">
+                  <button
+                    className="page-link"
+                    tabindex="-1"
+                    disabled={getElassessList?.prev_page_url ? !true : !false}
+                    onClick={() =>
+                      getEClassessList(getElassessList?.prev_page_url)
+                    }
+                    tabindex="-1"
+                  >
                     Previous
-                  </Link>
+                  </button>
                 </li>
+                {getElassessList
+                  ? paginationCountArr.map((x, i) => {
+                      return (
+                        <li className="page-item">
+                          <button
+                            className={`page-link ${
+                              getElassessList?.current_page == i + 1
+                                ? "active"
+                                : ""
+                            }`}
+                            to="#"
+                            onClick={() => {
+                              getEClassessList(
+                                getElassessList.links[i + 1].url
+                              );
+                            }}
+                          >
+                            {i + 1}
+                          </button>
+                        </li>
+                      );
+                    })
+                  : null}
                 <li className="page-item">
-                  <Link className="page-link" to="#">
-                    1
-                  </Link>
-                </li>
-                <li className="page-item active">
-                  {" "}
-                  <Link className="page-link" to="#">
-                    2 <span className="sr-only">(current)</span>
-                  </Link>
-                </li>
-                <li className="page-item">
-                  <Link className="page-link" to="#">
-                    3
-                  </Link>
-                </li>
-                <li className="page-item">
-                  {" "}
-                  <Link className="page-link" to="#">
+                  <button
+                    className="page-link"
+                    onClick={() =>
+                      getEClassessList(getElassessList.next_page_url)
+                    }
+                    disabled={getElassessList?.next_page_url ? !true : !false}
+                  >
                     Next
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </nav>

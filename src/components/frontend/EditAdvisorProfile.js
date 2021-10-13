@@ -80,13 +80,14 @@ function EditAdvisorProfile(props) {
       country: responsedata?.countryId,
       city: responsedata?.cityId,
       zipcode: responsedata?.zipCode,
-      // gender: responsedata?.gender,
+      gender: responsedata?.gender,
       yearexperience: responsedata?.yearExperience,
       stateList: responsedata?.statelist,
       cityList: responsedata?.citylist,
       selectService: response?.data?.services2,
       profileAbout: responsedata?.description,
       selectimageFile: responsedata?.videoPathFull,
+      selectDate: responsedata?.joinedDate,
     });
 
     setdefaultserviceOption(response?.data?.services2);
@@ -325,9 +326,8 @@ function EditAdvisorProfile(props) {
                   style={{ height: "auto" }}
                   name="profileAbout"
                   onChange={handleChange}
-                >
-                  {registerInput.profileAbout}
-                </textarea>
+                  value={registerInput.profileAbout}
+                ></textarea>
                 <div className="clearfix submit-box">
                   <div className="pull-right">
                     <button
@@ -561,8 +561,8 @@ function EditAdvisorProfile(props) {
                       <option value="" selected>
                         Gender
                       </option>
-                      <option value="1">Male</option>
-                      <option value="2">Female</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
                     </select>
                   </div>
                 </div>
