@@ -36,8 +36,8 @@ class ServiceController extends Controller
             return response()->json(['status' => '422', 'msg' => $validator->getMessageBag()]);
         } else {
             try {
-                $service_profile = ServiceProfile::where('userId', 4)->update(['description' => $request->profileAbout]);
-                return response()->json(['status' => '200', 'msg' => 'About Profile Successfully', 'data' => Auth::user()->id]);
+                $service_profile = ServiceProfile::where('userId', Auth::user()->id)->update(['description' => $request->profileAbout]);
+                return response()->json(['status' => '200', 'msg' => 'About Profile Successfully', 'data' => $service_profile]);
             } catch (Exception $e) {
                 return response()->json(['status' => '400', 'msg' => $e->getMessage()]);
             }
@@ -51,10 +51,15 @@ class ServiceController extends Controller
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
                 $name = time() . "_" . $file->getClientOriginalName();
-                $file->move(public_path() . '/uploads/', $name);
-                $name = public_path() . '/uploads/' . $name;
+                $filename = pathinfo($name, PATHINFO_FILENAME);
+                $extension = pathinfo($name, PATHINFO_EXTENSION);
+                $name = str_replace(" ", "_", $filename);
+                $name = str_replace(".", "_", $name) . "." . $extension;
+                $path = public_path() . "/uploads/";
+                $file->move($path, $name);
+                // $name = public_path() . '/uploads/' . $name;
             }
-            $service_profile = ServiceProfile::where('id', Auth::user()->id)->update(['videoPath' => $name]);
+            $service_profile = ServiceProfile::where('userId', Auth::user()->id)->update(['videoPath' => $name]);
             return response()->json(['status' => '200', 'msg' => 'Profile Video Uploaded Successfully', 'data' => $service_profile]);
         } catch (Exception $e) {
             return response()->json(['status' => '400', 'msg' => $e->getMessage()]);
@@ -106,13 +111,13 @@ class ServiceController extends Controller
             [
                 'firstname' => ['required', 'string', 'max:255'],
                 'lastname' => ['required', 'string', 'max:255'],
-                'gender' => ['required', 'string', 'max:255'],
+                'gender' => ['required'],
                 'email' => ['required', 'string', 'max:255'],
                 'country' => ['required', 'int'],
                 'contactno' => ['required', 'string', 'max:255'],
                 'city' => ['required', 'int'],
                 'state' => ['required', 'int'],
-                'yearexperience' => ['required', 'string', 'max:255'],
+                'yearexperience' => ['required'],
                 'yearjoined' => ['required'],
                 'zipcode' => ['required'],
             ]
@@ -123,16 +128,17 @@ class ServiceController extends Controller
             try {
                 $user = User::where('id', Auth::user()->id)->update([
                     'FirstName'         =>  $request->firstname,
-                    'LastName'         =>  $request->firstname,
+                    'LastName'          =>  $request->firstname,
                     'contactNo'         =>  $request->firstname,
                 ]);
                 $profile = ServiceProfile::where('userId', Auth::user()->id)->update([
                     'countryId'         =>      $request->country,
-                    'stateId'         =>      $request->state,
-                    'cityId'         =>      $request->city,
-                    'zipCode'         =>      $request->zipcode,
-                    'joinedDate'         =>      $request->yearjoined,
-                    'yearExperience'         =>      $request->yearexperience,
+                    'stateId'           =>      $request->state,
+                    'cityId'            =>      $request->city,
+                    'zipCode'           =>      $request->zipcode,
+                    'joinedDate'        =>      $request->yearjoined,
+                    'yearExperience'    =>      $request->yearexperience,
+                    'gender'            =>      $request->gender,
                 ]);
                 return response()->json(['status' => '200', 'msg' => 'Profile Updated Successfully', 'user' => $user, 'profile' => $profile]);
             } catch (Exception $e) {
@@ -183,6 +189,6 @@ class ServiceController extends Controller
                 }
             }
         }
-        return response()->json(['status' => '200', 'msg' => 'Profile data', 'profile' => $data, 'services' => $services, 'services2' => $services2]);
+        return response()->json(['status' => '200', 'msg' => 'Profile data', 'profile' => $data, 'services2' => $services2]);
     }
 }
