@@ -23,6 +23,7 @@ function EditAdvisorProfile(props) {
   const [isSelected, setIsSelected] = useState(false);
   const [servicelist, setServicelist] = useState([]);
   const [serviceOption, setserviceOption] = useState([]);
+  const [defaultserviceOption, setdefaultserviceOption] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [registerInput, setRegister] = useState({
     firstname: "",
@@ -39,6 +40,7 @@ function EditAdvisorProfile(props) {
     stateList: [],
     cityList: [],
     imageFile: null,
+    selectimageFile: null,
     selectService: [],
     profileAbout: "",
     selectDate: "",
@@ -50,22 +52,24 @@ function EditAdvisorProfile(props) {
     getCountry();
     getEditProfile();
   }, []);
-  useEffect(() => {
-    // if(editPro)
-    // getCity(res[pceID])
-    console.log("useEffect stateList");
-  }, [registerInput.stateList]);
+  // useEffect(() => {
+  //   // if(editPro)
+  //   // getCity(res[pceID])
+  //   console.log("useEffect stateList");
+  // }, [registerInput.stateList]);
 
   const getEditProfile = async () => {
     let response = await axios.post(`/api/profile_data`).then((data) => data);
     let responsedata = response.data.profile;
-    console.log(responsedata, "RESPOSSS");
+
     // setRegister({ firstname: responsedata.firstname });
 
     // setRegister({ ...registerInput, firstname: response.firstname });
 
-    getState(responsedata?.countryId);
+    // getState(responsedata?.countryId);
 
+    let option = response?.data?.services2;
+    //  setserviceOption([...option]);
     setRegister({
       ...registerInput,
       firstname: responsedata?.firstName,
@@ -77,9 +81,15 @@ function EditAdvisorProfile(props) {
       city: responsedata?.cityId,
       zipcode: responsedata?.zipCode,
       // gender: responsedata?.gender,
-      yearexperience: responsedata?.yearexperience,
+      yearexperience: responsedata?.yearExperience,
+      stateList: responsedata?.statelist,
+      cityList: responsedata?.citylist,
+      selectService: response?.data?.services2,
+      profileAbout: responsedata?.description,
+      selectimageFile: responsedata?.videoPathFull,
     });
 
+    setdefaultserviceOption(response?.data?.services2);
     setStartDate(new Date(responsedata?.joinedDate));
   };
 
@@ -225,22 +235,44 @@ function EditAdvisorProfile(props) {
     setserviceOption([...option]);
   };
 
-  const handleChangeService = (e) => {
+  const handleChangeService = (e, { removedValue }) => {
     var options = e;
     var value = [];
-    for (var i = 0, l = options.length; i < l; i++) {
-      var valuedata = {
-        value: options[i].value,
-        label: options[i].label,
-        pricechat: "",
-        priceaudio: "",
-        pricevideo: "",
-      };
-      value.push(valuedata);
+    console.log("removedValue", removedValue);
+    if (removedValue) {
+      // console.log("registerInput.selectService", registerInput.selectService);
+      // console.log("removedValue", removedValue);
+      const foundIndex = registerInput.selectService.findIndex(
+        (x) => x.value == removedValue.value
+      );
+      // console.log("foundIndexfoundIndex", foundIndex);
+      registerInput.selectService.splice(foundIndex, 1);
+      // console.log("registerInput.selectService", registerInput.selectService);
+      setRegister({ ...registerInput });
+    } else {
+      registerInput.selectService.push({
+        ...options,
+        pricechat: 0,
+        priceaudio: 0,
+        pricevideo: 0,
+      });
+
+      setRegister({ ...registerInput, selectService: options });
     }
 
-    setRegister({ ...registerInput, selectService: value });
-    setFeilds([...value]);
+    // for (var i = 0, l = options.length; i < l; i++) {
+    //   var valuedata = {
+    //     value: options[i].value,
+    //     label: options[i].label,
+    //     pricechat: "",
+    //     priceaudio: "",
+    //     pricevideo: "",
+    //   };
+    //   value.push(valuedata);
+    // }
+
+    // setRegister({ ...registerInput, selectService: value });
+    // setFeilds([...value]);
   };
 
   // const dateChanged = (d) => {
@@ -268,7 +300,8 @@ function EditAdvisorProfile(props) {
     // const d = new Date(moment(value).format("yyyy-MM-d"));
     setStartDate(value);
   };
-  console.log("registerInput", registerInput);
+  console.log("serviceOption", serviceOption);
+  console.log("registerInput.selectService", registerInput.selectService);
   return (
     <div>
       <Navbar parentCallback={handleCallback} />
@@ -292,7 +325,9 @@ function EditAdvisorProfile(props) {
                   style={{ height: "auto" }}
                   name="profileAbout"
                   onChange={handleChange}
-                ></textarea>
+                >
+                  {registerInput.profileAbout}
+                </textarea>
                 <div className="clearfix submit-box">
                   <div className="pull-right">
                     <button
@@ -319,14 +354,27 @@ function EditAdvisorProfile(props) {
                 <h2 className="font-weight-bold">My Services</h2>
 
                 <div className="form-grp bg-white">
-                  <Select
-                    isMulti
-                    name="colors"
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                    options={serviceOption}
-                    onChange={handleChangeService}
-                  />
+                  {serviceOption.length > 0 ? (
+                    <Select
+                      isMulti
+                      name="colors"
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                      value={
+                        registerInput.selectService.length > 0
+                          ? registerInput.selectService.map((item, index) => {
+                              var valuedata = {
+                                value: item.value,
+                                label: item.label,
+                              };
+                              return valuedata;
+                            })
+                          : undefined
+                      }
+                      options={serviceOption}
+                      onChange={handleChangeService}
+                    />
+                  ) : null}
                 </div>
                 {registerInput.selectService.map((item, index) => (
                   <div key={item.id} className="row">
@@ -338,6 +386,7 @@ function EditAdvisorProfile(props) {
                         type="text"
                         className="form-control"
                         placeholder="Chat Price"
+                        value={registerInput.selectService[index]["pricechat"]}
                         onChange={(e) => {
                           registerInput.selectService[index]["pricechat"] =
                             e.target.value;
@@ -351,6 +400,7 @@ function EditAdvisorProfile(props) {
                         className="form-control"
                         placeholder="Audio Call Price"
                         name="audiocallprice[]"
+                        value={registerInput.selectService[index]["priceaudio"]}
                         onChange={(e) => {
                           registerInput.selectService[index]["priceaudio"] =
                             e.target.value;
@@ -364,6 +414,7 @@ function EditAdvisorProfile(props) {
                         className="form-control"
                         placeholder="video Call Price"
                         name="videocallprice"
+                        value={registerInput.selectService[index]["pricevideo"]}
                         onChange={(e) => {
                           registerInput.selectService[index]["pricevideo"] =
                             e.target.value;
@@ -425,12 +476,12 @@ function EditAdvisorProfile(props) {
                   </div>
                 </div>
 
-                {/* <VideoThumbnail
-                  videoUrl="https://dl.dropboxusercontent.com/s/7b21gtvsvicavoh/statue-of-admiral-yi-no-audio.mp4?dl=1"
+                <VideoThumbnail
+                  videoUrl={registerInput.selectimageFile}
                   thumbnailHandler={(thumbnail) => console.log(thumbnail)}
-                  width={120}
-                  height={80}
-                /> */}
+                  width={200}
+                  height={200}
+                />
                 <div className="clearfix submit-box">
                   <div className="pull-right">
                     <button

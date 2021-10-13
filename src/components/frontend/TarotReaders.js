@@ -38,10 +38,14 @@ function TarotReaders(props) {
       RangeEnd: registerInput.RangeEnd,
     };
     console.log(path);
-    let response = await axios.post(`${path}`, data).then((data) => data);
-    response = await response.data.data;
-    console.log(response);
-    setproviderList(response);
+    try {
+      let response = await axios.post(`${path}`, data).then((data) => data);
+      response = await response.data.data;
+      console.log(response);
+      setproviderList(response);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   // const SearchProviderfilter = () => {
@@ -534,8 +538,8 @@ function TarotReaders(props) {
                   <button
                     className="page-link"
                     tabindex="-1"
-                    disabled={providerList.prev_page_url ? !true : !false}
-                    onClick={() => getProviderList(providerList.prev_page_url)}
+                    disabled={providerList?.prev_page_url ? !true : !false}
+                    onClick={() => getProviderList(providerList?.prev_page_url)}
                     tabindex="-1"
                   >
                     Previous
@@ -566,7 +570,7 @@ function TarotReaders(props) {
                   <button
                     className="page-link"
                     onClick={() => getProviderList(providerList.next_page_url)}
-                    disabled={providerList.next_page_url ? !true : !false}
+                    disabled={providerList?.next_page_url ? !true : !false}
                   >
                     Next
                   </button>
