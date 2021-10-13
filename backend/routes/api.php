@@ -25,6 +25,7 @@ Route::get('state/{country_id}', [CustomController::class, 'getState']);
 Route::get('city/{state_id}', [CustomController::class, 'getCity']);
 
 Route::post('providers', [CustomController::class, 'getTarotProviders']);
+Route::get('/provider_detail/{userId}/{serviceId}', [ServiceController::class, 'providerDetail'])->name('/provider_detail');
 Route::post('contact_us', [CustomController::class, 'contactUs']);
 Route::post('e_classes', [CustomController::class, 'eClasses']);
 Route::get('e_class_detail/{e_classes_id}', [CustomController::class, 'eClassDetail']);
