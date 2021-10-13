@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
@@ -11,6 +11,24 @@ import icon3Img from "../../assets/frontend/img/services/icon-3.png";
 import readingsdetail1img from "../../assets/frontend/img/services/psychic-readings-detail-1.jpg";
 
 function PhysicReadingDetail(props) {
+  const [eclassDetal, setEclassDetail] = React.useState({});
+
+  useEffect(() => {
+    getEclassDetail();
+  }, []);
+
+  const getEclassDetail = async () => {
+    try {
+      let path = `/api/e_class_detail/` + props.match.params.id;
+      let response = await axios.get(path).then((data) => data);
+      response = await response.data.data;
+      console.log(response);
+      setEclassDetail(response);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <div>
       <Navbar />

@@ -114,7 +114,7 @@ class App extends Component {
             />
             <PublicRoute
               restricted={false}
-              path="/physic-reading-detail"
+              path="/provider/detail/:userid/:serviceid"
               name="PhysicReadingDetail"
               component={PhysicReadingDetail}
             />
@@ -150,7 +150,7 @@ class App extends Component {
             />
             <PublicRoute
               restricted={false}
-              path="/ecourse-detail"
+              path="/ecourse-detail/:id"
               name="EcourseDetail"
               component={EcourseDetail}
             />

@@ -44,6 +44,7 @@ function EditAdvisorProfile(props) {
     selectService: [],
     profileAbout: "",
     selectDate: "",
+    profileService: "",
   });
 
   const [arrFeilds, setFeilds] = useState([]);
@@ -80,13 +81,15 @@ function EditAdvisorProfile(props) {
       country: responsedata?.countryId,
       city: responsedata?.cityId,
       zipcode: responsedata?.zipCode,
-      // gender: responsedata?.gender,
+      gender: responsedata?.gender,
       yearexperience: responsedata?.yearExperience,
       stateList: responsedata?.statelist,
       cityList: responsedata?.citylist,
       selectService: response?.data?.services2,
       profileAbout: responsedata?.description,
       selectimageFile: responsedata?.videoPathFull,
+      selectDate: responsedata?.joinedDate,
+      profileService: responsedata?.service_description,
     });
 
     setdefaultserviceOption(response?.data?.services2);
@@ -210,6 +213,7 @@ function EditAdvisorProfile(props) {
     axios
       .post("/api/profile_service", {
         selectService: registerInput.selectService,
+        service_description: registerInput.profileService,
       })
       .then((res) => {
         if (res.data.status == 200) {
@@ -325,9 +329,8 @@ function EditAdvisorProfile(props) {
                   style={{ height: "auto" }}
                   name="profileAbout"
                   onChange={handleChange}
-                >
-                  {registerInput.profileAbout}
-                </textarea>
+                  value={registerInput.profileAbout}
+                ></textarea>
                 <div className="clearfix submit-box">
                   <div className="pull-right">
                     <button
@@ -424,6 +427,18 @@ function EditAdvisorProfile(props) {
                     </div>
                   </div>
                 ))}
+
+                <textarea
+                  className="form-control margin-top-2"
+                  id="exampleFormControlTextarea1Service"
+                  rows="4"
+                  placeholder="Service Describtion here"
+                  style={{ height: "auto" }}
+                  name="profileService"
+                  onChange={handleChange}
+                  value={registerInput.profileService}
+                ></textarea>
+
                 <div className="clearfix submit-box">
                   <div className="pull-right">
                     <button
@@ -561,8 +576,8 @@ function EditAdvisorProfile(props) {
                       <option value="" selected>
                         Gender
                       </option>
-                      <option value="1">Male</option>
-                      <option value="2">Female</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
                     </select>
                   </div>
                 </div>

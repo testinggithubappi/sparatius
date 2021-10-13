@@ -457,7 +457,11 @@ function TarotReaders(props) {
                   </div>
                   <div className="text-center">
                     <h3>
-                      <a href="#">{item.firstName}</a>
+                      <Link
+                        to={`/provider/detail/${item.userId}/${item.userId}`}
+                      >
+                        {item.firstName}
+                      </Link>
                     </h3>
                     <small className="color-black">
                       Leading UK Tarot Readings

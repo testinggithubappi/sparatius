@@ -66,7 +66,7 @@ class CustomController extends Controller
 
     public function eClassDetail($id)
     {
-        $detail = Eclasses::where($id)::first();
+        $detail = Eclasses::where('id', $id)->first();
         return ['status' => '200', 'data' => $detail];
     }
 }
