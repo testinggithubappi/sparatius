@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
 use App\Models\ContactUs;
+use App\Models\Eclassdetail;
 use App\Models\Eclasses;
 use App\Models\Rating;
 use App\Models\Service;
@@ -65,7 +66,7 @@ class CustomController extends Controller
 
     public function eClassDetail($id)
     {
-        $detail = Eclasses::where($id)::first();
+        $detail = Eclassdetail::where($id)->first();
         return ['status' => '200', 'data' => $detail];
     }
 }
