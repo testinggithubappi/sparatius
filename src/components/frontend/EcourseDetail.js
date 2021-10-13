@@ -7,6 +7,24 @@ import Footer from "../../layouts/frontend/Footer";
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
 
 function EcourseDetail(props) {
+  const [eclassDetal, setEclassDetail] = React.useState({});
+
+  useEffect(() => {
+    getEclassDetail();
+  }, []);
+
+  const getEclassDetail = async () => {
+    try {
+      let path = `/api/e_class_detail/` + props.match.params.id;
+      let response = await axios.get(path).then((data) => data);
+      response = await response.data.data;
+      console.log(response);
+      setEclassDetail(response);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -28,7 +46,11 @@ function EcourseDetail(props) {
                       >
                         <i className="fa fa-play-circle" aria-hidden="true"></i>
                         <img
-                          src={readingsprofileImg}
+                          src={
+                            eclassDetal?.filePath
+                              ? eclassDetal?.filePath
+                              : readingsprofileImg
+                          }
                           className="img-responsive readings-profile-img"
                         />
                       </Link>
@@ -45,13 +67,11 @@ function EcourseDetail(props) {
                 <div className="col-md-9 e-courses-detail">
                   <div className="col-md-12 username">
                     <h2 className="text-white text-left ">
-                      Learn Tarot Cards With A Tarot Reader - Advance Level
+                      {eclassDetal?.eclassName}
                     </h2>
                   </div>
                   <div className="col-md-9 top-rated ">
-                    <p className=" text-left ">
-                      Learn Tarot Card Advance Level{" "}
-                    </p>
+                    <p className=" text-left ">{eclassDetal?.title}</p>
                     <ul className="list-inline review-star text-left star-color">
                       <li>
                         <i className="fa fa-star"></i>
@@ -72,7 +92,7 @@ function EcourseDetail(props) {
                     </ul>
                   </div>
                   <div className="col-md-3 readings">
-                    <h3>$459.00</h3>
+                    <h3>${eclassDetal?.Price}</h3>
                     <button
                       className="thm-btn w-100"
                       type="submit"
@@ -135,79 +155,21 @@ function EcourseDetail(props) {
                     className="tab-pane fade in active signle-tab-content"
                     id="smart"
                   >
-                    <p>
-                      I am an open, accepting and non- judgemental reader. With
-                      me you have nothing to hide, ever. I am here to share the
-                      love and the energy of the Divine with you with the love
-                      and care of a mother.
-                      <br />
-                      <br />
-                      iaculis suscipit nulla. Etiam venenatis augue massa, nec
-                      dictum scelerisque velit egestas eget. Morbi ultricies
-                      tortor non dolor vehicula euismod id erat vitae, iaculis
-                      suscipit nulla. Etiam venenatis augue massa, nec dictum
-                      sapien suscipit sit amet. Curabitur sit amet tempus felis,
-                      ac ultrices libero. Duis dignissim aliquam mi quis
-                      feugiat.
-                      <br />
-                      <br />
-                      <h2>This course includes</h2>
-                      <ul>
-                        <li>5.5 hours on-demand video</li>
-                        <li>1 downloadable resource</li>
-                        <li>Full lifetime access</li>
-                        <li>Access on mobile and TV</li>
-                        <li>Certificate of completion</li>
-                      </ul>
-                      <br />
-                      <h2>Requirements</h2>
-                      Rider-Waite Tarot card deck or Morgan Greer or any deck
-                      that has the Rider-Waite Structure Notebook for
-                      Journalling
-                    </p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: eclassDetal?.learn,
+                      }}
+                    />
                   </div>
                   <div
                     className="tab-pane fade signle-tab-content"
                     id="attraction"
                   >
-                    <p>
-                      I am an open, accepting and non- judgemental reader. With
-                      me you have nothing to hide, ever. I am here to share the
-                      love and the energy of the Divine with you with the love
-                      and care of a mother.
-                      <br />
-                      <br />
-                      iaculis suscipit nulla. Etiam venenatis augue massa, nec
-                      dictum scelerisque velit egestas eget. Morbi ultricies
-                      tortor non dolor vehicula euismod id erat vitae, iaculis
-                      suscipit nulla. Etiam venenatis augue massa, nec dictum
-                      sapien suscipit sit amet. Curabitur sit amet tempus felis,
-                      ac ultrices libero. Duis dignissim aliquam mi quis
-                      feugiat.
-                      <br />
-                      <br />
-                      Sed in tempor odio. Nulla condimentum accumsan turpis nec
-                      feugiat. Vivamus nec molestie magna. Aliquam sit amet
-                      dictum augue, tempor mattis justo. Sed ultricies sapien
-                      imperdiet venenatis varius. Sed quam odio, aliquet eu
-                      dapibus ut, scelerisque eget tellus. Nullam euismod
-                      condimentum tincidunt.
-                      <br />
-                      <br />
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Mauris aliquam lorem et sagittis laoreet. Morbi in sodales
-                      ante. Vivamus interdum dictum ante, vitae scelerisque
-                      velit egestas eget. Morbi ultricies tortor non dolor
-                      vehicula euismod id erat vitae, iaculis suscipit nulla.{" "}
-                      <br />
-                      <br />
-                      Sed in tempor odio. Nulla condimentum accumsan turpis nec
-                      feugiat. Vivamus nec molestie magna. Aliquam sit amet
-                      dictum augue, tempor mattis justo. Sed ultricies sapien
-                      imperdiet venenatis varius. Sed quam odio, aliquet eu
-                      dapibus ut, scelerisque eget tellus. Nullam euismod
-                      condimentum tincidunt.
-                    </p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: eclassDetal?.description,
+                      }}
+                    />
                   </div>
                   <div className="tab-pane fade signle-tab-content" id="skills">
                     <div>

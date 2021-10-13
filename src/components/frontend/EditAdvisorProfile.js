@@ -44,6 +44,7 @@ function EditAdvisorProfile(props) {
     selectService: [],
     profileAbout: "",
     selectDate: "",
+    profileService: "",
   });
 
   const [arrFeilds, setFeilds] = useState([]);
@@ -88,6 +89,7 @@ function EditAdvisorProfile(props) {
       profileAbout: responsedata?.description,
       selectimageFile: responsedata?.videoPathFull,
       selectDate: responsedata?.joinedDate,
+      profileService: responsedata?.service_description,
     });
 
     setdefaultserviceOption(response?.data?.services2);
@@ -211,6 +213,7 @@ function EditAdvisorProfile(props) {
     axios
       .post("/api/profile_service", {
         selectService: registerInput.selectService,
+        service_description: registerInput.profileService,
       })
       .then((res) => {
         if (res.data.status == 200) {
@@ -424,6 +427,18 @@ function EditAdvisorProfile(props) {
                     </div>
                   </div>
                 ))}
+
+                <textarea
+                  className="form-control margin-top-2"
+                  id="exampleFormControlTextarea1Service"
+                  rows="4"
+                  placeholder="Service Describtion here"
+                  style={{ height: "auto" }}
+                  name="profileService"
+                  onChange={handleChange}
+                  value={registerInput.profileService}
+                ></textarea>
+
                 <div className="clearfix submit-box">
                   <div className="pull-right">
                     <button

@@ -27,7 +27,7 @@ Route::get('city/{state_id}', [CustomController::class, 'getCity']);
 Route::post('providers', [CustomController::class, 'getTarotProviders']);
 Route::post('contact_us', [CustomController::class, 'contactUs']);
 Route::post('e_classes', [CustomController::class, 'eClasses']);
-Route::post('e_class_detail', [CustomController::class, 'eClassDetail']);
+Route::get('e_class_detail/{e_classes_id}', [CustomController::class, 'eClassDetail']);
 
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('logout', [AuthController::class, 'Logout']);
