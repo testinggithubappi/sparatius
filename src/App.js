@@ -41,7 +41,7 @@ import PublicRoute from "./routes/PublicRoute";
 
 import axios from "axios";
 
-axios.defaults.baseURL = "http://202.142.180.146:90/backend/";
+axios.defaults.baseURL = "http://localhost/sparatius-git/backend/public/";
 axios.defaults.headers.post["content-type"] = "appliaction/json";
 axios.defaults.headers.post["accept"] = "appliaction/json";
 axios.defaults.headers.post["accept"] = "multipart/form-data";
