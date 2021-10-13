@@ -150,7 +150,7 @@ class App extends Component {
             />
             <PublicRoute
               restricted={false}
-              path="/ecourse-detail"
+              path="/ecourse-detail/:id"
               name="EcourseDetail"
               component={EcourseDetail}
             />

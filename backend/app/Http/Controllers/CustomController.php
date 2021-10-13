@@ -14,7 +14,7 @@ use App\Models\ServiceLookUp;
 use App\Models\ServiceProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 class CustomController extends Controller
 {
@@ -32,8 +32,12 @@ class CustomController extends Controller
     }
     public function getTarotProviders(Request $request)
     {
+        $type = Service::where('slug', $request->slug)->first();
+
         $providers = User::leftjoin("serviceproviderprofile as profile", 'profile.userId', 'users.id')
-            ->where('roleType', 'provider')->paginate(2);
+            ->leftjoin('serviceslookup as lookup', 'lookup.userId', 'users.id')
+            ->select(DB::raw('lookup.*, users.*, GROUP_CONCAT(lookup.chatType) as type, GROUP_CONCAT(lookup.price) as price'))
+            ->where(['users.roleType' => 'provider', 'lookup.serviceId' => $type->id])->paginate(2);
         // $type = Service::where('slug', $request->slug)->first();
         // $i = 0;
         // foreach ($providers as $provider) {

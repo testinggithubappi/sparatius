@@ -96,6 +96,7 @@ class ServiceController extends Controller
             }
             // var_dump($services);
             // die();
+            ServiceProfile::where('userId', Auth::user()->id)->update(['service_description' => $request->service_description]);
             $lookup = ServiceLookUp::insert($services);
             return response()->json(['status' => '200', 'msg' => 'Service  Created Successfully', 'data' => $lookup]);
         } catch (Exception $e) {
@@ -157,8 +158,52 @@ class ServiceController extends Controller
         $data['videoPathFull']  =    url('uploads') . '/' . $data->videoPath;
         $data['statelist'] =  State::where('country_id', $data->countryId)->get();
         $data['citylist'] =  City::where('state_id', $data->stateId)->get();
+        $services = ServiceLookUp::where(['userId' => Auth::user()->id])->get();
+        $services2 = [];
+        if (count($services) > 0) {
+            foreach ($services as $service) {
+                if ($service->serviceId == '1') {
+                    $services2[0]['value'] = "1";
+                    $services2[0]['label'] = Service::where('type', '1')->select('name')->first()->name;
+                    if ($service->chatType == "audio") {
+                        $services2[0]['priceaudio'] = $service->price;
+                    }
+                    if ($service->chatType == "text") {
+                        $services2[0]['pricechat'] = $service->price;
+                    }
+                    if ($service->chatType == "video") {
+                        $services2[0]['pricevideo'] = $service->price;
+                    }
+                } else {
+                    $services2[1]['value'] = "2";
+                    $services2[1]['label'] = Service::where('type', '2')->select('name')->first()->name;
+                    if ($service->chatType == "audio") {
+                        $services2[1]['priceaudio'] = $service->price;
+                    }
+                    if ($service->chatType == "text") {
+                        $services2[1]['pricechat'] = $service->price;
+                    }
+                    if ($service->chatType == "video") {
+                        $services2[1]['pricevideo'] = $service->price;
+                    }
+                }
+            }
+        }
+        return response()->json(['status' => '200', 'msg' => 'Profile data', 'profile' => $data, 'services2' => $services2]);
+    }
 
-        $services = ServiceLookUp::where('userId', Auth::user()->id)->get();
+
+    public function providerDetail($userId, $serviceId)
+    {
+        $data = User::leftjoin('serviceproviderprofile as profile', 'profile.userId', 'users.id')
+            ->select('users.*', 'profile.*')
+            ->where('users.id', $userId)
+            ->first()->makeHidden(['profile.id', 'profile.userId']);
+
+        $data['videoPathFull']  =    url('uploads') . '/' . $data->videoPath;
+        $data['statelist'] =  State::where('country_id', $data->countryId)->get();
+        $data['citylist'] =  City::where('state_id', $data->stateId)->get();
+        $services = ServiceLookUp::where(['userId' => $userId, 'serviceId' => $serviceId])->get();
         $services2 = [];
         if (count($services) > 0) {
             foreach ($services as $service) {
