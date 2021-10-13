@@ -15,6 +15,7 @@ use App\Models\ServiceProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 
+
 class CustomController extends Controller
 {
     public function getCountry()
@@ -32,7 +33,7 @@ class CustomController extends Controller
     public function getTarotProviders(Request $request)
     {
         $providers = User::leftjoin("serviceproviderprofile as profile", 'profile.userId', 'users.id')
-            ->where('roleType', 'provider')->get();
+            ->where('roleType', 'provider')->paginate(2);
         // $type = Service::where('slug', $request->slug)->first();
         // $i = 0;
         // foreach ($providers as $provider) {
@@ -49,7 +50,7 @@ class CustomController extends Controller
         //     }
         //     $i++;
         // }
-        return response()->json(['data', $providers]);
+        return response()->json(['data' => $providers]);
     }
 
     public function contactUs(Request $request)

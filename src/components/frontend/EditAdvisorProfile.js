@@ -7,6 +7,8 @@ import Footer from "../../layouts/frontend/Footer";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import VideoThumbnail from "react-video-thumbnail";
+import moment from "moment";
 import {
   getCountrytList,
   getStatetList,
@@ -21,6 +23,7 @@ function EditAdvisorProfile(props) {
   const [isSelected, setIsSelected] = useState(false);
   const [servicelist, setServicelist] = useState([]);
   const [serviceOption, setserviceOption] = useState([]);
+  const [defaultserviceOption, setdefaultserviceOption] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [registerInput, setRegister] = useState({
     firstname: "",
@@ -37,17 +40,58 @@ function EditAdvisorProfile(props) {
     stateList: [],
     cityList: [],
     imageFile: null,
+    selectimageFile: null,
     selectService: [],
     profileAbout: "",
     selectDate: "",
   });
 
   const [arrFeilds, setFeilds] = useState([]);
-  console.log(registerInput);
+  console.log("stateList", registerInput.stateList);
   useEffect(() => {
     getCountry();
-    console.log(props);
+    getEditProfile();
   }, []);
+  // useEffect(() => {
+  //   // if(editPro)
+  //   // getCity(res[pceID])
+  //   console.log("useEffect stateList");
+  // }, [registerInput.stateList]);
+
+  const getEditProfile = async () => {
+    let response = await axios.post(`/api/profile_data`).then((data) => data);
+    let responsedata = response.data.profile;
+
+    // setRegister({ firstname: responsedata.firstname });
+
+    // setRegister({ ...registerInput, firstname: response.firstname });
+
+    // getState(responsedata?.countryId);
+
+    let option = response?.data?.services2;
+    //  setserviceOption([...option]);
+    setRegister({
+      ...registerInput,
+      firstname: responsedata?.firstName,
+      lastname: responsedata?.LastName,
+      contactno: responsedata?.contactNo,
+      email: responsedata?.contactno,
+      state: responsedata?.stateId,
+      country: responsedata?.countryId,
+      city: responsedata?.cityId,
+      zipcode: responsedata?.zipCode,
+      // gender: responsedata?.gender,
+      yearexperience: responsedata?.yearExperience,
+      stateList: responsedata?.statelist,
+      cityList: responsedata?.citylist,
+      selectService: response?.data?.services2,
+      profileAbout: responsedata?.description,
+      selectimageFile: responsedata?.videoPathFull,
+    });
+
+    setdefaultserviceOption(response?.data?.services2);
+    setStartDate(new Date(responsedata?.joinedDate));
+  };
 
   const changeHandler = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -191,38 +235,73 @@ function EditAdvisorProfile(props) {
     setserviceOption([...option]);
   };
 
-  const handleChangeService = (e) => {
+  const handleChangeService = (e, { removedValue }) => {
     var options = e;
     var value = [];
-    for (var i = 0, l = options.length; i < l; i++) {
-      var valuedata = {
-        value: options[i].value,
-        label: options[i].label,
-        pricechat: "",
-        priceaudio: "",
-        pricevideo: "",
-      };
-      value.push(valuedata);
+    console.log("removedValue", removedValue);
+    if (removedValue) {
+      // console.log("registerInput.selectService", registerInput.selectService);
+      // console.log("removedValue", removedValue);
+      const foundIndex = registerInput.selectService.findIndex(
+        (x) => x.value == removedValue.value
+      );
+      // console.log("foundIndexfoundIndex", foundIndex);
+      registerInput.selectService.splice(foundIndex, 1);
+      // console.log("registerInput.selectService", registerInput.selectService);
+      setRegister({ ...registerInput });
+    } else {
+      registerInput.selectService.push({
+        ...options,
+        pricechat: 0,
+        priceaudio: 0,
+        pricevideo: 0,
+      });
+
+      setRegister({ ...registerInput, selectService: options });
     }
 
-    setRegister({ ...registerInput, selectService: value });
-    setFeilds([...value]);
+    // for (var i = 0, l = options.length; i < l; i++) {
+    //   var valuedata = {
+    //     value: options[i].value,
+    //     label: options[i].label,
+    //     pricechat: "",
+    //     priceaudio: "",
+    //     pricevideo: "",
+    //   };
+    //   value.push(valuedata);
+    // }
+
+    // setRegister({ ...registerInput, selectService: value });
+    // setFeilds([...value]);
   };
 
-  const dateChanged = (d) => {
-    const selectedDate = new Date(d); // pass in date param here
-    const formattedDate = `${selectedDate.getFullYear()}-${
-      selectedDate.getMonth() + 1
-    }-${selectedDate.getDate()}`;
-    console.log(formattedDate);
+  // const dateChanged = (d) => {
+  //   const selectedDate = new Date(d); // pass in date param here
+  //   const formattedDate = `${selectedDate.getFullYear()}-${
+  //     selectedDate.getMonth() + 1
+  //   }-${selectedDate.getDate()}`;
+  //   console.log(formattedDate);
 
-    setRegister({ ...registerInput, selectDate: formattedDate });
+  //   const formatteddddDate = moment(formattedDate).format("yyyy-MM-d");
+  //   // setRegister({ ...registerInput, selectDate: formattedDate });
+  //   // console.log(formattedDate);
 
-    setStartDate(selectedDate);
+  //   // console.log(new Date(formattedDate));
+  //   // var momentObj = moment(formattedDate);
+
+  //   setStartDate(formatteddddDate);
+  // };
+
+  const dateChanged = (value, e) => {
+    console.log(value); // this will be a moment date object
+    console.log(e.target); // this will be a string value in datepicker input field
+    console.log(moment(value).format("yyyy-MM-dd"));
+    setRegister({ ...registerInput, selectDate: value });
+    // const d = new Date(moment(value).format("yyyy-MM-d"));
+    setStartDate(value);
   };
-
-  console.log(registerInput);
-  // console.log(registerInput);
+  console.log("serviceOption", serviceOption);
+  console.log("registerInput.selectService", registerInput.selectService);
   return (
     <div>
       <Navbar parentCallback={handleCallback} />
@@ -246,7 +325,9 @@ function EditAdvisorProfile(props) {
                   style={{ height: "auto" }}
                   name="profileAbout"
                   onChange={handleChange}
-                ></textarea>
+                >
+                  {registerInput.profileAbout}
+                </textarea>
                 <div className="clearfix submit-box">
                   <div className="pull-right">
                     <button
@@ -273,14 +354,27 @@ function EditAdvisorProfile(props) {
                 <h2 className="font-weight-bold">My Services</h2>
 
                 <div className="form-grp bg-white">
-                  <Select
-                    isMulti
-                    name="colors"
-                    className="basic-multi-select"
-                    classNamePrefix="select"
-                    options={serviceOption}
-                    onChange={handleChangeService}
-                  />
+                  {serviceOption.length > 0 ? (
+                    <Select
+                      isMulti
+                      name="colors"
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                      value={
+                        registerInput.selectService.length > 0
+                          ? registerInput.selectService.map((item, index) => {
+                              var valuedata = {
+                                value: item.value,
+                                label: item.label,
+                              };
+                              return valuedata;
+                            })
+                          : undefined
+                      }
+                      options={serviceOption}
+                      onChange={handleChangeService}
+                    />
+                  ) : null}
                 </div>
                 {registerInput.selectService.map((item, index) => (
                   <div key={item.id} className="row">
@@ -292,6 +386,7 @@ function EditAdvisorProfile(props) {
                         type="text"
                         className="form-control"
                         placeholder="Chat Price"
+                        value={registerInput.selectService[index]["pricechat"]}
                         onChange={(e) => {
                           registerInput.selectService[index]["pricechat"] =
                             e.target.value;
@@ -305,6 +400,7 @@ function EditAdvisorProfile(props) {
                         className="form-control"
                         placeholder="Audio Call Price"
                         name="audiocallprice[]"
+                        value={registerInput.selectService[index]["priceaudio"]}
                         onChange={(e) => {
                           registerInput.selectService[index]["priceaudio"] =
                             e.target.value;
@@ -318,6 +414,7 @@ function EditAdvisorProfile(props) {
                         className="form-control"
                         placeholder="video Call Price"
                         name="videocallprice"
+                        value={registerInput.selectService[index]["pricevideo"]}
                         onChange={(e) => {
                           registerInput.selectService[index]["pricevideo"] =
                             e.target.value;
@@ -378,6 +475,13 @@ function EditAdvisorProfile(props) {
                     <div></div>
                   </div>
                 </div>
+
+                <VideoThumbnail
+                  videoUrl={registerInput.selectimageFile}
+                  thumbnailHandler={(thumbnail) => console.log(thumbnail)}
+                  width={200}
+                  height={200}
+                />
                 <div className="clearfix submit-box">
                   <div className="pull-right">
                     <button
@@ -412,6 +516,7 @@ function EditAdvisorProfile(props) {
                       placeholder="First Name"
                       name="firstname"
                       onChange={handleInput}
+                      value={registerInput.firstname}
                     />
                   </div>
                 </div>
@@ -424,6 +529,7 @@ function EditAdvisorProfile(props) {
                       placeholder="Last Name"
                       name="lastname"
                       onChange={handleInput}
+                      value={registerInput.lastname}
                     />
                   </div>
                 </div>
@@ -437,6 +543,7 @@ function EditAdvisorProfile(props) {
                       placeholder="Phone No"
                       name="contactno"
                       onChange={handleInput}
+                      value={registerInput.contactno}
                     />
                   </div>
                 </div>
@@ -449,6 +556,7 @@ function EditAdvisorProfile(props) {
                       aria-label="Default select example"
                       name="gender"
                       onChange={handleChange}
+                      value={registerInput.gender}
                     >
                       <option value="" selected>
                         Gender
@@ -467,6 +575,7 @@ function EditAdvisorProfile(props) {
                       aria-label="Default select example"
                       name="country"
                       onChange={handleChangeCountry}
+                      value={registerInput.country}
                     >
                       <option value="">Select Country</option>
                       {CountryList.map((item) => (
@@ -483,8 +592,9 @@ function EditAdvisorProfile(props) {
                     <select
                       className="form-select select-field"
                       aria-label="Default select example"
-                      name="country"
+                      name="state"
                       onChange={handleChangeState}
+                      value={registerInput.state}
                     >
                       <option value="">Select State</option>
                       {registerInput.stateList.map((item) => (
@@ -503,6 +613,7 @@ function EditAdvisorProfile(props) {
                       aria-label="Default select example"
                       name="city"
                       onChange={handleChange}
+                      value={registerInput.city}
                     >
                       <option selected>Select City</option>
                       {registerInput.cityList.map((item) => (
@@ -522,6 +633,7 @@ function EditAdvisorProfile(props) {
                       placeholder="Code"
                       name="zipcode"
                       onChange={handleInput}
+                      value={registerInput.zipcode}
                     />
                   </div>
                 </div>
@@ -535,6 +647,7 @@ function EditAdvisorProfile(props) {
                       placeholder="Year of Experience"
                       name="yearexperience"
                       onChange={handleInput}
+                      value={registerInput.yearexperience}
                     />
                   </div>
                 </div>
@@ -543,7 +656,7 @@ function EditAdvisorProfile(props) {
                   <div className="form-grp bg-white">
                     <DatePicker
                       selected={startDate}
-                      onChange={dateChanged}
+                      onChange={(value, e) => dateChanged(value, e)}
                       dateFormat="d MMM yyyy"
                     />
                   </div>

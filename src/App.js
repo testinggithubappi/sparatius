@@ -32,6 +32,7 @@ import PaymentHistory from "./components/frontend/PaymentHistory";
 import EditAdvisorProfile from "./components/frontend/EditAdvisorProfile";
 import Settings from "./components/frontend/Settings";
 import OrderList from "./components/frontend/OrderList";
+import EcourseDetail from "./components/frontend/EcourseDetail";
 
 // import Login from "./layouts/frontend/Login";
 // import Register from "./layouts/frontend/Register";
@@ -41,7 +42,7 @@ import PublicRoute from "./routes/PublicRoute";
 
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost/sparatius-git/backend/public/";
+axios.defaults.baseURL = "http://localhost:8000/";
 axios.defaults.headers.post["content-type"] = "appliaction/json";
 axios.defaults.headers.post["accept"] = "appliaction/json";
 axios.defaults.headers.post["accept"] = "multipart/form-data";
@@ -137,7 +138,7 @@ class App extends Component {
             />
             <PublicRoute
               restricted={false}
-              path="/tarot-readers"
+              path="/service/:slug"
               name="TarotReaders"
               component={TarotReaders}
             />
@@ -146,6 +147,12 @@ class App extends Component {
               path="/terms-condition"
               name="TermsCondition"
               component={TermsCondition}
+            />
+            <PublicRoute
+              restricted={false}
+              path="/ecourse-detail"
+              name="EcourseDetail"
+              component={EcourseDetail}
             />
 
             <Route path="/login">

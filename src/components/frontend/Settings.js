@@ -1,10 +1,76 @@
-import React from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
 
 function Settings(props) {
+  useEffect(() => {
+    getEditProfile();
+  }, []);
+  const [editInput, setEditInput] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    id: "",
+    showmodal: false,
+  });
+  const getEditProfile = async () => {
+    let response = await axios.post(`/api/getEditProfile`).then((data) => data);
+    response = await response.data.getEditProfile;
+    setEditInput({
+      email: response.email,
+      id: response.id,
+    });
+  };
+
+  const handleInput = (e) => {
+    e.persist();
+    setEditInput({ ...editInput, [e.target.name]: e.target.value });
+  };
+
+  const opeModal = (e) => {
+    e.persist();
+    console.log(e);
+    setEditInput({
+      showmodal: true,
+    });
+  };
+  const closeModal = (e) => {
+    e.persist();
+    console.log(e);
+    setEditInput({
+      showmodal: false,
+    });
+  };
+
+  const registerSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {
+      email: editInput.email,
+      password: editInput.password,
+      confirmPassword: editInput.confirmPassword,
+    };
+    if (editInput.password) {
+      if (editInput.password != editInput.confirmPassword) {
+        swal("Success", "Confrim Password Not Match", "success");
+      }
+    }
+    console.log(data);
+    axios.post("/api/login", data).then((res) => {
+      if (res.data.status == 200) {
+        swal("Success", res.data.message, "success");
+      } else {
+        setEditInput({
+          ...editInput,
+          error_list: res.data.validation_erros,
+        });
+      }
+    });
+  };
+
   return (
     <div>
       <Navbar />
@@ -36,9 +102,11 @@ function Settings(props) {
                 </div>
                 <div className="col-md-6 margin-top-3">
                   <button
-                    className="btn-primary btn-sm w-33"
-                    data-toggle="modal"
-                    data-target="#exampleModal"
+                    // className="btn-primary btn-sm w-33"
+                    // data-toggle="modal"
+                    // data-target="#exampleModal"
+
+                    onClick={opeModal}
                   >
                     Edit
                   </button>
@@ -50,12 +118,13 @@ function Settings(props) {
         </div>
       </section>
       <div
-        className="modal fade"
+        className={"modal fade " + (editInput.showmodal ? "in" : "")}
         id="exampleModal"
         tabindex="-1"
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
+        style={{ display: editInput.showmodal ? "block" : "none" }}
       >
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -64,14 +133,18 @@ function Settings(props) {
                 <h3 className="text-purple">Edit Settings</h3>
               </div>
             </div>
-            <div className="modal-body">
-              <form action="#">
+
+            <form action="#" onSubmit={registerSubmit}>
+              <div className="modal-body">
                 <label>Enter Your Email</label>
                 <div className="form-grp">
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Email"
+                    value={editInput.email}
+                    name="email"
+                    onChange={handleInput}
                   />
                 </div>
                 <label className="margin-top-1">Change Password</label>
@@ -80,6 +153,9 @@ function Settings(props) {
                     type="password"
                     className="form-control"
                     placeholder="Password"
+                    value={editInput.password}
+                    name="password"
+                    onChange={handleInput}
                   />
                 </div>
 
@@ -89,22 +165,25 @@ function Settings(props) {
                     type="password"
                     className="form-control"
                     placeholder="Password"
+                    value={editInput.confirmPassword}
+                    name="confirmPassword"
+                    onChange={handleInput}
                   />
                 </div>
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-              <button type="button" className="btn bg-purple text-white">
-                Save Changes
-              </button>
-            </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={closeModal}
+                >
+                  Close
+                </button>
+                <button type="submit" className="btn bg-purple text-white">
+                  Save Changes
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
