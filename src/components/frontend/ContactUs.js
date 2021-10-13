@@ -6,6 +6,47 @@ import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
 
 function ContactUs(props) {
+  const [contactInput, setContactInput] = useState({
+    name: "",
+    email: "",
+    type: "",
+    description: "",
+    error_list: "",
+  });
+
+  const handleInput = (e) => {
+    e.persist();
+    setContactInput({ ...contactInput, [e.target.name]: e.target.value });
+  };
+
+  const registerSubmit = (e) => {
+    e.preventDefault();
+
+    const data = {
+      name: contactInput.name,
+      email: contactInput.email,
+      type: contactInput.type,
+      description: contactInput.description,
+    };
+    console.log(data);
+    axios.post("/api/contactUs", data).then((res) => {
+      if (res.data.status == 200) {
+        swal("Success", res.data.message, "success");
+        setContactInput({
+          name: "",
+          email: "",
+          type: "",
+          description: "",
+        });
+      } else {
+        setContactInput({
+          ...contactInput,
+          error_list: res.data.validation_erros,
+        });
+      }
+    });
+  };
+
   return (
     <div>
       <Navbar />
@@ -20,74 +61,85 @@ function ContactUs(props) {
           </p>
         </div>
       </section>
-
-      <section className=" sec-padding margin-top-4 margin-bottom-3">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-3"></div>
-            <div className="col-md-6 margin-top-4">
-              <div className="sec-title-container less-padding-5 text-left"></div>
-              <div className="bg-white font-p">
-                <div className="row">
-                  <div className="col-md-12">
-                    <input
-                      id="phone"
-                      className="form-control input-1"
-                      type="text"
-                      placeholder="Name"
-                      name="Title"
-                    />
+      <form action="#" onSubmit={registerSubmit}>
+        <section className=" sec-padding margin-top-4 margin-bottom-3">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-3"></div>
+              <div className="col-md-6 margin-top-4">
+                <div className="sec-title-container less-padding-5 text-left"></div>
+                <div className="bg-white font-p">
+                  <div className="row">
+                    <div className="col-md-12">
+                      <input
+                        id="phone"
+                        className="form-control input-1"
+                        type="text"
+                        placeholder="Name"
+                        name="Title"
+                        value={contactInput.name}
+                        name="name"
+                        onChange={handleInput}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-12">
-                    <input
-                      id="phone"
-                      className="form-control input-1"
-                      type="text"
-                      placeholder="Email Here"
-                      name="Title"
-                    />
+                  <div className="row">
+                    <div className="col-md-12">
+                      <input
+                        id="phone"
+                        className="form-control input-1"
+                        type="text"
+                        placeholder="Email Here"
+                        value={contactInput.email}
+                        name="email"
+                        onChange={handleInput}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-12">
-                    <input
-                      id="phone"
-                      className="form-control input-1"
-                      type="text"
-                      placeholder="Type"
-                      name="Title"
-                    />
+                  <div className="row">
+                    <div className="col-md-12">
+                      <input
+                        id="phone"
+                        className="form-control input-1"
+                        type="text"
+                        placeholder="Type"
+                        value={contactInput.type}
+                        name="type"
+                        onChange={handleInput}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="row">
-                  <div className="col-md-12 margin-top-1">
-                    <textarea
-                      className="form-control input-1"
-                      id="exampleFormControlTextarea1"
-                      rows="4"
-                      placeholder="Enter Desdcription"
-                    ></textarea>
+                  <div className="row">
+                    <div className="col-md-12 margin-top-1">
+                      <textarea
+                        className="form-control input-1"
+                        id="exampleFormControlTextarea1"
+                        rows="4"
+                        placeholder="Enter Desdcription"
+                        value={contactInput.description}
+                        name="description"
+                        onChange={handleInput}
+                      ></textarea>
+                    </div>
                   </div>
-                </div>
-                <div className="row">
-                  <br />
-                  <div className="col-md-12">
-                    <button type="submit" className="thm-btn uppercase">
-                      submit
-                    </button>
+                  <div className="row">
+                    <br />
+                    <div className="col-md-12">
+                      <button type="submit" className="thm-btn uppercase">
+                        submit
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
+              <div className="col-md-3"></div>
             </div>
-            <div className="col-md-3"></div>
           </div>
-        </div>
-      </section>
+        </section>
+      </form>
       <Footer />
     </div>
   );

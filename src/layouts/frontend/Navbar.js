@@ -200,9 +200,9 @@ function Navbar(props) {
                 <li>
                   <Link to="/services">Services</Link>
                   <ul className="sub-menu">
-                    {servicelist.map((item) => (
+                    {servicelist.map((item, index) => (
                       <li key={item.id}>
-                        <Link to={item.slug}>{item.name}</Link>
+                        <Link to={"/service/" + item.slug}>{item.name}</Link>
                       </li>
                     ))}
                     {/* <li>
