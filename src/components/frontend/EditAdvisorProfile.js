@@ -45,11 +45,16 @@ function EditAdvisorProfile(props) {
   });
 
   const [arrFeilds, setFeilds] = useState([]);
-  console.log(registerInput);
+  console.log("stateList", registerInput.stateList);
   useEffect(() => {
     getCountry();
     getEditProfile();
   }, []);
+  useEffect(() => {
+    // if(editPro)
+    // getCity(res[pceID])
+    console.log("useEffect stateList");
+  }, [registerInput.stateList]);
 
   const getEditProfile = async () => {
     let response = await axios.post(`/api/profile_data`).then((data) => data);
@@ -58,6 +63,8 @@ function EditAdvisorProfile(props) {
     // setRegister({ firstname: responsedata.firstname });
 
     // setRegister({ ...registerInput, firstname: response.firstname });
+
+    getState(responsedata?.countryId);
 
     setRegister({
       ...registerInput,
@@ -458,6 +465,7 @@ function EditAdvisorProfile(props) {
                       placeholder="First Name"
                       name="firstname"
                       onChange={handleInput}
+                      value={registerInput.firstname}
                     />
                   </div>
                 </div>
@@ -470,6 +478,7 @@ function EditAdvisorProfile(props) {
                       placeholder="Last Name"
                       name="lastname"
                       onChange={handleInput}
+                      value={registerInput.lastname}
                     />
                   </div>
                 </div>
@@ -483,6 +492,7 @@ function EditAdvisorProfile(props) {
                       placeholder="Phone No"
                       name="contactno"
                       onChange={handleInput}
+                      value={registerInput.contactno}
                     />
                   </div>
                 </div>
