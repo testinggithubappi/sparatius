@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
 use App\Models\ContactUs;
+use App\Models\Eclasses;
 use App\Models\Rating;
 use App\Models\Service;
 use App\Models\ServiceLookUp;
@@ -54,5 +55,17 @@ class CustomController extends Controller
     {
         $contact = ContactUs::create($request->all());
         return response()->json(['status' => '200', 'data' => $contact]);
+    }
+
+    public function eClasses()
+    {
+        $eclasses = Eclasses::paginate(3);
+        return ['status' => '200', 'data' => $eclasses];
+    }
+
+    public function eClassDetail($id)
+    {
+        $detail = Eclasses::where($id)::first();
+        return ['status' => '200', 'data' => $detail];
     }
 }

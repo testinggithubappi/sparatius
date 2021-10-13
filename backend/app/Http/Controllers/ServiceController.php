@@ -45,7 +45,6 @@ class ServiceController extends Controller
     public function providerProfileVideo(Request $request)
     {
         $name = "";
-        return response()->json(['status' => '200', 'msg' => 'Profile Video Uploaded Successfully', 'data' => $request->all()]);
         try {
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
