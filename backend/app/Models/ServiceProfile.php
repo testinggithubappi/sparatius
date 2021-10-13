@@ -10,7 +10,7 @@ class ServiceProfile extends Model
     use HasFactory;
     protected $table = "serviceproviderprofile";
     protected $fillable = [
-        'userId', 'description', 'videoPath', 'countryId', 'cityId', 'stateId', 'zipCode', 'joinedDate', 'yearExperience'
+        'userId', 'gender', 'description', 'videoPath', 'countryId', 'cityId', 'stateId', 'zipCode', 'joinedDate', 'yearExperience'
     ];
     public function user()
     {

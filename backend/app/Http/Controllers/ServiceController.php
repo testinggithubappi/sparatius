@@ -36,7 +36,7 @@ class ServiceController extends Controller
             return response()->json(['status' => '422', 'msg' => $validator->getMessageBag()]);
         } else {
             try {
-                $service_profile = ServiceProfile::where('userId', 4)->update(['description' => $request->profileAbout]);
+                $service_profile = ServiceProfile::where('userId', Auth::user()->id)->update(['description' => $request->profileAbout]);
                 return response()->json(['status' => '200', 'msg' => 'About Profile Successfully', 'data' => Auth::user()->id]);
             } catch (Exception $e) {
                 return response()->json(['status' => '400', 'msg' => $e->getMessage()]);
@@ -112,7 +112,7 @@ class ServiceController extends Controller
                 'contactno' => ['required', 'string', 'max:255'],
                 'city' => ['required', 'int'],
                 'state' => ['required', 'int'],
-                'yearexperience' => ['required', 'string', 'max:255'],
+                'yearexperience' => ['required'],
                 'yearjoined' => ['required'],
                 'zipcode' => ['required'],
             ]
@@ -127,6 +127,7 @@ class ServiceController extends Controller
                     'contactNo'         =>  $request->firstname,
                 ]);
                 $profile = ServiceProfile::where('userId', Auth::user()->id)->update([
+                    'gender'         =>      $request->gender,
                     'countryId'         =>      $request->country,
                     'stateId'         =>      $request->state,
                     'cityId'         =>      $request->city,
