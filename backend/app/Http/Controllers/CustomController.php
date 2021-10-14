@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InviteEmail;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
 use App\Models\ContactUs;
 use App\Models\Eclassdetail;
 use App\Models\Eclasses;
+use App\Models\Favorite;
+use App\Models\Invitefriend;
 use App\Models\Rating;
 use App\Models\Service;
 use App\Models\ServiceLookUp;
 use App\Models\ServiceProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class CustomController extends Controller
 {
@@ -39,22 +44,6 @@ class CustomController extends Controller
             ->leftjoin('rating', 'rating.providerId', 'lookup.userId')
             ->select(DB::raw('users.*, lookup.serviceId, profile.description, Year(profile.joinedDate) as joinedYear, GROUP_CONCAT(lookup.chatType) as type, GROUP_CONCAT(lookup.price) as prices, AVG(ratingScore) as rating'))
             ->where(['users.roleType' => 'provider', 'lookup.serviceId' => $type->id])->groupBy('lookup.serviceId')->paginate(2);
-        // $type = Service::where('slug', $request->slug)->first();
-        // $i = 0;
-        // foreach ($providers as $provider) {
-        //     $rating = array();
-        //     $provider->profile = ServiceProfile::where('userId', $provider->id)->get();
-        //     $provider->lookup = ServiceLookUp::leftjoin('rating', 'rating.serviceId', 'serviceslookup.id')->where(['userId' => $provider->id, 'serviceId' => $type->id])->get();
-        //     if (empty(($provider->lookup)->toArray())) {
-        //         unset($providers[$i]);
-        //     } else {
-        //         foreach ($provider->lookup as $lookup) {
-        //             $rating[] = Rating::where('serviceId', $lookup->id)->avg('ratingScore');
-        //         }
-        //         $provider->rating = $rating;
-        //     }
-        //     $i++;
-        // }
         return response()->json(['data' => $providers]);
     }
 
@@ -74,5 +63,46 @@ class CustomController extends Controller
     {
         $detail = Eclasses::where('id', $id)->first();
         return ['status' => '200', 'data' => $detail];
+    }
+
+    public function inviteFriends(Request $request)
+    {
+        $check = Invitefriend::where(['userId' => Auth::user()->id, 'email' => $request->email])->first();
+        if (empty($check)) {
+            $invitation = Invitefriend::create([
+                'userId' => Auth::user()->id,
+                'email' => $request->email,
+            ]);
+            Mail::to($request->email)->send(new InviteEmail(env('BASE_URL'), Auth::user()->firstName . " " . Auth::user()->lastName));
+            return response()->json(['status' => '200', 'msg' => 'invitation send successfully', 'data' => $invitation]);
+        } else {
+            return response()->json(['status' => '400', 'msg' => "invitation already send to this email", 'data' => ""]);
+        }
+    }
+
+    public function addFavorite(request $request)
+    {
+        $check = Favorite::where(['userId' => Auth::user()->id, 'providerId' => $request->id])->first();
+        if (empty($check)) {
+            $fav = Favorite::create([
+                'userId'        => Auth::user()->id,
+                'providerId'    =>  $request->id
+            ]);
+            return response()->json(['status' => '200', "msg" => "Favorite Added", 'data' => $fav]);
+        } else {
+            return response()->json(['status' => '400', "msg" => "Already Favorite", 'data' => ""]);
+        }
+    }
+
+    public function userProfile()
+    {
+        $user = User::where('id', Auth::user()->id)->first();
+        return ['status' => '200', 'data' => $user];
+    }
+
+    public function editProfile(Request $request)
+    {
+        $updated = User::where('id', Auth::user()->id)->update($request->all());
+        return ['status' => '200', 'data' => $updated];
     }
 }

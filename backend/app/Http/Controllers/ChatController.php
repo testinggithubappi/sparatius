@@ -36,7 +36,7 @@ class ChatController extends Controller
         try {
             $check_session = $this->sessionCheck($request);
             $chat = Chatmessages::create([
-                'chathead_id'  =>  $check_session->id,
+                'chathead_id'  =>  $check_session['data']->id,
                 'to_id'     =>  $request->id,
                 'from_id'   =>  Auth::user()->id,
                 'message'  =>  $request->message,
@@ -77,6 +77,6 @@ class ChatController extends Controller
         //         ->orwhere(['to_id'=> $request->user()->id, "from_id"=>$request->id])
         //         ->get();
         // $chats = $this->clearData($chats, $request->user()->id, $request->id);
-        return $chathead;
+        return ['status' => '200', 'data' => $chathead];
     }
 }
