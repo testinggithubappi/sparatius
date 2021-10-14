@@ -16,6 +16,8 @@ class Rating extends Migration
         Schema::create('rating', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('userid')->unsigned();
+            $table->enum('type', ['service', 'eclass'])->nullable();
+            $table->bigInteger('eclassId')->unsigned();
             $table->bigInteger('serviceId')->unsigned();
             $table->integer('ratingScore');
             $table->string('description')->nullable();
@@ -27,6 +29,10 @@ class Rating extends Migration
             $table->foreign('serviceId')
                 ->references('id')
                 ->on('servicesLookup')
+                ->onCascade('delete');
+            $table->foreign('eclassId')
+                ->references('id')
+                ->on('eclasses')
                 ->onCascade('delete');
         });
     }
