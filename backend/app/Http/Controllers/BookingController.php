@@ -11,9 +11,9 @@ class BookingController extends Controller
     //
     public function orderHistory()
     {
-        $history = User::join('booking', 'booking.userId', 'users.id')
+        $history = User::leftjoin('booking', 'booking.userId', 'users.id')
             ->where('id', Auth::user()->id)
-            ->get();
+            ->paginate(5);
         return ['status' => '200', 'history' => $history];
     }
 }

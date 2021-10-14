@@ -47,7 +47,14 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::get('order_history', [BookingController::class, 'orderHistory'])->name('oder_history');
     Route::post('/profile_data', [ServiceController::class, 'providerProfileData'])->name('/profile_data');
 
+    Route::post('create_chathead', [ChatController::class, 'sessionCheck'])->name('create_chathead');
     Route::post('send_message', [ChatController::class, 'SendMessage'])->name('send_message');
+
+    Route::post('invite_friend', [CustomController::class, 'inviteFriends'])->name('invite_friend');
+    Route::post('add_favorite', [CustomController::class, 'addFavorite'])->name('add_favorite');
+
+    Route::get('user_profile', [CustomController::class, 'userProfile'])->name('user_profile');
+    Route::post('edit_profile', [CustomController::class, 'editProfile'])->name('edit_profile');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
