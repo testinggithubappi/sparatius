@@ -4,6 +4,8 @@ import axios from "axios";
 import swal from "sweetalert";
 import gfgLogo from "../../assets/frontend/img/logo.png";
 import profilePicimg from "../../assets/frontend/img/resources/profile-pic.jpg";
+import fire from "../../config/firebase";
+import { getDatabase, set, ref } from "firebase/database";
 
 import { getList } from "../../services/services";
 
@@ -33,9 +35,17 @@ function Navbar(props) {
         localStorage.removeItem("auth_token");
         localStorage.removeItem("auth_name");
         swal("Success", res.data.message, "success");
-        history.push("/home");
+        setUserOnlineStatus(localStorage.getItem("user_id"));
       }
     });
+  };
+
+  const setUserOnlineStatus = async (user_id) => {
+    let database = getDatabase(fire);
+    await set(ref(database, "users/" + user_id), {
+      online: false,
+    });
+    history.push("/home");
   };
 
   var AuthButton = "";

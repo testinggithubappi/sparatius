@@ -36,8 +36,8 @@ class CustomController extends Controller
 
         $providers = User::leftjoin("serviceproviderprofile as profile", 'profile.userId', 'users.id')
             ->leftjoin('serviceslookup as lookup', 'lookup.userId', 'users.id')
-            ->select(DB::raw('lookup.*, users.*, GROUP_CONCAT(lookup.chatType) as type, GROUP_CONCAT(lookup.price) as price'))
-            ->where(['users.roleType' => 'provider', 'lookup.serviceId' => $type->id])->paginate(2);
+            ->select(DB::raw('users.*, lookup.serviceId, profile.description, Year(profile.joinedDate) as joinedYear, GROUP_CONCAT(lookup.chatType) as type, GROUP_CONCAT(lookup.price) as prices'))
+            ->where(['users.roleType' => 'provider', 'lookup.serviceId' => $type->id])->groupBy('lookup.serviceId')->paginate(2);
         // $type = Service::where('slug', $request->slug)->first();
         // $i = 0;
         // foreach ($providers as $provider) {

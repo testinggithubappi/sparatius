@@ -42,6 +42,11 @@ a:focus {
   text-decoration: none;
 }
 
+.readingsContainerPrice button {
+  background: #662c91;
+  border: transparent;
+}
+
 @media (min-width: 1200px) {
   .container {
     padding: 0;
