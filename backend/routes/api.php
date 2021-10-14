@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\CustomController;
 
@@ -30,6 +32,8 @@ Route::post('contact_us', [CustomController::class, 'contactUs']);
 Route::post('e_classes', [CustomController::class, 'eClasses']);
 Route::get('e_class_detail/{e_classes_id}', [CustomController::class, 'eClassDetail']);
 
+Route::get('token', [ChatController::class, 'createTokSession'])->name('token');
+
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('logout', [AuthController::class, 'Logout']);
     Route::get('/TokenVerify', function () {
@@ -40,7 +44,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('/profile_service', [ServiceController::class, 'providerProfileServices'])->name('/profile_service');
     Route::post('/profile_detail', [ServiceController::class, 'providerProfileDetails'])->name('/profile_detail');
 
+    Route::get('order_history', [BookingController::class, 'orderHistory'])->name('oder_history');
     Route::post('/profile_data', [ServiceController::class, 'providerProfileData'])->name('/profile_data');
+
+    Route::post('send_message', [ChatController::class, 'SendMessage'])->name('send_message');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
