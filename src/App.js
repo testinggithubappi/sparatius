@@ -162,7 +162,7 @@ class App extends Component {
               {localStorage.getItem("auth_token") ? <Redirect /> : <Register />}
             </Route>
 
-            <PrivateRoute path="/chat" name="Chat" component={Chat} />
+            <PrivateRoute path="/chat/:id" name="Chat" component={Chat} />
             <PrivateRoute
               path="/edit-profile"
               name="EditProfile"

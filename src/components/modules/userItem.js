@@ -7,6 +7,7 @@ import swal from "sweetalert";
 import { getDatabase, set, ref, onValue, child, get } from "firebase/database";
 import fire from "../../config/firebase";
 import { Link, useHistory } from "react-router-dom";
+import StarRatings from "react-star-ratings";
 
 function UserItem(props) {
   const [online, setOnline] = React.useState(false);
@@ -87,7 +88,7 @@ function UserItem(props) {
           <div className="shape-rating">
             <span>Top Rated</span>
             <ul className="list-inline review-star">
-              <li>
+              {/* <li>
                 <i className="fa fa-star"></i>
               </li>
               <li>
@@ -101,8 +102,17 @@ function UserItem(props) {
               </li>
               <li>
                 <i className="fa fa-star"></i>
-              </li>
+              </li> */}
+
+              <StarRatings
+                rating={Math.floor(item.rating)}
+                starRatedColor="yellow"
+                numberOfStars={5}
+                name="rating"
+                starDimension="30px"
+              />
             </ul>
+
             <img
               src={readingsprofileImg}
               className="img-responsive shape-rating-img"

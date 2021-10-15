@@ -7,8 +7,8 @@ import Footer from "../../layouts/frontend/Footer";
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
 import shaperatingImg from "../../assets/frontend/img/resources/shape-rating.png";
 import videocallImg from "../../assets/frontend/img/video-call-img.jpg";
-import { OTSession, OTPublisher, OTStreams, OTSubscriber } from "opentok-react";
 import { API_KEY } from "../../config";
+import VideoChatInner from "../modules/VideoChatInner";
 
 class VideoCall extends Component {
   constructor(props) {
@@ -22,42 +22,6 @@ class VideoCall extends Component {
       apiKey: API_KEY,
       sessionId: "",
       token: "",
-    };
-
-    this.sessionEventHandlers = {
-      sessionConnected: () => {
-        this.setState({ connection: "Connected" });
-      },
-      sessionDisconnected: () => {
-        this.setState({ connection: "Disconnected" });
-      },
-      sessionReconnected: () => {
-        this.setState({ connection: "Reconnected" });
-      },
-      sessionReconnecting: () => {
-        this.setState({ connection: "Reconnecting" });
-      },
-    };
-
-    this.publisherEventHandlers = {
-      accessDenied: () => {
-        console.log("User denied access to media source");
-      },
-      streamCreated: () => {
-        console.log("Publisher stream created");
-      },
-      streamDestroyed: ({ reason }) => {
-        console.log(`Publisher stream destroyed because: ${reason}`);
-      },
-    };
-
-    this.subscriberEventHandlers = {
-      videoEnabled: () => {
-        console.log("Subscriber video enabled");
-      },
-      videoDisabled: () => {
-        console.log("Subscriber video disabled");
-      },
     };
   }
 
@@ -83,36 +47,7 @@ class VideoCall extends Component {
     }
   };
 
-  onSessionError = (error) => {
-    this.setState({ error });
-  };
-
-  onPublish = () => {
-    console.log("Publish Success");
-  };
-
-  onPublishError = (error) => {
-    this.setState({ error });
-  };
-
-  onSubscribe = () => {
-    console.log("Subscribe Success");
-  };
-
-  onSubscribeError = (error) => {
-    this.setState({ error });
-  };
-
-  toggleVideo = () => {
-    this.setState((state) => ({
-      publishVideo: !state.publishVideo,
-    }));
-  };
   render() {
-    console.log(this.props.location.state);
-    // const { apiKey, sessionId, token } = this.props.credentials;
-    const { error, connection, publishVideo, apiKey, sessionId, token } =
-      this.state;
     return (
       <div>
         <Navbar />
@@ -127,37 +62,12 @@ class VideoCall extends Component {
             <div className="row">
               <div className="col-md-8">
                 <div className="video-screen">
-                  <div id="sessionStatus">Session Status: {connection}</div>
-                  {error ? (
-                    <div className="error">
-                      <strong>Error:</strong> {error}
-                    </div>
-                  ) : null}
-                  <OTSession
-                    apiKey={apiKey}
-                    sessionId={sessionId}
-                    token={token}
-                    onError={this.onSessionError}
-                    eventHandlers={this.sessionEventHandlers}
-                  >
-                    <button id="videoButton" onClick={this.toggleVideo}>
-                      {publishVideo ? "Disable" : "Enable"} Video
-                    </button>
-                    <OTPublisher
-                      properties={{ publishVideo, width: 50, height: 50 }}
-                      onPublish={this.onPublish}
-                      onError={this.onPublishError}
-                      eventHandlers={this.publisherEventHandlers}
-                    />
-                    <OTStreams>
-                      <OTSubscriber
-                        properties={{ width: 100, height: 100 }}
-                        onSubscribe={this.onSubscribe}
-                        onError={this.onSubscribeError}
-                        eventHandlers={this.subscriberEventHandlers}
-                      />
-                    </OTStreams>
-                  </OTSession>
+                  {/* <VideoChatInner
+                    sessionId={this.state.sessionId}
+                    token={this.state.token}
+                    apiKey={API_KEY}
+                  /> */}
+
                   {/* <div className="row">
                     <div className="video-profile-screen">
                       <img src="img/80x80.jpg" alt="" />

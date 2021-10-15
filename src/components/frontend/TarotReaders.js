@@ -36,19 +36,6 @@ function TarotReaders(props) {
     RangeEnd: "",
   });
 
-  const ChatStart = async (data) => {
-    try {
-      let response = await axios
-        .post(`/api/send_message`, data)
-        .then((data) => data);
-      response = await response.data;
-
-      history.push("/chat");
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   const getProviderList = async (path = "/api/providers") => {
     let data = {
       slug: props.match.params.slug,
@@ -136,20 +123,17 @@ function TarotReaders(props) {
     console.log(providerdata);
     // history.push("/chat");
     console.log(item);
-    // if (item == "text") {
-    //   let data = {
-    //     id: providerdata.id,
-    //   };
-    //   ChatStart(data);
-    // }
-    // if (item == "video") {
-    //   history.push(`/video-call/${providerdata.id}`);
-    //   // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
-    // }
+    if (item == "text") {
+      history.push(`/chat/${providerdata.id}`);
+    }
+    if (item == "video") {
+      history.push(`/video-call/${providerdata.id}`);
+      // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+    }
 
-    setEditInput({
-      showmodal: true,
-    });
+    // setEditInput({
+    //   showmodal: true,
+    // });
   };
 
   const checkUseronline = (userId) => {
