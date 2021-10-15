@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
+import axios from "axios";
 import shaperatingImg from "../../assets/frontend/img/resources/shape-rating.png";
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
 import dotImg from "../../assets/frontend/img/dot.png";
-
+import swal from "sweetalert";
 import { getDatabase, set, ref, onValue, child, get } from "firebase/database";
 import fire from "../../config/firebase";
 import { Link, useHistory } from "react-router-dom";
@@ -52,6 +53,22 @@ function UserItem(props) {
         </li>
       );
     });
+  };
+
+  const addFavouriteclick = (item) => {
+    const data = {
+      id: item.id,
+    };
+    let role = localStorage.getItem("role");
+    console.log(data);
+    if (role == "customer") {
+      axios.post("/api/addFavourites", data).then((res) => {
+        if (res.data.status == 200) {
+          swal("Success", "Add Favoutite ", "success");
+        } else {
+        }
+      });
+    }
   };
 
   let { item } = props;
@@ -118,13 +135,27 @@ function UserItem(props) {
               <p>Year joined</p>
             </li>
             <li>
-              <i className="fa fa-heart" aria-hidden="true"></i>
-              <p>Favorite</p>
+              <i
+                onClick={() => {
+                  addFavouriteclick(item);
+                }}
+                className="fa fa-heart"
+                aria-hidden="true"
+              ></i>
+              <p>
+                <button
+                  onClick={() => {
+                    addFavouriteclick(item);
+                  }}
+                >
+                  Favorite
+                </button>
+              </p>
             </li>
-            <li>
+            {/* <li>
               <i className="fa fa-bell" aria-hidden="true"></i>
               <p>Notificaton</p>
-            </li>
+            </li> */}
           </ul>
         </div>
 

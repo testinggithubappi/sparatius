@@ -43,8 +43,8 @@ import PublicRoute from "./routes/PublicRoute";
 import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8000/";
-axios.defaults.headers.post["content-type"] = "appliaction/json";
-axios.defaults.headers.post["accept"] = "appliaction/json";
+axios.defaults.headers.post["content-type"] = "application/json";
+axios.defaults.headers.post["accept"] = "application/json";
 axios.defaults.headers.post["accept"] = "multipart/form-data";
 axios.interceptors.request.use(function (config) {
   let token = localStorage.getItem("auth_token");
@@ -184,7 +184,7 @@ class App extends Component {
               component={Notifications}
             />
             <PrivateRoute
-              path="/video-call"
+              path="/video-call/:id"
               name="VideoCall"
               component={VideoCall}
             />

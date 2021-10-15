@@ -15,11 +15,17 @@ function OrderList(props) {
 
   const [OrderList, SetOrderList] = useState([]);
 
-  const getOrderLIst = async () => {
-    let response = await axios.post(`/api/orderlist`).then((data) => data);
-    response = await response.data.orderlist;
+  const getOrderLIst = async (path = `/api/orderlist`) => {
+    let response = await axios.post(`${path}`).then((data) => data);
+    response = await response.data.data;
     SetOrderList(response);
   };
+
+  let paginationCountArr = [];
+  for (let i = 0; i < OrderList?.total / OrderList?.per_page; i++) {
+    paginationCountArr.push(i);
+  }
+
   return (
     <div>
       <Navbar />
@@ -34,7 +40,7 @@ function OrderList(props) {
           <div className="row">
             <div className="col-md-2"></div>
             <div className="col-md-8 left-side">
-              {OrderList.map((item) => (
+              {OrderList?.data?.map((item) => (
                 <div className="col-md-12 bg-white margin-top-1">
                   <h4 className="font-weight-bold">Order # 1235</h4>
                   <p>28 Sept 2021, 08:42 PM</p>
@@ -58,6 +64,51 @@ function OrderList(props) {
               ))}
             </div>
             <div className="col-md-2"></div>
+
+            <nav aria-label="..." className="text-center">
+              <ul className="pagination font-p">
+                <li className="page-item">
+                  {" "}
+                  <button
+                    className="page-link"
+                    tabindex="-1"
+                    disabled={OrderList?.prev_page_url ? !true : !false}
+                    onClick={() => getOrderLIst(OrderList?.prev_page_url)}
+                    tabindex="-1"
+                  >
+                    Previous
+                  </button>
+                </li>
+                {OrderList
+                  ? paginationCountArr.map((x, i) => {
+                      return (
+                        <li className="page-item">
+                          <button
+                            className={`page-link ${
+                              OrderList?.current_page == i + 1 ? "active" : ""
+                            }`}
+                            to="#"
+                            onClick={() => {
+                              getOrderLIst(OrderList.links[i + 1].url);
+                            }}
+                          >
+                            {i + 1}
+                          </button>
+                        </li>
+                      );
+                    })
+                  : null}
+                <li className="page-item">
+                  <button
+                    className="page-link"
+                    onClick={() => getOrderLIst(OrderList.next_page_url)}
+                    disabled={OrderList?.next_page_url ? !true : !false}
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </section>

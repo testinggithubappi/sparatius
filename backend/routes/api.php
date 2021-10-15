@@ -48,6 +48,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('/profile_data', [ServiceController::class, 'providerProfileData'])->name('/profile_data');
 
     Route::post('send_message', [ChatController::class, 'SendMessage'])->name('send_message');
+    Route::post('create_chathead', [ChatController::class, 'sessionCheck'])->name('create_chathead');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

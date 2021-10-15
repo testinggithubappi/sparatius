@@ -4,13 +4,15 @@ import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+
 import fire from "../../config/firebase";
 import { getDatabase, set, ref, onValue, child, get } from "firebase/database";
 
 import shaperatingImg from "../../assets/frontend/img/resources/shape-rating.png";
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
 import UserItem from "../modules/userItem";
+import PaymentModal from "../modules/PaymentModal";
+import { OTSession, OTPublisher, OTStreams, OTSubscriber } from "opentok-react";
 
 function TarotReaders(props) {
   const history = useHistory();
@@ -34,6 +36,19 @@ function TarotReaders(props) {
     RangeEnd: "",
   });
 
+  const ChatStart = async (data) => {
+    try {
+      let response = await axios
+        .post(`/api/send_message`, data)
+        .then((data) => data);
+      response = await response.data;
+
+      history.push("/chat");
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const getProviderList = async (path = "/api/providers") => {
     let data = {
       slug: props.match.params.slug,
@@ -56,10 +71,6 @@ function TarotReaders(props) {
       console.log("error", error);
     }
   };
-
-  // const SearchProviderfilter = () => {
-  //       getProviderList();
-  // }
 
   const capitalizeWords = (string) => {
     return string.replace(/(?:^|\s)\S/g, function (a) {
@@ -105,74 +116,6 @@ function TarotReaders(props) {
   }
   console.log(paginationCountArr);
 
-  // const loadPrices = (type, prices) => {
-  //   var arraytype = type.split(",");
-  //   var arrayprices = prices.split(",");
-  //   console.log("arraytype", arraytype);
-  //   console.log("arrayprices", arrayprices);
-
-  //   var htmlPrice = "<ul>";
-  //   arraytype.map((item, i) => {
-  //     console.log(item);
-  //     var Type = "Video Call";
-  //     if (item == "text") {
-  //       Type = "Chat";
-  //     } else if (item == "audio") {
-  //       Type = "Audio Call";
-  //     }
-  //     htmlPrice += `        <li>
-  //       <button >
-  //         <i className="fa fa-comments" aria-hidden="true"></i>
-  //         <br />
-  //         ${arrayprices[i]}/min
-  //         <p>${Type}</p>
-  //       </a>
-  //     </button>`;
-
-  //     // if (arrayprices[i] != "" && item == "text") {
-  //     //   htmlPrice += `        <li>
-  //     //   <a href="#">
-  //     //     <i className="fa fa-comments" aria-hidden="true"></i>
-  //     //     <br />
-  //     //     ${arrayprices[i]}/min
-  //     //     <p>Chat</p>
-  //     //   </a>
-  //     // </li>`;
-  //     // }
-
-  //     // if (arrayprices[i] != "" && item == "audio") {
-  //     //   htmlPrice += `
-  //     //   <li>
-  //     //   <a href="#">
-  //     //     <i className="fa fa-phone" aria-hidden="true"></i>
-  //     //     <br />
-  //     //     ${arrayprices[i]}/min
-  //     //     <p>Voice call</p>
-  //     //   </a>
-  //     // </li>`;
-  //     // }
-  //     // if (arrayprices[i] != "" && item == "video") {
-  //     //   htmlPrice += `
-  //     //   <li>
-  //     //   <a href="#">
-  //     //     <i className="fa fa-video-camera" aria-hidden="true"></i>
-  //     //     <br />
-  //     //     ${arrayprices[i]}/min
-  //     //     <p>Video call</p>
-  //     //   </a>
-  //     // </li>`;
-  //     // }
-  //   });
-  //   htmlPrice += "</ul>";
-
-  //   return htmlPrice;
-  //   // return (
-  //   //   <ul>
-
-  //   //   </ul>
-  //   // );
-  // };
-
   const opeModal = (e) => {
     e.persist();
     console.log(e);
@@ -192,6 +135,17 @@ function TarotReaders(props) {
     var providerdata = providerList?.data[indexProvider];
     console.log(providerdata);
     // history.push("/chat");
+    console.log(item);
+    // if (item == "text") {
+    //   let data = {
+    //     id: providerdata.id,
+    //   };
+    //   ChatStart(data);
+    // }
+    // if (item == "video") {
+    //   history.push(`/video-call/${providerdata.id}`);
+    //   // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+    // }
 
     setEditInput({
       showmodal: true,
@@ -241,41 +195,7 @@ function TarotReaders(props) {
           <h2>{capitalizeWords(props.match.params.slug)}</h2>
         </div>
       </section>
-
-      <div
-        className={"modal fade " + (editInput.showmodal ? "in" : "")}
-        id="exampleModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalLabel"
-        aria-hidden="true"
-        style={{ display: editInput.showmodal ? "block" : "none" }}
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <div className="sec-title text-center">
-                <h3 className="text-purple">Edit Settings</h3>
-              </div>
-            </div>
-            <div className="modal-body">
-              <PayPalScriptProvider options={{ "client-id": "test" }}>
-                <PayPalButtons style={{ layout: "horizontal" }} />
-              </PayPalScriptProvider>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-block btn-secondary"
-                onClick={closeModal}
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} />
       <section className="sec-pad faq-page shop-sidebar sidebar-page">
         <div className="container">
           <div className="row">
