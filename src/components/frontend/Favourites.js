@@ -73,7 +73,7 @@ function Favourites(props) {
       <Navbar />
       <section className="inner-banner has-dot-pattern text-center">
         <div className="container sec-title">
-          <h2>Favorites</h2>
+          <h2>Favourites</h2>
         </div>
       </section>
       <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} />

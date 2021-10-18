@@ -159,13 +159,13 @@ function Navbar(props) {
               <img src={profilePicimg} className="profile-pic" />
             </Link>
           </li>
-          {/* <li>
+          <li>
             <Link to="/notifications">
               <span className="phone-only">Notification</span>
               <i className="fa fa-bell"></i>
               <span className="count">{notificationlist}</span>
             </Link>
-          </li> */}
+          </li>
           <li>
             <Link
               role="button"

@@ -36,6 +36,7 @@ class VideoCall extends Component {
         title: "Video Chat",
         msg: "You Have A Video Chat",
         type: "video",
+        customerid: localStorage.getItem("user_id"),
       };
       let response = await axios.post(path, data).then((data) => data);
       response = await response.data.data;
@@ -152,10 +153,6 @@ class VideoCall extends Component {
                       <li>
                         <i className="fa fa-heart" aria-hidden="true"></i>
                         <p>Favorite</p>
-                      </li>
-                      <li>
-                        <i className="fa fa-bell" aria-hidden="true"></i>
-                        <p>Notificaton</p>
                       </li>
                     </ul>
                   </div>

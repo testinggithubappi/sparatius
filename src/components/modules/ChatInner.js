@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { OTSession, OTPublisher, OTStreams, OTSubscriber } from "opentok-react";
-import CountDownTimer from './CountDownTimer';
+import CountDownTimer from "./CountDownTimer";
 
 export default class ChatInner extends React.Component {
   constructor(props) {
@@ -14,8 +14,12 @@ export default class ChatInner extends React.Component {
       chatHeadMessageList: [],
       txtmessage: "",
       currentchatID: this.props.currentchatID,
-      TimerMin: localStorage.getItem("timeMinute")?localStorage.getItem("timeMinute"):localStorage.setItem("timeMinute",1),
-      TimerSec: localStorage.getItem("timeSec")?localStorage.getItem("timeSec"):localStorage.setItem("timeSec",59)
+      TimerMin: localStorage.getItem("timeMinute")
+        ? localStorage.getItem("timeMinute")
+        : localStorage.setItem("timeMinute", 1),
+      TimerSec: localStorage.getItem("timeSec")
+        ? localStorage.getItem("timeSec")
+        : localStorage.setItem("timeSec", 59),
     };
 
     this.sessionEventHandlers = {
@@ -33,26 +37,39 @@ export default class ChatInner extends React.Component {
       },
     };
 
-    this.publisherEventHandlers = {
-      accessDenied: () => {
-        console.log("User denied access to media source");
-      },
-      streamCreated: () => {
-        console.log("Publisher stream created");
-      },
-      streamDestroyed: ({ reason }) => {
-        console.log(`Publisher stream destroyed because: ${reason}`);
-      },
-    };
+    // this.publisherEventHandlers = {
+    //   accessDenied: () => {
+    //     console.log("User denied access to media source");
+    //   },
+    //   streamCreated: () => {
+    //     console.log("Publisher stream created");
+    //   },
+    //   streamDestroyed: ({ reason }) => {
+    //     console.log(`Publisher stream destroyed because: ${reason}`);
+    //   },
+    // };
 
-    this.subscriberEventHandlers = {
-      videoEnabled: () => {
-        console.log("Subscriber video enabled");
-      },
-      videoDisabled: () => {
-        console.log("Subscriber video disabled");
-      },
-    };
+    // this.subscriberEventHandlers = {
+    //   videoEnabled: () => {
+    //     console.log("Subscriber video enabled");
+    //   },
+    //   videoDisabled: () => {
+    //     console.log("Subscriber video disabled");
+    //   },
+    // };
+  }
+
+  componentDidMount() {
+    this.LoadMesageByChat();
+    this.tok_session.sessionHelper.session.on("signal", (event) => {
+      console.log(this.state.chatHeadMessageList);
+      this.setState({
+        chatHeadMessageList: [
+          ...this.state.chatHeadMessageList,
+          ...[JSON.parse(event.data)],
+        ],
+      });
+    });
   }
 
   onSessionError = (error) => {
@@ -116,21 +133,20 @@ export default class ChatInner extends React.Component {
     });
   };
 
-  LoadMesageByChat = async (item) => {
-    console.log(item);
-    this.setState({
-      currentchatID: item.msg_to,
-    });
+  LoadMesageByChat = async () => {
     try {
       let data = {
-        id: item.id,
+        id:
+          localStorage.getItem("role") == "proviider"
+            ? this.props.params.customerid
+            : this.state.currentchatID,
       };
-      let path = `/api/getchatheadmessages`;
+      let path = `/api/show_chat`;
       let response = await axios.post(path, data).then((data) => data);
-      response = await response.data.data;
-      console.log(response);
+      let resdata = await response.data;
+      console.log("sss", resdata);
       this.setState({
-        chatHeadMessageList: response,
+        chatHeadMessageList: [...resdata.chat],
       });
     } catch (error) {
       console.log("error", error);
@@ -141,10 +157,10 @@ export default class ChatInner extends React.Component {
     return this.state.chatHeadMessageList.map((item, i) => {
       return (
         <div key={i}>
-          {item.id == 1 ? (
+          {item.from_id == localStorage.getItem("user_id") ? (
             <div className="outgoing_msg">
               <div className="sent_msg">
-                <p>Test which is a new approach to have all solutions</p>
+                <p>{item.message}</p>
                 <span className="time_date"> 11:01 AM | June 9</span>{" "}
               </div>
             </div>
@@ -159,7 +175,7 @@ export default class ChatInner extends React.Component {
               </div>
               <div className="received_msg">
                 <div className="received_withd_msg">
-                  <p>Test which is a new approach to have all solutions</p>
+                  <p>{item.message}</p>
                   <span className="time_date"> 11:01 AM | June 9</span>
                 </div>
               </div>
@@ -175,16 +191,45 @@ export default class ChatInner extends React.Component {
       txtmessage: e.target.value,
     });
   };
+
   SendMessage = async () => {
     try {
       let data = {
         message: this.state.txtmessage,
         id: this.state.currentchatID,
+        created_at: new Date().toISOString(),
+        from_id: localStorage.getItem("user_id"),
+        id:
+          this.state.chatHeadMessageList.length > 0
+            ? this.state.chatHeadMessageList[
+                this.state.chatHeadMessageList.length - 1
+              ].id + 1
+            : 1,
+        to_id: this.state.currentchatID,
+        updated_at: new Date().toISOString(),
       };
+      this.tok_session.sessionHelper.session.signal(
+        {
+          type: "message",
+          data: JSON.stringify(data),
+        },
+        function (error) {
+          if (error) {
+            console.log("signal error: " + error.message);
+          } else {
+            console.log("signal sent");
+          }
+        }
+      );
       let path = `/api/send_message`;
-      let response = await axios.post(path, data).then((data) => data);
-      response = await response.data.data;
-      console.log(response);
+      let response = await axios
+        .post(path, {
+          message: this.state.txtmessage,
+          id: this.state.currentchatID,
+        })
+        .then((data) => data);
+      // response = await response.data.data;
+      //console.log(response);
       // this.setState({
       //   chatHeadMessageList: response,
       // });
@@ -196,13 +241,24 @@ export default class ChatInner extends React.Component {
   render() {
     const { apiKey, sessionId, token } = this.props;
     const { error, connection, publishVideo } = this.state;
-    console.log("this.state.currentchatID", this.state.currentchatID);
     return (
       <div>
+        <OTSession
+          ref={(component) => (this.tok_session = component)}
+          sessionId={sessionId}
+          apiKey={apiKey}
+          token={token}
+          eventHandlers={this.sessionEventHandlers}
+        />
         <div className="messaging">
-        <CountDownTimer hoursMinSecs={{minutes: this.state.TimerMin,seconds:this.state.TimerSec}}/>
+          {/* <CountDownTimer
+            hoursMinSecs={{
+              minutes: this.state.TimerMin,
+              seconds: this.state.TimerSec,
+            }}
+          /> */}
           <div className="inbox_msg">
-            <div className="inbox_people">
+            {/* <div className="inbox_people">
               <div className="headind_srch">
                 <div className="srch_bar">
                   <div className="stylish-input-group">
@@ -221,7 +277,7 @@ export default class ChatInner extends React.Component {
                 </div>
               </div>
               <div className="inbox_chat">{this.loadChathead()}</div>
-            </div>
+            </div> */}
 
             <div className="mesgs">
               <div className="user-name">

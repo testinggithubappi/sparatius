@@ -27,7 +27,10 @@ import TarotReaders from "./components/frontend/TarotReaders";
 
 import TermsCondition from "./components/frontend/TermsCondition";
 import VideoCall from "./components/frontend/VideoCall";
+import VideoCalllProvider from "./components/frontend/VideoCalllProvider";
 import AudioCall from "./components/frontend/AudioCall";
+import AudioCallProvider from "./components/frontend/AudioCallProvider";
+
 import aboutUs from "./components/frontend/aboutUs";
 import PaymentHistory from "./components/frontend/PaymentHistory";
 import EditAdvisorProfile from "./components/frontend/EditAdvisorProfile";
@@ -157,13 +160,18 @@ class App extends Component {
             />
 
             <Route path="/login">
-            <Login />
+              <Login />
             </Route>
             <Route path="/register">
               {localStorage.getItem("auth_token") ? <Redirect /> : <Register />}
             </Route>
 
             <PrivateRoute path="/chat/:id" name="Chat" component={Chat} />
+            <PrivateRoute
+              path="/chat/:id/:customerid"
+              name="Customer"
+              component={Chat}
+            />
             <PrivateRoute
               path="/edit-profile"
               name="EditProfile"
@@ -190,9 +198,19 @@ class App extends Component {
               component={VideoCall}
             />
             <PrivateRoute
+              path="/provider/video-call/:id"
+              name="VideoCalllProvider"
+              component={VideoCalllProvider}
+            />
+            <PrivateRoute
               path="/audio-call/:id"
               name="AudioCall"
               component={AudioCall}
+            />
+            <PrivateRoute
+              path="/provider/audio-call/:id"
+              name="AudioCallProvider"
+              component={AudioCallProvider}
             />
             <PrivateRoute
               path="/payment-history"

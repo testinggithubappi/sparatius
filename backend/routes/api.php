@@ -48,6 +48,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('/profile_data', [ServiceController::class, 'providerProfileData'])->name('/profile_data');
 
     Route::post('get_chathead', [ChatController::class, 'getChatHeads'])->name('get_chathead');
+
+
     Route::post('create_chathead', [ChatController::class, 'sessionCheck'])->name('create_chathead');
     Route::post('send_message', [ChatController::class, 'SendMessage'])->name('send_message');
 
@@ -61,6 +63,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     Route::get('get-notification-count', [ChatController::class, 'getNotificationCount'])->name('getNotificationCount');
     Route::get('get-notification', [ChatController::class, 'getNotification'])->name('getNotification');
+
+    Route::post('show_chat', [ChatController::class, "allMessage"])->name('show_chat');
+
+    Route::post('getChatSession', [ChatController::class, 'getChatSession'])->name('getChatSession');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

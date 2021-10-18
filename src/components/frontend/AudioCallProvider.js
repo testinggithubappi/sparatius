@@ -10,7 +10,7 @@ import videocallImg from "../../assets/frontend/img/video-call-img.jpg";
 import { API_KEY } from "../../config";
 import VideoChatInner from "../modules/VideoChatInner";
 
-class AudioCall extends Component {
+class AudioCallProvider extends Component {
   constructor(props) {
     super(props);
 
@@ -30,13 +30,12 @@ class AudioCall extends Component {
   }
   getProviderSession = async () => {
     try {
-      let path = `/api/create_chathead`;
+      let path = `/api/getChatSession`;
       var data = {
         id: this.props.match.params.id,
-        title: "Audio Chat",
-        msg: "You Have A Audio Chat",
+        title: "Video Chat",
+        msg: "You Have A Video Chat",
         type: "audio",
-        customerid: localStorage.getItem("user_id"),
       };
       let response = await axios.post(path, data).then((data) => data);
       response = await response.data.data;
@@ -177,4 +176,4 @@ class AudioCall extends Component {
   }
 }
 
-export default AudioCall;
+export default AudioCallProvider;

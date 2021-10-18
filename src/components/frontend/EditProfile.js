@@ -16,10 +16,8 @@ function EditProfile(props) {
     contactno: "",
   });
   const getEditCustomerProfile = async () => {
-    let response = await axios
-      .post(`/api/editcustomerprofile`)
-      .then((data) => data);
-    let responsedata = response.data.profile;
+    let response = await axios.get(`/api/user_profile`).then((data) => data);
+    let responsedata = response.data.data;
 
     setProfileData({
       ...profileData,
@@ -32,17 +30,22 @@ function EditProfile(props) {
   const submitProfile = (e) => {
     e.preventDefault();
     const data = {
-      firstname: profileData.firstname,
-      lastname: profileData.lastname,
-      contactno: profileData.contactno,
+      firstName: profileData.firstname,
+      LastName: profileData.lastname,
+      contactNo: profileData.contactno,
     };
-    axios.post("/api/profilecustomerUpdate", data).then((res) => {
+    axios.post("/api/edit_profile", data).then((res) => {
       if (res.data.status == 200) {
-        swal("Success", res.data.msg, "success");
+        swal("Success", "Update Succesfully", "success");
         // history.push("/home");
       } else {
       }
     });
+  };
+
+  const handleInput = (e) => {
+    e.persist();
+    setProfileData({ ...profileData, [e.target.name]: e.target.value });
   };
   return (
     <div>
@@ -112,6 +115,7 @@ function EditProfile(props) {
                     className="form-control"
                     placeholder="Enter Name"
                     name="firstname"
+                    onChange={handleInput}
                     value={profileData.firstname}
                   />
                 </div>
@@ -122,6 +126,7 @@ function EditProfile(props) {
                     className="form-control"
                     placeholder="Enter Last Name"
                     name="lastname"
+                    onChange={handleInput}
                     value={profileData.lastname}
                   />
                 </div>
@@ -134,6 +139,7 @@ function EditProfile(props) {
                       className="form-control"
                       placeholder="Phone No"
                       name="contactno"
+                      onChange={handleInput}
                       value={profileData.contactno}
                     />
                   </div>

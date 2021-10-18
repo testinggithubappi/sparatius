@@ -71,27 +71,27 @@ class ChatController extends Controller
                 "token" => $tok->original['session_token']
             ]);
 
-            $this->Notification($request->title, $request->msg, $request->id, $request->type);
+            $this->Notification($request->title, $request->msg, $request->id, $request->type, $request->customerid);
             // echo "<pre>";
             // print_r($chathead);
             // die();
         } else {
-            // $tok = $this->createTokSession($request);
-            // // echo "<pre>";
-            // // print_r($tok->original);
-            // // die();
-            // $chathead = Chathead::where('id', $chathead->id)->update([
-            //     "from_id" => Auth::user()->id,
-            //     "to_id" => $request->id,
-            //     "session_id" => $tok->original['session_id'],
-            //     "token" => $tok->original['session_token']
-            // ]);
+            $tok = $this->createTokSession($request);
+            // echo "<pre>";
+            // print_r($tok->original);
+            // die();
+            $chathead = Chathead::where('id', $chathead->id)->update([
+                "from_id" => Auth::user()->id,
+                "to_id" => $request->id,
+                "session_id" => $tok->original['session_id'],
+                "token" => $tok->original['session_token']
+            ]);
 
-            // $chathead = Chathead::where(['from_id' => Auth::user()->id, 'to_id' => $request->id])
-            //     ->orwhere(['from_id' => $request->id, 'to_id' => Auth::user()->id])
-            //     ->first();
+            $chathead = Chathead::where(['from_id' => Auth::user()->id, 'to_id' => $request->id])
+                ->orwhere(['from_id' => $request->id, 'to_id' => Auth::user()->id])
+                ->first();
 
-            // $this->Notification($request->title, $request->msg, $request->id, $request->type);
+            $this->Notification($request->title, $request->msg, $request->id, $request->type, $request->customerid);
         }
         // $chats = Chats::where(['from_id'=>$request->user()->id, "to_id"=>$request->id])
         //         ->orwhere(['to_id'=> $request->user()->id, "from_id"=>$request->id])
@@ -99,6 +99,16 @@ class ChatController extends Controller
         // $chats = $this->clearData($chats, $request->user()->id, $request->id);
         return ['status' => '200', 'data' => $chathead];
     }
+
+    public function getChatSession(Request $request)
+    {
+        $chathead = Chathead::where(['from_id' => Auth::user()->id, 'to_id' => $request->id])
+            ->orwhere(['from_id' => $request->id, 'to_id' => Auth::user()->id])
+            ->first();
+        return ['status' => '200', 'data' => $chathead];
+    }
+
+
 
 
     public function getNotificationCount()
@@ -118,15 +128,23 @@ class ChatController extends Controller
         return response()->json(['status' => '200', 'data' => $heads]);
     }
 
-    public function Notification($title, $msg, $RcieverID, $type)
+    public function Notification($title, $msg, $RcieverID, $type, $customerid)
     {
 
         $data = array(
             'title' => $title,
             'msg' => $msg,
             'user_id' => $RcieverID,
-            'type' => $type
+            'type' => $type,
+            'customer_id' => $customerid,
         );
         DB::table('notification')->insert($data);
+    }
+
+    public function allMessage(Request $request)
+    {
+        $head = $this->sessionCheck($request);
+        $messages = Chatmessages::where('chathead_id', $head['data']->id)->orderBy('created_at', 'DESC')->get();
+        return response()->json(['status' => "200", "chat" => $messages, "auth_id" => Auth::user()->id]);
     }
 }

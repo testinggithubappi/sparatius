@@ -15,8 +15,8 @@ function OrderList(props) {
 
   const [OrderList, SetOrderList] = useState([]);
 
-  const getOrderLIst = async (path = `/api/orderlist`) => {
-    let response = await axios.post(`${path}`).then((data) => data);
+  const getOrderLIst = async (path = `/api/order_history`) => {
+    let response = await axios.get(`${path}`).then((data) => data);
     response = await response.data.data;
     SetOrderList(response);
   };

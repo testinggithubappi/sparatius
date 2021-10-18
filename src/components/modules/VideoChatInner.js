@@ -1,5 +1,11 @@
 import React from "react";
-import { OTSession, OTStreams, preloadScript } from "opentok-react";
+import {
+  OTPublisher,
+  OTSession,
+  OTStreams,
+  OTSubscriber,
+  preloadScript,
+} from "opentok-react";
 import ConnectionStatus from "./VideoCall/ConnectionStatus";
 import Publisher from "./VideoCall/Publisher";
 import Subscriber from "./VideoCall/Subscriber";
@@ -19,6 +25,7 @@ export default class VideoChatInner extends React.Component {
     };
     this.sessionEvents = {
       sessionConnected: () => {
+        console.log("asdasdasd");
         this.setState({ connected: true });
       },
       sessionDisconnected: () => {
@@ -32,18 +39,18 @@ export default class VideoChatInner extends React.Component {
   };
 
   render() {
-    const { apiKey, sessionId, token } = this.props;
-
+    const { apiKey, sessionId, token, video } = this.props;
+    console.log(this.props);
     return (
       <div>
-        <CountDownTimer
+        {/* <CountDownTimer
           hoursMinSecs={{
             minutes: this.state.TimerMin,
             seconds: this.state.TimerSec,
           }}
-        />
+        /> */}
         {sessionId && token ? (
-          <div>
+          <div style={{ height: 500 }}>
             <OTSession
               apiKey={apiKey}
               sessionId={sessionId}
@@ -56,12 +63,49 @@ export default class VideoChatInner extends React.Component {
               ) : null}
 
               {/* <ConnectionStatus connected={this.state.connected} /> */}
-
-              <Publisher video={this.props.video} />
+              <OTPublisher
+                eventHandlers={{
+                  streamCreated: () => {
+                    console.log("stream created");
+                  },
+                }}
+                style={{
+                  position: "absolute",
+                  zIndex: 11111111,
+                  bottom: 0,
+                  right: 0,
+                }}
+                properties={{
+                  publishAudio: true,
+                  publishVideo: video,
+                  width: 200,
+                  height: 250,
+                  insertMode: "append",
+                }}
+                onError={this.onError}
+                onPublish={() => {
+                  console.log("published");
+                }}
+              />
+              {/* <Publisher video={this.props.video} /> */}
 
               <OTStreams>
-                <Subscriber />
+                <OTSubscriber
+                  properties={{
+                    width: "100%",
+                    height: 500,
+                    insertMode: "append",
+                    fitMode: "cover",
+                  }}
+                  onError={() => {
+                    console.log("error");
+                  }}
+                  onSubscribe={() => {
+                    console.log("connected");
+                  }}
+                />
               </OTStreams>
+              {/* <Subscriber /> */}
             </OTSession>
           </div>
         ) : null}

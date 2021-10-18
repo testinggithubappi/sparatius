@@ -31,13 +31,13 @@ function Notifications(props) {
     console.log(item);
     var type = item.type;
     if (type == "text") {
-      history.push(`/chat/${item.user_id}`);
+      history.push(`/chat/${item.user_id}/${item.customer_id}`);
     }
     if (type == "video") {
-      history.push(`/video-call/${item.user_id}`);
+      history.push(`/provider/video-call/${item.customer_id}`);
     }
     if (type == "audio") {
-      history.push(`/audio-call/${item.user_id}`);
+      history.push(`/provider/audio-call/${item.customer_id}`);
     }
   };
 
