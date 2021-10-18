@@ -30,7 +30,7 @@ Route::post('providers', [CustomController::class, 'getTarotProviders']);
 Route::get('/provider_detail/{userId}/{serviceId}', [ServiceController::class, 'providerDetail'])->name('/provider_detail');
 Route::post('contact_us', [CustomController::class, 'contactUs']);
 Route::post('e_classes', [CustomController::class, 'eClasses']);
-Route::post('e_class_detail', [CustomController::class, 'eClassDetail']);
+Route::get('e_class_detail/{e_classes_id}', [CustomController::class, 'eClassDetail']);
 
 Route::get('token', [ChatController::class, 'createTokSession'])->name('token');
 
@@ -49,15 +49,21 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::get('order_history', [BookingController::class, 'orderHistory'])->name('oder_history');
     Route::post('/profile_data', [ServiceController::class, 'providerProfileData'])->name('/profile_data');
 
+    Route::post('get_chathead', [ChatController::class, 'getChatHeads'])->name('get_chathead');
     Route::post('create_chathead', [ChatController::class, 'sessionCheck'])->name('create_chathead');
     Route::post('get_chathead', [ChatController::class, 'getChatHeads'])->name('get_chathead');
     Route::post('send_message', [ChatController::class, 'SendMessage'])->name('send_message');
+
 
     Route::post('invite_friend', [CustomController::class, 'inviteFriends'])->name('invite_friend');
     Route::post('add_favorite', [CustomController::class, 'addFavorite'])->name('add_favorite');
 
     Route::get('user_profile', [CustomController::class, 'userProfile'])->name('user_profile');
     Route::post('edit_profile', [CustomController::class, 'editProfile'])->name('edit_profile');
+
+
+    Route::get('get-notification-count', [ChatController::class, 'getNotificationCount'])->name('getNotificationCount');
+    Route::get('get-notification', [ChatController::class, 'getNotification'])->name('getNotification');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -27,6 +27,7 @@ import TarotReaders from "./components/frontend/TarotReaders";
 
 import TermsCondition from "./components/frontend/TermsCondition";
 import VideoCall from "./components/frontend/VideoCall";
+import AudioCall from "./components/frontend/AudioCall";
 import aboutUs from "./components/frontend/aboutUs";
 import PaymentHistory from "./components/frontend/PaymentHistory";
 import EditAdvisorProfile from "./components/frontend/EditAdvisorProfile";
@@ -42,9 +43,9 @@ import PublicRoute from "./routes/PublicRoute";
 
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost/sparatius-git/backend/public/";
-axios.defaults.headers.post["content-type"] = "appliaction/json";
-axios.defaults.headers.post["accept"] = "appliaction/json";
+axios.defaults.baseURL = "http://localhost:8000/";
+axios.defaults.headers.post["content-type"] = "application/json";
+axios.defaults.headers.post["accept"] = "application/json";
 axios.defaults.headers.post["accept"] = "multipart/form-data";
 axios.interceptors.request.use(function (config) {
   let token = localStorage.getItem("auth_token");
@@ -114,7 +115,7 @@ class App extends Component {
             />
             <PublicRoute
               restricted={false}
-              path="/physic-reading-detail"
+              path="/provider/detail/:userid/:serviceid"
               name="PhysicReadingDetail"
               component={PhysicReadingDetail}
             />
@@ -156,13 +157,13 @@ class App extends Component {
             />
 
             <Route path="/login">
-              {localStorage.getItem("auth_token") ? <Redirect /> : <Login />}
+            <Login />
             </Route>
             <Route path="/register">
               {localStorage.getItem("auth_token") ? <Redirect /> : <Register />}
             </Route>
 
-            <PrivateRoute path="/chat" name="Chat" component={Chat} />
+            <PrivateRoute path="/chat/:id" name="Chat" component={Chat} />
             <PrivateRoute
               path="/edit-profile"
               name="EditProfile"
@@ -184,9 +185,14 @@ class App extends Component {
               component={Notifications}
             />
             <PrivateRoute
-              path="/video-call"
+              path="/video-call/:id"
               name="VideoCall"
               component={VideoCall}
+            />
+            <PrivateRoute
+              path="/audio-call/:id"
+              name="AudioCall"
+              component={AudioCall}
             />
             <PrivateRoute
               path="/payment-history"

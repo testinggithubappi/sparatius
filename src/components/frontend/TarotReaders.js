@@ -5,15 +5,26 @@ import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
 
+import fire from "../../config/firebase";
+import { getDatabase, set, ref, onValue, child, get } from "firebase/database";
+
 import shaperatingImg from "../../assets/frontend/img/resources/shape-rating.png";
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
+import UserItem from "../modules/userItem";
+import PaymentModal from "../modules/PaymentModal";
+import { OTSession, OTPublisher, OTStreams, OTSubscriber } from "opentok-react";
 
 function TarotReaders(props) {
+  const history = useHistory();
+
   useEffect(() => {
     getProviderList();
   }, []);
   const [checked, setChecked] = React.useState(false);
   const [providerList, setproviderList] = React.useState({});
+  const [editInput, setEditInput] = useState({
+    showmodal: false,
+  });
   const [registerInput, setRegister] = useState({
     keyword: "",
     Rating: "",
@@ -47,10 +58,6 @@ function TarotReaders(props) {
       console.log("error", error);
     }
   };
-
-  // const SearchProviderfilter = () => {
-  //       getProviderList();
-  // }
 
   const capitalizeWords = (string) => {
     return string.replace(/(?:^|\s)\S/g, function (a) {
@@ -95,6 +102,46 @@ function TarotReaders(props) {
     paginationCountArr.push(i);
   }
   console.log(paginationCountArr);
+
+  const opeModal = (e) => {
+    e.persist();
+    console.log(e);
+    setEditInput({
+      showmodal: true,
+    });
+  };
+  const closeModal = (e) => {
+    e.persist();
+    console.log(e);
+    setEditInput({
+      showmodal: false,
+    });
+  };
+
+  const onHandleClickPay = (item, prices, indexProvider) => {
+    var providerdata = providerList?.data[indexProvider];
+    console.log(providerdata);
+    localStorage.removeItem("timeMinute");
+    localStorage.removeItem("timeSec");
+    // history.push("/chat");
+    console.log(item);
+    if (item == "text") {
+      history.push(`/chat/${providerdata.id}`);
+    }
+    if (item == "video") {
+      history.push(`/video-call/${providerdata.id}`);
+      // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+    }
+    if (item == "audio") {
+      history.push(`/audio-call/${providerdata.id}`);
+      // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+    }
+
+    // setEditInput({
+    //   showmodal: true,
+    // });
+  };
+
   return (
     <div>
       <Navbar />
@@ -103,7 +150,7 @@ function TarotReaders(props) {
           <h2>{capitalizeWords(props.match.params.slug)}</h2>
         </div>
       </section>
-
+      <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} />
       <section className="sec-pad faq-page shop-sidebar sidebar-page">
         <div className="container">
           <div className="row">
@@ -301,107 +348,6 @@ function TarotReaders(props) {
                     </div>
                   </div>
                   <div className="panel panel-default">
-                    {/* <a
-                      role="button"
-                      data-toggle="collapse"
-                      data-parent="#accordion-one"
-                      href="#accordion-one-collapse-three"
-                      className="collapsed"
-                      aria-expanded="false"
-                    >
-                      Advisor Reviews
-                    </a>
-
-                    <div
-                      id="accordion-one-collapse-three"
-                      className="panel-collapse collapse"
-                      role="tabpanel"
-                      aria-expanded="false"
-                    >
-                      <div className="inner-box">
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            value=""
-                            id="defaultCheck1"
-                          />
-                          <label
-                            className="form-check-label"
-                            for="defaultCheck1"
-                          >
-                            {" "}
-                            Any{" "}
-                          </label>
-                        </div>
-
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            value=""
-                            id="defaultCheck2"
-                          />
-                          <label
-                            className="form-check-label"
-                            for="defaultCheck2"
-                          >
-                            {" "}
-                            Live chat{" "}
-                          </label>
-                        </div>
-
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            value=""
-                            id="defaultCheck3"
-                          />
-                          <label
-                            className="form-check-label"
-                            for="defaultCheck3"
-                          >
-                            {" "}
-                            Video call{" "}
-                          </label>
-                        </div>
-
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            value=""
-                            id="defaultCheck4"
-                          />
-                          <label
-                            className="form-check-label"
-                            for="defaultCheck4"
-                          >
-                            {" "}
-                            Voice call{" "}
-                          </label>
-                        </div>
-                      </div>
-                    </div> */}
-
-                    {/* <ul className="list-group">
-                      <li className="list-group-item">
-                        Include offline advisors
-                        <div className="material-switch pull-right">
-                          <input
-                            id="someSwitchOptionDefault"
-                            name="someSwitchOption001"
-                            type="checkbox"
-                          />
-                          <label
-                            for="someSwitchOptionDefault"
-                            className="label-default"
-                          ></label>
-                        </div>
-                      </li>
-                    </ul> */}
-
                     <button
                       href="#"
                       className="thm-btn uppercase margin-top-2 col-md-6 text-center "
@@ -419,116 +365,13 @@ function TarotReaders(props) {
                 </div>
               </div>
             </div>
-            {providerList?.data?.map((item) => (
-              <div className="col-md-4">
-                <div className="reading-profile">
-                  <div className="reading-profile-inner">
-                    <a href="#" data-toggle="modal" data-target="#exampleModal">
-                      <i className="fa fa-play-circle" aria-hidden="true"></i>
-                      <img
-                        src={readingsprofileImg}
-                        className="img-responsive readings-profile-img"
-                      />
-                    </a>
-                    <div className="shape-rating">
-                      <span>Top Rated</span>
-                      <ul className="list-inline review-star">
-                        <li>
-                          <i className="fa fa-star"></i>
-                        </li>
-                        <li>
-                          <i className="fa fa-star"></i>
-                        </li>
-                        <li>
-                          <i className="fa fa-star"></i>
-                        </li>
-                        <li>
-                          <i className="fa fa-star"></i>
-                        </li>
-                        <li>
-                          <i className="fa fa-star"></i>
-                        </li>
-                      </ul>
-                      <img
-                        src={readingsprofileImg}
-                        className="img-responsive shape-rating-img"
-                      />
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <h3>
-                      <a href="#">{item.firstName}</a>
-                    </h3>
-                    <small className="color-black">
-                      Leading UK Tarot Readings
-                    </small>
-                  </div>
-                  <div className="readingsContainer">
-                    <ul>
-                      <li>
-                        10,376
-                        <p>Readings</p>
-                      </li>
-                      <li>
-                        2016
-                        <p>Year joined</p>
-                      </li>
-                      <li>
-                        <i className="fa fa-heart" aria-hidden="true"></i>
-                        <p>Favorite</p>
-                      </li>
-                      <li>
-                        <i className="fa fa-bell" aria-hidden="true"></i>
-                        <p>Notificaton</p>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <div className="col-md-12 dec">
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Mauris aliquam lorem et sagittis laoreet. Morbi in sodales
-                      ante. Vivamus interdum dictum ante, vitae scelerisque
-                      velit egestas eget. Morbi ultricies tortor non dolor
-                      vehicula euismod id erat vitae,{" "}
-                    </p>
-                  </div>
-
-                  <div className="readingsContainerPrice">
-                    <ul>
-                      <li>
-                        <a href="#">
-                          <i className="fa fa-comments" aria-hidden="true"></i>
-                          <br />
-                          $3.99/min
-                          <p>Chat</p>
-                        </a>
-                      </li>
-
-                      <li>
-                        <a href="#">
-                          <i className="fa fa-phone" aria-hidden="true"></i>
-                          <br />
-                          $6.99/min
-                          <p>Voice call</p>
-                        </a>
-                      </li>
-
-                      <li>
-                        <a href="#">
-                          <i
-                            className="fa fa-video-camera"
-                            aria-hidden="true"
-                          ></i>
-                          <br />
-                          $7.99/min
-                          <p>Video call</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+            {providerList?.data?.map((item, i) => (
+              <UserItem
+                onHandleClickPay={onHandleClickPay}
+                providerList={providerList}
+                index={i}
+                item={item}
+              />
             ))}
 
             <nav aria-label="..." className="text-center">

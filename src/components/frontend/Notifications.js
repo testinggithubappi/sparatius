@@ -1,11 +1,46 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
-
+import { getNotificationList } from "../../services/services";
 function Notifications(props) {
+  const history = useHistory();
+  const [notificationlist, setnotificationlist] = useState([]);
+
+  useEffect(() => {
+    let role = localStorage.getItem("role");
+    if (role == "provider") {
+      getNotification();
+    }
+
+    // console.log(props);
+  }, []);
+
+  const getNotification = async () => {
+    let response = await getNotificationList();
+    response = await response.data;
+    setnotificationlist(response);
+    if (props.parentCallback) {
+      props.parentCallback(response);
+    }
+  };
+
+  const onHandleClickPay = (item) => {
+    console.log(item);
+    var type = item.type;
+    if (type == "text") {
+      history.push(`/chat/${item.user_id}`);
+    }
+    if (type == "video") {
+      history.push(`/video-call/${item.user_id}`);
+    }
+    if (type == "audio") {
+      history.push(`/audio-call/${item.user_id}`);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -25,113 +60,22 @@ function Notifications(props) {
           <div className="row">
             <div className="col-md-12 notificationspage">
               <ul className="font-p">
-                <li className="gray-bg ">
-                  <Link to="#">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    It has survived not only five centuries, but also the leap
-                    into electronic typesetting, remaining essentially
-                    unchanged.
-                  </Link>
-                </li>
-                <li className="gray-bg">
-                  <Link to="#">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    It has survived not only five centuries, but also the leap
-                    into electronic typesetting, remaining essentially
-                    unchanged.
-                  </Link>
-                </li>
-                <li className="gray-bg">
-                  <Link to="#">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    It has survived not only five centuries, but also the leap
-                    into electronic typesetting, remaining essentially
-                    unchanged.
-                  </Link>
-                </li>
-                <li className="gray-bg">
-                  <Link to="#">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    It has survived not only five centuries, but also the leap
-                    into electronic typesetting, remaining essentially
-                    unchanged.
-                  </Link>
-                </li>
-                <li className="gray-bg">
-                  <Link to="#">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    It has survived not only five centuries, but also the leap
-                    into electronic typesetting, remaining essentially
-                    unchanged.
-                  </Link>
-                </li>
-                <li className="gray-bg">
-                  <Link to="#">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    It has survived not only five centuries, but also the leap
-                    into electronic typesetting, remaining essentially
-                    unchanged.
-                  </Link>
-                </li>
-                <li className="gray-bg">
-                  <Link to="#">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    It has survived not only five centuries, but also the leap
-                    into electronic typesetting, remaining essentially
-                    unchanged.
-                  </Link>
-                </li>
-                <li className="gray-bg">
-                  <Link to="#">
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry.
-                  </Link>
-                </li>
-                <li>
-                  <Link to="#">
-                    It has survived not only five centuries, but also the leap
-                    into electronic typesetting, remaining essentially
-                    unchanged.
-                  </Link>
-                </li>
+                {notificationlist.map((item) => (
+                  <li className="gray-bg ">
+                    <button
+                      style={{ border: 0 }}
+                      className="btn-block"
+                      onClick={() => {
+                        onHandleClickPay(item);
+                      }}
+                    >
+                      {item.msg}
+                    </button>
+                  </li>
+                ))}
               </ul>
             </div>
-            <nav aria-label="..." className="text-center">
+            {/* <nav aria-label="..." className="text-center">
               <ul className="pagination font-p">
                 <li className="page-item">
                   {" "}
@@ -162,7 +106,7 @@ function Notifications(props) {
                   </Link>
                 </li>
               </ul>
-            </nav>
+            </nav> */}
           </div>
         </div>
       </section>

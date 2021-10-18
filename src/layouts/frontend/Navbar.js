@@ -4,15 +4,22 @@ import axios from "axios";
 import swal from "sweetalert";
 import gfgLogo from "../../assets/frontend/img/logo.png";
 import profilePicimg from "../../assets/frontend/img/resources/profile-pic.jpg";
+import fire from "../../config/firebase";
+import { getDatabase, set, ref } from "firebase/database";
 
-import { getList } from "../../services/services";
+import { getList, getNotificationCount } from "../../services/services";
 
 function Navbar(props) {
   const history = useHistory();
   const [servicelist, setServicelist] = useState([]);
+  const [notificationlist, setnotificationlist] = useState([]);
 
   useEffect(() => {
     getService();
+    let role = localStorage.getItem("role");
+    if (role == "provider") {
+      getNotification();
+    }
 
     // console.log(props);
   }, []);
@@ -20,6 +27,14 @@ function Navbar(props) {
     let response = await getList();
     response = await response.data.services;
     setServicelist(response);
+    if (props.parentCallback) {
+      props.parentCallback(response);
+    }
+  };
+  const getNotification = async () => {
+    let response = await getNotificationCount();
+    response = await response.data;
+    setnotificationlist(response);
     if (props.parentCallback) {
       props.parentCallback(response);
     }
@@ -33,9 +48,17 @@ function Navbar(props) {
         localStorage.removeItem("auth_token");
         localStorage.removeItem("auth_name");
         swal("Success", res.data.message, "success");
-        history.push("/home");
+        setUserOnlineStatus(localStorage.getItem("user_id"));
       }
     });
+  };
+
+  const setUserOnlineStatus = async (user_id) => {
+    let database = getDatabase(fire);
+    await set(ref(database, "users/" + user_id), {
+      online: false,
+    });
+    history.push("/home");
   };
 
   var AuthButton = "";
@@ -66,13 +89,13 @@ function Navbar(props) {
               <img src={profilePicimg} className="profile-pic" />
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link to="/notifications">
               <span className="phone-only">Notification</span>
               <i className="fa fa-bell"></i>
               <span className="count">3</span>
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               role="button"
@@ -101,13 +124,13 @@ function Navbar(props) {
               <img src={profilePicimg} className="profile-pic" />
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link to="/notifications">
               <span className="phone-only">Notification</span>
               <i className="fa fa-bell"></i>
               <span className="count">3</span>
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               role="button"
@@ -136,13 +159,13 @@ function Navbar(props) {
               <img src={profilePicimg} className="profile-pic" />
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link to="/notifications">
               <span className="phone-only">Notification</span>
               <i className="fa fa-bell"></i>
-              <span className="count">3</span>
+              <span className="count">{notificationlist}</span>
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               role="button"

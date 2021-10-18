@@ -4,15 +4,36 @@ import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
+import fire from "../../config/firebase";
+import { getDatabase, set, ref } from "firebase/database";
+import * as firebase from "@firebase/app";
 
 function Login(props) {
   const history = useHistory();
-
+  const [editInput, setEditInput] = useState({
+    showmodal: false,
+  });
   const [registerInput, setRegister] = useState({
     email: "",
     password: "",
+    forgetemail: "",
   });
+  const opeModal = (e) => {
+    // e.persist();
+    // console.log(e);
 
+    console.log("ddd");
+    setEditInput({
+      showmodal: true,
+    });
+  };
+  const closeModal = (e) => {
+    e.persist();
+    console.log(e);
+    setEditInput({
+      showmodal: false,
+    });
+  };
   const handleInput = (e) => {
     e.persist();
     setRegister({ ...registerInput, [e.target.name]: e.target.value });
@@ -27,12 +48,34 @@ function Login(props) {
     };
     console.log(data);
     axios.post("/api/login", data).then((res) => {
+      console.log(res);
       if (res.data.status == 200) {
         localStorage.setItem("auth_token", res.data.token);
         localStorage.setItem("auth_name", res.data.name);
         localStorage.setItem("role", res.data.role);
+        localStorage.setItem("user_id", res.data.id);
         swal("Success", res.data.message, "success");
-        history.push("/home");
+        setUserOnlineStatus(res.data.id);
+      } else {
+        swal("warning", "Invalid Email and Password", "warning");
+        // setRegister({
+        //   ...registerInput,
+        //   error_list: res.data.validation_erros,
+        // });
+      }
+    });
+  };
+  const forgetSubmit = (e) => {
+    e.preventDefault();
+
+    console.log("sss");
+    const data = {
+      email: registerInput.forgetemail,
+    };
+    console.log(data);
+    axios.post("/api/forgetpassword", data).then((res) => {
+      if (res.data.status == 200) {
+        swal("Success", res.data.message, "success");
       } else {
         setRegister({
           ...registerInput,
@@ -42,6 +85,15 @@ function Login(props) {
     });
   };
 
+  const setUserOnlineStatus = async (user_id) => {
+    let database = getDatabase(fire);
+    await set(ref(database, "users/" + user_id), {
+      online: true,
+    });
+    history.push("/home");
+  };
+
+  console.log("setEditInput.showmodal", setEditInput.showmodal);
   return (
     <div>
       <Navbar />
@@ -161,7 +213,7 @@ function Login(props) {
                       Login
                     </button>
                   </div>
-                  <div className="pull-right">
+                  {/* <div className="pull-right">
                     <label>Or login with</label>
                     <ul className="social-icon">
                       <li>
@@ -180,20 +232,22 @@ function Login(props) {
                         </Link>
                       </li>
                     </ul>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="clearfix remember-box">
                   <div className="pull-left">
-                    <input type="checkbox" /> <label>Remember Me</label>
+                    {/* <input type="checkbox" /> <label>Remember Me</label> */}
                   </div>
                   <div className="pull-right">
-                    <Link
-                      to="/#"
-                      data-toggle="modal"
-                      data-target="#exampleModal"
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        opeModal(e);
+                      }}
+                      className="ForgetPassword"
                     >
                       Forgot Password?
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </form>
@@ -204,12 +258,13 @@ function Login(props) {
       </section>
       <Footer />
       <div
-        className="modal fade"
+        className={"modal fade " + (editInput.showmodal ? "in" : "")}
         id="exampleModal"
         tabindex="-1"
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
+        style={{ display: editInput.showmodal ? "block" : "none" }}
       >
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -218,8 +273,8 @@ function Login(props) {
                 <h3 className="text-purple">Forgot Password</h3>
               </div>
             </div>
-            <div className="modal-body">
-              <form action="#">
+            <form onSubmit={forgetSubmit} action="#">
+              <div className="modal-body">
                 <div className="form-grp">
                   <input
                     type="text"
@@ -227,20 +282,14 @@ function Login(props) {
                     placeholder="Email"
                   />
                 </div>
-              </form>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                Close
-              </button>
-              <button type="button" className="btn bg-purple text-white">
-                Submit
-              </button>
-            </div>
+              </div>
+              <div className="modal-footer">
+                <button onClick={closeModal}>Close</button>
+                <button type="submit" className="btn bg-purple text-white">
+                  Submit
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

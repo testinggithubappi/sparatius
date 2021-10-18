@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use OpenTok\OpenTok;
 use OpenTok\MediaMode;
+use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
@@ -69,15 +70,44 @@ class ChatController extends Controller
                 "session_id" => $tok->original['session_id'],
                 "token" => $tok->original['session_token']
             ]);
+
+            $this->Notification($request->title, $request->msg, $request->id, $request->type);
             // echo "<pre>";
             // print_r($chathead);
             // die();
+        } else {
+            // $tok = $this->createTokSession($request);
+            // // echo "<pre>";
+            // // print_r($tok->original);
+            // // die();
+            // $chathead = Chathead::where('id', $chathead->id)->update([
+            //     "from_id" => Auth::user()->id,
+            //     "to_id" => $request->id,
+            //     "session_id" => $tok->original['session_id'],
+            //     "token" => $tok->original['session_token']
+            // ]);
+
+            // $chathead = Chathead::where(['from_id' => Auth::user()->id, 'to_id' => $request->id])
+            //     ->orwhere(['from_id' => $request->id, 'to_id' => Auth::user()->id])
+            //     ->first();
+
+            // $this->Notification($request->title, $request->msg, $request->id, $request->type);
         }
         // $chats = Chats::where(['from_id'=>$request->user()->id, "to_id"=>$request->id])
         //         ->orwhere(['to_id'=> $request->user()->id, "from_id"=>$request->id])
         //         ->get();
         // $chats = $this->clearData($chats, $request->user()->id, $request->id);
         return ['status' => '200', 'data' => $chathead];
+    }
+
+
+    public function getNotificationCount()
+    {
+        return DB::table('notification')->where('user_id', Auth::user()->id)->count();
+    }
+    public function getNotification()
+    {
+        return DB::table('notification')->where('user_id', Auth::user()->id)->get();
     }
 
     public function getChatHeads()
@@ -88,7 +118,14 @@ class ChatController extends Controller
         return response()->json(['status' => '200', 'data' => $heads]);
     }
 
-    public function allMessages(){
-        $messages = Chatmessages
+    public function Notification($title, $msg, $RcieverID, $type)
+    {
+        $data = array(
+            'title' => $title,
+            'msg' => $msg,
+            'user_id' => $RcieverID,
+            'type' => $type
+        );
+        DB::table('notification')->insert($data);
     }
 }

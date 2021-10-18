@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
@@ -11,6 +11,24 @@ import icon3Img from "../../assets/frontend/img/services/icon-3.png";
 import readingsdetail1img from "../../assets/frontend/img/services/psychic-readings-detail-1.jpg";
 
 function PhysicReadingDetail(props) {
+  const [providerDetal, setProviderDetail] = React.useState({});
+
+  useEffect(() => {
+    getProviderDetail();
+  }, []);
+
+  const getProviderDetail = async () => {
+    try {
+      let path = `/api/provider_detail/${props.match.params.userid}/${props.match.params.serviceid}`;
+      let response = await axios.get(path).then((data) => data);
+      response = await response.data;
+      console.log(response);
+      setProviderDetail(response);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -27,10 +45,12 @@ function PhysicReadingDetail(props) {
                 </div>
                 <div className="col-md-9 ">
                   <div className="col-md-12 username">
-                    <h2 className="text-white text-left">Psychic Alexandra</h2>
+                    <h2 className="text-white text-left">
+                      {providerDetal?.profile?.firstName}
+                    </h2>
                     <p className=" text-left">
                       <a href="#" className="text-white">
-                        Gifted Psychic Reader
+                        {providerDetal.LastName}
                       </a>
                     </p>
                   </div>
@@ -61,7 +81,10 @@ function PhysicReadingDetail(props) {
                   </div>
 
                   <div className="col-md-3 readings">
-                    <h3 className="">2021</h3>
+                    <h3 className="">
+                      {" "}
+                      {providerDetal?.profile?.yearExperience}
+                    </h3>
                     <h4 className="">Year Joined</h4>
                   </div>
                 </div>
@@ -79,9 +102,17 @@ function PhysicReadingDetail(props) {
                 <img src={icon1Img} />
                 <h2 className="text-purple">Chat</h2>
                 <p className=" margin-top-2">Get a live text reading now</p>
-                <button className="btn  bg-purple text-white w-33">
+
+                <button
+                  className="btn  bg-purple text-white w-33"
+                  disabled={providerDetal?.services2?.pricechat ? false : true}
+                >
                   {" "}
-                  $4.99/min{" "}
+                  $
+                  {providerDetal?.services2?.pricechat
+                    ? providerDetal?.services2?.pricechat
+                    : 0}
+                  /min.{" "}
                 </button>
               </div>
             </div>
@@ -90,9 +121,17 @@ function PhysicReadingDetail(props) {
                 <img src={icon2Img} />
                 <h2 className="text-purple">Voice Call</h2>
                 <p className=" margin-top-2">Get a live text reading now</p>
-                <button className="btn  bg-purple text-white w-33">
+
+                <button
+                  className="btn  bg-purple text-white w-33"
+                  disabled={providerDetal?.services2?.priceaudio ? false : true}
+                >
                   {" "}
-                  $9.99/min.{" "}
+                  $
+                  {providerDetal?.services2?.priceaudio
+                    ? providerDetal?.services2?.priceaudio
+                    : 0}
+                  /min.{" "}
                 </button>
               </div>
             </div>
@@ -101,9 +140,16 @@ function PhysicReadingDetail(props) {
                 <img src={icon3Img} />
                 <h2 className="text-purple">Video Calls</h2>
                 <p className=" margin-top-2">Get a live text reading now</p>
-                <button className="btn  bg-purple text-white w-33">
+                <button
+                  className="btn  bg-purple text-white w-33"
+                  disabled={providerDetal?.services2?.pricevideo ? false : true}
+                >
                   {" "}
-                  $14.99/min.{" "}
+                  $
+                  {providerDetal?.services2?.pricevideo
+                    ? providerDetal?.services2?.pricevideo
+                    : 0}
+                  /min.{" "}
                 </button>
               </div>
             </div>
@@ -153,87 +199,21 @@ function PhysicReadingDetail(props) {
                     className="tab-pane fade in active signle-tab-content"
                     id="smart"
                   >
-                    <p>
-                      I am an open, accepting and non- judgemental reader. With
-                      me you have nothing to hide, ever. I am here to share the
-                      love and the energy of the Divine with you with the love
-                      and care of a mother.
-                      <br />
-                      <br />
-                      iaculis suscipit nulla. Etiam venenatis augue massa, nec
-                      dictum scelerisque velit egestas eget. Morbi ultricies
-                      tortor non dolor vehicula euismod id erat vitae, iaculis
-                      suscipit nulla. Etiam venenatis augue massa, nec dictum
-                      sapien suscipit sit amet. Curabitur sit amet tempus felis,
-                      ac ultrices libero. Duis dignissim aliquam mi quis
-                      feugiat.
-                      <br />
-                      <br />
-                      Sed in tempor odio. Nulla condimentum accumsan turpis nec
-                      feugiat. Vivamus nec molestie magna. Aliquam sit amet
-                      dictum augue, tempor mattis justo. Sed ultricies sapien
-                      imperdiet venenatis varius. Sed quam odio, aliquet eu
-                      dapibus ut, scelerisque eget tellus. Nullam euismod
-                      condimentum tincidunt.
-                      <br />
-                      <br />
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Mauris aliquam lorem et sagittis laoreet. Morbi in sodales
-                      ante. Vivamus interdum dictum ante, vitae scelerisque
-                      velit egestas eget. Morbi ultricies tortor non dolor
-                      vehicula euismod id erat vitae, iaculis suscipit nulla.{" "}
-                      <br />
-                      <br />
-                      Sed in tempor odio. Nulla condimentum accumsan turpis nec
-                      feugiat. Vivamus nec molestie magna. Aliquam sit amet
-                      dictum augue, tempor mattis justo. Sed ultricies sapien
-                      imperdiet venenatis varius. Sed quam odio, aliquet eu
-                      dapibus ut, scelerisque eget tellus. Nullam euismod
-                      condimentum tincidunt.
-                    </p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: providerDetal?.profile?.service_description,
+                      }}
+                    />
                   </div>
                   <div
                     className="tab-pane fade signle-tab-content"
                     id="attraction"
                   >
-                    <p>
-                      I am an open, accepting and non- judgemental reader. With
-                      me you have nothing to hide, ever. I am here to share the
-                      love and the energy of the Divine with you with the love
-                      and care of a mother.
-                      <br />
-                      <br />
-                      iaculis suscipit nulla. Etiam venenatis augue massa, nec
-                      dictum scelerisque velit egestas eget. Morbi ultricies
-                      tortor non dolor vehicula euismod id erat vitae, iaculis
-                      suscipit nulla. Etiam venenatis augue massa, nec dictum
-                      sapien suscipit sit amet. Curabitur sit amet tempus felis,
-                      ac ultrices libero. Duis dignissim aliquam mi quis
-                      feugiat.
-                      <br />
-                      <br />
-                      Sed in tempor odio. Nulla condimentum accumsan turpis nec
-                      feugiat. Vivamus nec molestie magna. Aliquam sit amet
-                      dictum augue, tempor mattis justo. Sed ultricies sapien
-                      imperdiet venenatis varius. Sed quam odio, aliquet eu
-                      dapibus ut, scelerisque eget tellus. Nullam euismod
-                      condimentum tincidunt.
-                      <br />
-                      <br />
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Mauris aliquam lorem et sagittis laoreet. Morbi in sodales
-                      ante. Vivamus interdum dictum ante, vitae scelerisque
-                      velit egestas eget. Morbi ultricies tortor non dolor
-                      vehicula euismod id erat vitae, iaculis suscipit nulla.{" "}
-                      <br />
-                      <br />
-                      Sed in tempor odio. Nulla condimentum accumsan turpis nec
-                      feugiat. Vivamus nec molestie magna. Aliquam sit amet
-                      dictum augue, tempor mattis justo. Sed ultricies sapien
-                      imperdiet venenatis varius. Sed quam odio, aliquet eu
-                      dapibus ut, scelerisque eget tellus. Nullam euismod
-                      condimentum tincidunt.
-                    </p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: providerDetal?.profile?.description,
+                      }}
+                    />
                   </div>
                   <div className="tab-pane fade signle-tab-content" id="skills">
                     <div>
