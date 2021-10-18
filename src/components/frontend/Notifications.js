@@ -31,6 +31,7 @@ function Notifications(props) {
     console.log(item);
     var type = item.type;
     if (type == "text") {
+<<<<<<< HEAD
       history.push(`/chat/${item.user_id}`);
     }
     if (type == "video") {
@@ -38,6 +39,15 @@ function Notifications(props) {
     }
     if (type == "audio") {
       history.push(`/audio-call/${item.user_id}`);
+=======
+      history.push(`/chat/${item.user_id}/${item.customer_id}`);
+    }
+    if (type == "video") {
+      history.push(`/provider/video-call/${item.customer_id}`);
+    }
+    if (type == "audio") {
+      history.push(`/provider/audio-call/${item.customer_id}`);
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
     }
   };
 

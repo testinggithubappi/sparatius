@@ -69,6 +69,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::get('get-notification', [ChatController::class, 'getNotification'])->name('getNotification');
 
     Route::post('show_chat', [ChatController::class, "allMessage"])->name('show_chat');
+
+    Route::post('getChatSession', [ChatController::class, 'getChatSession'])->name('getChatSession');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

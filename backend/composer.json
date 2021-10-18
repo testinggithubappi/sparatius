@@ -12,9 +12,13 @@
         "laravel/passport": "^10.1",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+<<<<<<< HEAD
         "opentok/opentok": "^4.9",
         "paypal/rest-api-sdk-php": "^1.14",
         "srmklive/paypal": "^3.0"
+=======
+        "opentok/opentok": "^4.9"
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
     },
     "require-dev": {
         "facade/ignition": "^2.5",

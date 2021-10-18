@@ -28,6 +28,12 @@ function Chat(props) {
       let path = `/api/create_chathead`;
       var data = {
         id: props.match.params.id,
+<<<<<<< HEAD
+=======
+        customerid: props.match.params.customerid
+          ? props.match.params.customerid
+          : localStorage.getItem("user_id"),
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
         title: "Text Chat",
         msg: "You Have A Text Chat",
         type: "text",
@@ -77,6 +83,10 @@ function Chat(props) {
         {onProviderSessionline.sessionId && onProviderSessionline.token ? (
           <ChatInner
             currentchatID={props.match.params.id}
+<<<<<<< HEAD
+=======
+            customerid={props.match.params.customerid}
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
             chatHeadlist={chatHeadList}
             apiKey={API_KEY}
             sessionId={onProviderSessionline.sessionId}

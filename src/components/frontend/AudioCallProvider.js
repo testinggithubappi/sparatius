@@ -10,7 +10,7 @@ import videocallImg from "../../assets/frontend/img/video-call-img.jpg";
 import { API_KEY } from "../../config";
 import VideoChatInner from "../modules/VideoChatInner";
 
-class AudioCall extends Component {
+class AudioCallProvider extends Component {
   constructor(props) {
     super(props);
 
@@ -30,19 +30,12 @@ class AudioCall extends Component {
   }
   getProviderSession = async () => {
     try {
-      let path = `/api/create_chathead`;
+      let path = `/api/getChatSession`;
       var data = {
         id: this.props.match.params.id,
-<<<<<<< HEAD
         title: "Video Chat",
         msg: "You Have A Video Chat",
         type: "audio",
-=======
-        title: "Audio Chat",
-        msg: "You Have A Audio Chat",
-        type: "audio",
-        customerid: localStorage.getItem("user_id"),
->>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
       };
       let response = await axios.post(path, data).then((data) => data);
       response = await response.data.data;
@@ -160,13 +153,6 @@ class AudioCall extends Component {
                         <i className="fa fa-heart" aria-hidden="true"></i>
                         <p>Favorite</p>
                       </li>
-<<<<<<< HEAD
-                      <li>
-                        <i className="fa fa-bell" aria-hidden="true"></i>
-                        <p>Notificaton</p>
-                      </li>
-=======
->>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
                     </ul>
                   </div>
 
@@ -190,4 +176,4 @@ class AudioCall extends Component {
   }
 }
 
-export default AudioCall;
+export default AudioCallProvider;
