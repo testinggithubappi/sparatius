@@ -57,6 +57,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     Route::get('user_profile', [CustomController::class, 'userProfile'])->name('user_profile');
     Route::post('edit_profile', [CustomController::class, 'editProfile'])->name('edit_profile');
+
+
+    Route::get('get-notification-count', [ChatController::class, 'getNotificationCount'])->name('getNotificationCount');
+    Route::get('get-notification', [ChatController::class, 'getNotification'])->name('getNotification');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

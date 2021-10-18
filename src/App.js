@@ -27,6 +27,7 @@ import TarotReaders from "./components/frontend/TarotReaders";
 
 import TermsCondition from "./components/frontend/TermsCondition";
 import VideoCall from "./components/frontend/VideoCall";
+import AudioCall from "./components/frontend/AudioCall";
 import aboutUs from "./components/frontend/aboutUs";
 import PaymentHistory from "./components/frontend/PaymentHistory";
 import EditAdvisorProfile from "./components/frontend/EditAdvisorProfile";
@@ -156,7 +157,7 @@ class App extends Component {
             />
 
             <Route path="/login">
-              {localStorage.getItem("auth_token") ? <Redirect /> : <Login />}
+            <Login />
             </Route>
             <Route path="/register">
               {localStorage.getItem("auth_token") ? <Redirect /> : <Register />}
@@ -187,6 +188,11 @@ class App extends Component {
               path="/video-call/:id"
               name="VideoCall"
               component={VideoCall}
+            />
+            <PrivateRoute
+              path="/audio-call/:id"
+              name="AudioCall"
+              component={AudioCall}
             />
             <PrivateRoute
               path="/payment-history"

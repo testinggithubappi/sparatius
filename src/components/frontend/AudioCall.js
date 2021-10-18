@@ -10,7 +10,7 @@ import videocallImg from "../../assets/frontend/img/video-call-img.jpg";
 import { API_KEY } from "../../config";
 import VideoChatInner from "../modules/VideoChatInner";
 
-class VideoCall extends Component {
+class AudioCall extends Component {
   constructor(props) {
     super(props);
 
@@ -35,7 +35,7 @@ class VideoCall extends Component {
         id: this.props.match.params.id,
         title: "Video Chat",
         msg: "You Have A Video Chat",
-        type: "video",
+        type: "audio",
       };
       let response = await axios.post(path, data).then((data) => data);
       response = await response.data.data;
@@ -56,7 +56,7 @@ class VideoCall extends Component {
         <Navbar />
         <section className="inner-banner has-dot-pattern text-center">
           <div className="container sec-title">
-            <h2>Video Call</h2>
+            <h2>Audio Call</h2>
           </div>
         </section>
 
@@ -66,7 +66,7 @@ class VideoCall extends Component {
               <div className="col-md-8">
                 <div className="video-screen">
                   <VideoChatInner
-                    video={true}
+                    video={false}
                     sessionId={this.state.sessionId}
                     token={this.state.token}
                     apiKey={API_KEY}
@@ -180,4 +180,4 @@ class VideoCall extends Component {
   }
 }
 
-export default VideoCall;
+export default AudioCall;

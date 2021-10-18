@@ -8,6 +8,7 @@ import ChatInner from "../modules/ChatInner";
 import { API_KEY } from "../../config";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 function Chat(props) {
   const [onProviderSessionline, setProviderSession] = React.useState({
     ProviderData: "",
@@ -27,6 +28,9 @@ function Chat(props) {
       let path = `/api/create_chathead`;
       var data = {
         id: props.match.params.id,
+        title: "Text Chat",
+        msg: "You Have A Text Chat",
+        type: "text",
       };
       let response = await axios.post(path, data).then((data) => data);
       response = await response.data.data;

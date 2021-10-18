@@ -121,6 +121,8 @@ function TarotReaders(props) {
   const onHandleClickPay = (item, prices, indexProvider) => {
     var providerdata = providerList?.data[indexProvider];
     console.log(providerdata);
+    localStorage.removeItem("timeMinute");
+    localStorage.removeItem("timeSec");
     // history.push("/chat");
     console.log(item);
     if (item == "text") {
@@ -130,47 +132,16 @@ function TarotReaders(props) {
       history.push(`/video-call/${providerdata.id}`);
       // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
     }
+    if (item == "audio") {
+      history.push(`/audio-call/${providerdata.id}`);
+      // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+    }
 
     // setEditInput({
     //   showmodal: true,
     // });
   };
 
-  const checkUseronline = (userId) => {
-    let database = getDatabase(fire);
-    let dbref = ref(database, `users/${userId}`);
-    onValue(dbref, (snapshot) => {});
-  };
-
-  const loadPrices = (type, prices, indexProvider) => {
-    var arraytype = type.split(",");
-    var arrayprices = prices.split(",");
-    console.log("arraytype", arraytype);
-    console.log("arrayprices", arrayprices);
-
-    return arraytype.map((item, i) => {
-      console.log(item);
-      var Type = "Video Call";
-      if (item == "text") {
-        Type = "Chat";
-      } else if (item == "audio") {
-        Type = "Audio Call";
-      }
-      return (
-        <li>
-          <button
-            onClick={() => {
-              onHandleClickPay(item, arrayprices[i], indexProvider);
-            }}
-          >
-            <i className="fa fa-comments" aria-hidden="true"></i>
-            <br />${arrayprices[i]}/min
-            <p>${Type}</p>
-          </button>
-        </li>
-      );
-    });
-  };
   return (
     <div>
       <Navbar />

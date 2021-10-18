@@ -1,115 +1,66 @@
 import React from "react";
-import { OTSession, OTPublisher, OTStreams, OTSubscriber } from "opentok-react";
-
+import { OTSession, OTStreams, preloadScript } from "opentok-react";
+import ConnectionStatus from "./VideoCall/ConnectionStatus";
+import Publisher from "./VideoCall/Publisher";
+import Subscriber from "./VideoCall/Subscriber";
+import CountDownTimer from "./CountDownTimer";
 export default class VideoChatInner extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       error: null,
-      connection: "Connecting",
-      publishVideo: true,
+      connected: false,
+      TimerMin: localStorage.getItem("timeMinute")
+        ? localStorage.getItem("timeMinute")
+        : localStorage.setItem("timeMinute", 59),
+      TimerSec: localStorage.getItem("timeSec")
+        ? localStorage.getItem("timeSec")
+        : localStorage.setItem("timeSec", 59),
     };
-
-    this.sessionEventHandlers = {
+    this.sessionEvents = {
       sessionConnected: () => {
-        this.setState({ connection: "Connected" });
+        this.setState({ connected: true });
       },
       sessionDisconnected: () => {
-        this.setState({ connection: "Disconnected" });
-      },
-      sessionReconnected: () => {
-        this.setState({ connection: "Reconnected" });
-      },
-      sessionReconnecting: () => {
-        this.setState({ connection: "Reconnecting" });
-      },
-    };
-
-    this.publisherEventHandlers = {
-      accessDenied: () => {
-        console.log("User denied access to media source");
-      },
-      streamCreated: () => {
-        console.log("Publisher stream created");
-      },
-      streamDestroyed: ({ reason }) => {
-        console.log(`Publisher stream destroyed because: ${reason}`);
-      },
-    };
-
-    this.subscriberEventHandlers = {
-      videoEnabled: () => {
-        console.log("Subscriber video enabled");
-      },
-      videoDisabled: () => {
-        console.log("Subscriber video disabled");
+        this.setState({ connected: false });
       },
     };
   }
 
-  onSessionError = (error) => {
-    this.setState({ error });
-  };
-
-  onPublish = () => {
-    console.log("Publish Success");
-  };
-
-  onPublishError = (error) => {
-    this.setState({ error });
-  };
-
-  onSubscribe = () => {
-    console.log("Subscribe Success");
-  };
-
-  onSubscribeError = (error) => {
-    this.setState({ error });
-  };
-
-  toggleVideo = () => {
-    this.setState((state) => ({
-      publishVideo: !state.publishVideo,
-    }));
+  onError = (err) => {
+    this.setState({ error: `Failed to connect: ${err.message}` });
   };
 
   render() {
     const { apiKey, sessionId, token } = this.props;
-    const { error, connection, publishVideo } = this.state;
+
     return (
       <div>
-        <div id="sessionStatus">Session Status: {connection}</div>
-        {error ? (
-          <div className="error">
-            <strong>Error:</strong> {error}
-          </div>
-        ) : null}
+        <CountDownTimer
+          hoursMinSecs={{
+            minutes: this.state.TimerMin,
+            seconds: this.state.TimerSec,
+          }}
+        />
         {sessionId && token ? (
           <div>
             <OTSession
               apiKey={apiKey}
               sessionId={sessionId}
               token={token}
-              onError={this.onSessionError}
-              eventHandlers={this.sessionEventHandlers}
+              eventHandlers={this.sessionEvents}
+              onError={this.onError}
             >
-              <button id="videoButton" onClick={this.toggleVideo}>
-                {publishVideo ? "Disable" : "Enable"} Video
-              </button>
-              <OTPublisher
-                properties={{ publishVideo, width: 50, height: 50 }}
-                onPublish={this.onPublish}
-                onError={this.onPublishError}
-                eventHandlers={this.publisherEventHandlers}
-              />
+              {this.state.error ? (
+                <div id="error">{this.state.error}</div>
+              ) : null}
+
+              {/* <ConnectionStatus connected={this.state.connected} /> */}
+
+              <Publisher video={this.props.video} />
+
               <OTStreams>
-                <OTSubscriber
-                  properties={{ width: 100, height: 100 }}
-                  onSubscribe={this.onSubscribe}
-                  onError={this.onSubscribeError}
-                  eventHandlers={this.subscriberEventHandlers}
-                />
+                <Subscriber />
               </OTStreams>
             </OTSession>
           </div>

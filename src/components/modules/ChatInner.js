@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { OTSession, OTPublisher, OTStreams, OTSubscriber } from "opentok-react";
+import CountDownTimer from './CountDownTimer';
 
 export default class ChatInner extends React.Component {
   constructor(props) {
@@ -13,6 +14,8 @@ export default class ChatInner extends React.Component {
       chatHeadMessageList: [],
       txtmessage: "",
       currentchatID: this.props.currentchatID,
+      TimerMin: localStorage.getItem("timeMinute")?localStorage.getItem("timeMinute"):localStorage.setItem("timeMinute",1),
+      TimerSec: localStorage.getItem("timeSec")?localStorage.getItem("timeSec"):localStorage.setItem("timeSec",59)
     };
 
     this.sessionEventHandlers = {
@@ -197,6 +200,7 @@ export default class ChatInner extends React.Component {
     return (
       <div>
         <div className="messaging">
+        <CountDownTimer hoursMinSecs={{minutes: this.state.TimerMin,seconds:this.state.TimerSec}}/>
           <div className="inbox_msg">
             <div className="inbox_people">
               <div className="headind_srch">

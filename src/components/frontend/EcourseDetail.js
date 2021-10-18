@@ -5,9 +5,13 @@ import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
+import PaymentModal from "../modules/PaymentModal";
 
 function EcourseDetail(props) {
   const [eclassDetal, setEclassDetail] = React.useState({});
+  const [editInput, setEditInput] = useState({
+    showmodal: false,
+  });
 
   useEffect(() => {
     getEclassDetail();
@@ -25,6 +29,21 @@ function EcourseDetail(props) {
     }
   };
 
+  const opeModal = (e) => {
+    e.persist();
+    console.log(e);
+    setEditInput({
+      showmodal: true,
+    });
+  };
+  const closeModal = (e) => {
+    e.persist();
+    console.log(e);
+    setEditInput({
+      showmodal: false,
+    });
+  };
+
   return (
     <div>
       <Navbar />
@@ -32,6 +51,7 @@ function EcourseDetail(props) {
         className="inner-banner has-dot-pattern sec-title text-center"
         style={{ paddingBottom: "0px" }}
       >
+       <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} />
         <div className="container">
           <div className="row">
             <div className="col-md-12 psychic-readings-detail">
@@ -96,8 +116,7 @@ function EcourseDetail(props) {
                     <button
                       className="thm-btn w-100"
                       type="submit"
-                      data-toggle="modal"
-                      data-target="#modal2"
+                      onClick={opeModal}
                     >
                       Buy Now
                     </button>
