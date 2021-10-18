@@ -19,6 +19,9 @@ use App\Http\Controllers\CustomController;
 |
 */
 
+Route::get('approved_status/{serviceId}/{bookingId}', [BookingController::class, 'approvedStatus'])->name('approved_status');
+Route::get('cancel_status', [BookingController::class, 'cancelStatus'])->name('cancel_status');
+
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'Login']);
 Route::get('services', [ServiceController::class, 'getServices']);
@@ -34,7 +37,7 @@ Route::get('e_class_detail/{e_classes_id}', [CustomController::class, 'eClassDet
 
 Route::get('token', [ChatController::class, 'createTokSession'])->name('token');
 
-Route::post('payment', [BookingController::class, 'payment'])->name('payment');
+Route::get('payment', [BookingController::class, 'payment'])->name('payment');
 
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('logout', [AuthController::class, 'Logout']);
@@ -64,6 +67,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
 
     Route::get('get-notification-count', [ChatController::class, 'getNotificationCount'])->name('getNotificationCount');
     Route::get('get-notification', [ChatController::class, 'getNotification'])->name('getNotification');
+
+    Route::post('show_chat', [ChatController::class, "allMessage"])->name('show_chat');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

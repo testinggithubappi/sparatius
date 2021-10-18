@@ -118,6 +118,13 @@ class ChatController extends Controller
         return response()->json(['status' => '200', 'data' => $heads]);
     }
 
+    public function allMessage(Request $request)
+    {
+        $head = $this->sessionCheck($request);
+        $messages = Chatmessages::where('chathead_id', $head['data']->id)->orderBy('created_at', 'DESC')->get();
+        return response()->json(['status' => "200", "chat" => $messages, "auth_id" => Auth::user()->id]);
+    }
+
     public function Notification($title, $msg, $RcieverID, $type)
     {
         $data = array(
