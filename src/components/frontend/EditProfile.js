@@ -16,8 +16,15 @@ function EditProfile(props) {
     contactno: "",
   });
   const getEditCustomerProfile = async () => {
+<<<<<<< HEAD
+    let response = await axios
+      .post(`/api/editcustomerprofile`)
+      .then((data) => data);
+    let responsedata = response.data.profile;
+=======
     let response = await axios.get(`/api/user_profile`).then((data) => data);
     let responsedata = response.data.data;
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
 
     setProfileData({
       ...profileData,
@@ -30,6 +37,15 @@ function EditProfile(props) {
   const submitProfile = (e) => {
     e.preventDefault();
     const data = {
+<<<<<<< HEAD
+      firstname: profileData.firstname,
+      lastname: profileData.lastname,
+      contactno: profileData.contactno,
+    };
+    axios.post("/api/profilecustomerUpdate", data).then((res) => {
+      if (res.data.status == 200) {
+        swal("Success", res.data.msg, "success");
+=======
       firstName: profileData.firstname,
       LastName: profileData.lastname,
       contactNo: profileData.contactno,
@@ -37,16 +53,20 @@ function EditProfile(props) {
     axios.post("/api/edit_profile", data).then((res) => {
       if (res.data.status == 200) {
         swal("Success", "Update Succesfully", "success");
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
         // history.push("/home");
       } else {
       }
     });
   };
+<<<<<<< HEAD
+=======
 
   const handleInput = (e) => {
     e.persist();
     setProfileData({ ...profileData, [e.target.name]: e.target.value });
   };
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
   return (
     <div>
       <Navbar />
@@ -115,7 +135,10 @@ function EditProfile(props) {
                     className="form-control"
                     placeholder="Enter Name"
                     name="firstname"
+<<<<<<< HEAD
+=======
                     onChange={handleInput}
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
                     value={profileData.firstname}
                   />
                 </div>
@@ -126,7 +149,10 @@ function EditProfile(props) {
                     className="form-control"
                     placeholder="Enter Last Name"
                     name="lastname"
+<<<<<<< HEAD
+=======
                     onChange={handleInput}
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
                     value={profileData.lastname}
                   />
                 </div>
@@ -139,7 +165,10 @@ function EditProfile(props) {
                       className="form-control"
                       placeholder="Phone No"
                       name="contactno"
+<<<<<<< HEAD
+=======
                       onChange={handleInput}
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
                       value={profileData.contactno}
                     />
                   </div>
