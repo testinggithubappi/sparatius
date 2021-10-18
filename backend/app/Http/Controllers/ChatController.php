@@ -79,4 +79,16 @@ class ChatController extends Controller
         // $chats = $this->clearData($chats, $request->user()->id, $request->id);
         return ['status' => '200', 'data' => $chathead];
     }
+
+    public function getChatHeads()
+    {
+        $from_heads = Chathead::join('users', 'users.id', 'chatheads.to_id')->select('users.firstName', 'users.id as msg_to', 'chatheads.*')->where('from_id', Auth::user()->id)->get();
+        $to_heads = Chathead::join('users', 'users.id', 'chatheads.from_id')->select('users.firstName', 'users.id as msg_to', 'chatheads.*')->where('to_id', Auth::user()->id)->get();
+        $heads = array_merge($from_heads->toArray(), $to_heads->toArray());
+        return response()->json(['status' => '200', 'data' => $heads]);
+    }
+
+    public function allMessages(){
+        $messages = Chatmessages
+    }
 }

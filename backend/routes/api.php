@@ -34,6 +34,8 @@ Route::post('e_class_detail', [CustomController::class, 'eClassDetail']);
 
 Route::get('token', [ChatController::class, 'createTokSession'])->name('token');
 
+Route::post('payment', [BookingController::class, 'payment'])->name('payment');
+
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('logout', [AuthController::class, 'Logout']);
     Route::get('/TokenVerify', function () {
@@ -48,6 +50,7 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('/profile_data', [ServiceController::class, 'providerProfileData'])->name('/profile_data');
 
     Route::post('create_chathead', [ChatController::class, 'sessionCheck'])->name('create_chathead');
+    Route::post('get_chathead', [ChatController::class, 'getChatHeads'])->name('get_chathead');
     Route::post('send_message', [ChatController::class, 'SendMessage'])->name('send_message');
 
     Route::post('invite_friend', [CustomController::class, 'inviteFriends'])->name('invite_friend');
