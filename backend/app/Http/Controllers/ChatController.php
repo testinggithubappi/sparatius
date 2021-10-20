@@ -109,8 +109,6 @@ class ChatController extends Controller
     }
 
 
-
-
     public function getNotificationCount()
     {
         return DB::table('notification')->where('user_id', Auth::user()->id)->count();
@@ -130,7 +128,6 @@ class ChatController extends Controller
 
     public function Notification($title, $msg, $RcieverID, $type, $customerid)
     {
-
         $data = array(
             'title' => $title,
             'msg' => $msg,

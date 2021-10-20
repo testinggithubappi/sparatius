@@ -1,7 +1,11 @@
 import React from "react";
 import axios from "axios";
 import { OTSession, OTPublisher, OTStreams, OTSubscriber } from "opentok-react";
+<<<<<<< HEAD
+import CountDownTimer from './CountDownTimer';
+=======
 import CountDownTimer from "./CountDownTimer";
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
 
 export default class ChatInner extends React.Component {
   constructor(props) {
@@ -14,12 +18,17 @@ export default class ChatInner extends React.Component {
       chatHeadMessageList: [],
       txtmessage: "",
       currentchatID: this.props.currentchatID,
+<<<<<<< HEAD
+      TimerMin: localStorage.getItem("timeMinute")?localStorage.getItem("timeMinute"):localStorage.setItem("timeMinute",1),
+      TimerSec: localStorage.getItem("timeSec")?localStorage.getItem("timeSec"):localStorage.setItem("timeSec",59)
+=======
       TimerMin: localStorage.getItem("timeMinute")
         ? localStorage.getItem("timeMinute")
         : localStorage.setItem("timeMinute", 1),
       TimerSec: localStorage.getItem("timeSec")
         ? localStorage.getItem("timeSec")
         : localStorage.setItem("timeSec", 59),
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
     };
 
     this.sessionEventHandlers = {
@@ -37,6 +46,28 @@ export default class ChatInner extends React.Component {
       },
     };
 
+<<<<<<< HEAD
+    this.publisherEventHandlers = {
+      accessDenied: () => {
+        console.log("User denied access to media source");
+      },
+      streamCreated: () => {
+        console.log("Publisher stream created");
+      },
+      streamDestroyed: ({ reason }) => {
+        console.log(`Publisher stream destroyed because: ${reason}`);
+      },
+    };
+
+    this.subscriberEventHandlers = {
+      videoEnabled: () => {
+        console.log("Subscriber video enabled");
+      },
+      videoDisabled: () => {
+        console.log("Subscriber video disabled");
+      },
+    };
+=======
     // this.publisherEventHandlers = {
     //   accessDenied: () => {
     //     console.log("User denied access to media source");
@@ -70,6 +101,7 @@ export default class ChatInner extends React.Component {
         ],
       });
     });
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
   }
 
   onSessionError = (error) => {
@@ -133,6 +165,23 @@ export default class ChatInner extends React.Component {
     });
   };
 
+<<<<<<< HEAD
+  LoadMesageByChat = async (item) => {
+    console.log(item);
+    this.setState({
+      currentchatID: item.msg_to,
+    });
+    try {
+      let data = {
+        id: item.id,
+      };
+      let path = `/api/getchatheadmessages`;
+      let response = await axios.post(path, data).then((data) => data);
+      response = await response.data.data;
+      console.log(response);
+      this.setState({
+        chatHeadMessageList: response,
+=======
   LoadMesageByChat = async () => {
     try {
       let data = {
@@ -147,6 +196,7 @@ export default class ChatInner extends React.Component {
       console.log("sss", resdata);
       this.setState({
         chatHeadMessageList: [...resdata.chat],
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
       });
     } catch (error) {
       console.log("error", error);
@@ -157,10 +207,17 @@ export default class ChatInner extends React.Component {
     return this.state.chatHeadMessageList.map((item, i) => {
       return (
         <div key={i}>
+<<<<<<< HEAD
+          {item.id == 1 ? (
+            <div className="outgoing_msg">
+              <div className="sent_msg">
+                <p>Test which is a new approach to have all solutions</p>
+=======
           {item.from_id == localStorage.getItem("user_id") ? (
             <div className="outgoing_msg">
               <div className="sent_msg">
                 <p>{item.message}</p>
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
                 <span className="time_date"> 11:01 AM | June 9</span>{" "}
               </div>
             </div>
@@ -175,7 +232,11 @@ export default class ChatInner extends React.Component {
               </div>
               <div className="received_msg">
                 <div className="received_withd_msg">
+<<<<<<< HEAD
+                  <p>Test which is a new approach to have all solutions</p>
+=======
                   <p>{item.message}</p>
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
                   <span className="time_date"> 11:01 AM | June 9</span>
                 </div>
               </div>
@@ -191,12 +252,22 @@ export default class ChatInner extends React.Component {
       txtmessage: e.target.value,
     });
   };
+<<<<<<< HEAD
+=======
 
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
   SendMessage = async () => {
     try {
       let data = {
         message: this.state.txtmessage,
         id: this.state.currentchatID,
+<<<<<<< HEAD
+      };
+      let path = `/api/send_message`;
+      let response = await axios.post(path, data).then((data) => data);
+      response = await response.data.data;
+      console.log(response);
+=======
         created_at: new Date().toISOString(),
         from_id: localStorage.getItem("user_id"),
         id:
@@ -230,6 +301,7 @@ export default class ChatInner extends React.Component {
         .then((data) => data);
       // response = await response.data.data;
       //console.log(response);
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
       // this.setState({
       //   chatHeadMessageList: response,
       // });
@@ -241,6 +313,15 @@ export default class ChatInner extends React.Component {
   render() {
     const { apiKey, sessionId, token } = this.props;
     const { error, connection, publishVideo } = this.state;
+<<<<<<< HEAD
+    console.log("this.state.currentchatID", this.state.currentchatID);
+    return (
+      <div>
+        <div className="messaging">
+        <CountDownTimer hoursMinSecs={{minutes: this.state.TimerMin,seconds:this.state.TimerSec}}/>
+          <div className="inbox_msg">
+            <div className="inbox_people">
+=======
     return (
       <div>
         <OTSession
@@ -259,6 +340,7 @@ export default class ChatInner extends React.Component {
           /> */}
           <div className="inbox_msg">
             {/* <div className="inbox_people">
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
               <div className="headind_srch">
                 <div className="srch_bar">
                   <div className="stylish-input-group">
@@ -277,7 +359,11 @@ export default class ChatInner extends React.Component {
                 </div>
               </div>
               <div className="inbox_chat">{this.loadChathead()}</div>
+<<<<<<< HEAD
+            </div>
+=======
             </div> */}
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
 
             <div className="mesgs">
               <div className="user-name">

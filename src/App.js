@@ -27,10 +27,14 @@ import TarotReaders from "./components/frontend/TarotReaders";
 
 import TermsCondition from "./components/frontend/TermsCondition";
 import VideoCall from "./components/frontend/VideoCall";
+<<<<<<< HEAD
+import AudioCall from "./components/frontend/AudioCall";
+=======
 import VideoCalllProvider from "./components/frontend/VideoCalllProvider";
 import AudioCall from "./components/frontend/AudioCall";
 import AudioCallProvider from "./components/frontend/AudioCallProvider";
 
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
 import aboutUs from "./components/frontend/aboutUs";
 import PaymentHistory from "./components/frontend/PaymentHistory";
 import EditAdvisorProfile from "./components/frontend/EditAdvisorProfile";
@@ -160,18 +164,25 @@ class App extends Component {
             />
 
             <Route path="/login">
+<<<<<<< HEAD
+            <Login />
+=======
               <Login />
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
             </Route>
             <Route path="/register">
               {localStorage.getItem("auth_token") ? <Redirect /> : <Register />}
             </Route>
 
             <PrivateRoute path="/chat/:id" name="Chat" component={Chat} />
+<<<<<<< HEAD
+=======
             <PrivateRoute
               path="/chat/:id/:customerid"
               name="Customer"
               component={Chat}
             />
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
             <PrivateRoute
               path="/edit-profile"
               name="EditProfile"
@@ -198,21 +209,27 @@ class App extends Component {
               component={VideoCall}
             />
             <PrivateRoute
+<<<<<<< HEAD
+=======
               path="/provider/video-call/:id"
               name="VideoCalllProvider"
               component={VideoCalllProvider}
             />
             <PrivateRoute
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
               path="/audio-call/:id"
               name="AudioCall"
               component={AudioCall}
             />
             <PrivateRoute
+<<<<<<< HEAD
+=======
               path="/provider/audio-call/:id"
               name="AudioCallProvider"
               component={AudioCallProvider}
             />
             <PrivateRoute
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
               path="/payment-history"
               name="PaymentHistory"
               component={PaymentHistory}

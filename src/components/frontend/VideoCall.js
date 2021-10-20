@@ -36,7 +36,10 @@ class VideoCall extends Component {
         title: "Video Chat",
         msg: "You Have A Video Chat",
         type: "video",
+<<<<<<< HEAD
+=======
         customerid: localStorage.getItem("user_id"),
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
       };
       let response = await axios.post(path, data).then((data) => data);
       response = await response.data.data;
@@ -60,6 +63,7 @@ class VideoCall extends Component {
             <h2>Video Call</h2>
           </div>
         </section>
+<<<<<<< HEAD
 
         <section className="sec-pad faq-page shop-sidebar sidebar-page">
           <div className="container">
@@ -73,6 +77,21 @@ class VideoCall extends Component {
                     apiKey={API_KEY}
                   />
 
+=======
+
+        <section className="sec-pad faq-page shop-sidebar sidebar-page">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-8">
+                <div className="video-screen">
+                  <VideoChatInner
+                    video={true}
+                    sessionId={this.state.sessionId}
+                    token={this.state.token}
+                    apiKey={API_KEY}
+                  />
+
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
                   {/* <div className="row">
                     <div className="video-profile-screen">
                       <img src="img/80x80.jpg" alt="" />
@@ -142,6 +161,7 @@ class VideoCall extends Component {
                   </div>
                   <div className="readingsContainer">
                     <ul>
+<<<<<<< HEAD
                       <li>
                         10,376
                         <p>Readings</p>
@@ -153,6 +173,23 @@ class VideoCall extends Component {
                       <li>
                         <i className="fa fa-heart" aria-hidden="true"></i>
                         <p>Favorite</p>
+                      </li>
+                      <li>
+                        <i className="fa fa-bell" aria-hidden="true"></i>
+                        <p>Notificaton</p>
+=======
+                      <li>
+                        10,376
+                        <p>Readings</p>
+                      </li>
+                      <li>
+                        2016
+                        <p>Year joined</p>
+                      </li>
+                      <li>
+                        <i className="fa fa-heart" aria-hidden="true"></i>
+                        <p>Favorite</p>
+>>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
                       </li>
                     </ul>
                   </div>

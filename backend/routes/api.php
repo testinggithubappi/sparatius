@@ -19,6 +19,9 @@ use App\Http\Controllers\CustomController;
 |
 */
 
+Route::get('approved_status/{serviceId}/{bookingId}', [BookingController::class, 'approvedStatus'])->name('approved_status');
+Route::get('cancel_status', [BookingController::class, 'cancelStatus'])->name('cancel_status');
+
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'Login']);
 Route::get('services', [ServiceController::class, 'getServices']);
@@ -34,6 +37,8 @@ Route::get('e_class_detail/{e_classes_id}', [CustomController::class, 'eClassDet
 
 Route::get('token', [ChatController::class, 'createTokSession'])->name('token');
 
+Route::get('payment', [BookingController::class, 'payment'])->name('payment');
+
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('logout', [AuthController::class, 'Logout']);
     Route::get('/TokenVerify', function () {
@@ -48,9 +53,8 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('/profile_data', [ServiceController::class, 'providerProfileData'])->name('/profile_data');
 
     Route::post('get_chathead', [ChatController::class, 'getChatHeads'])->name('get_chathead');
-
-
     Route::post('create_chathead', [ChatController::class, 'sessionCheck'])->name('create_chathead');
+    Route::post('get_chathead', [ChatController::class, 'getChatHeads'])->name('get_chathead');
     Route::post('send_message', [ChatController::class, 'SendMessage'])->name('send_message');
 
 
