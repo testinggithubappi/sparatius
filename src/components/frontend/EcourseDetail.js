@@ -6,6 +6,7 @@ import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
 import PaymentModal from "../modules/PaymentModal";
+import StarRatings from "react-star-ratings";
 
 function EcourseDetail(props) {
   const [eclassDetal, setEclassDetail] = React.useState({});
@@ -51,7 +52,7 @@ function EcourseDetail(props) {
         className="inner-banner has-dot-pattern sec-title text-center"
         style={{ paddingBottom: "0px" }}
       >
-       <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} />
+        <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} />
         <div className="container">
           <div className="row">
             <div className="col-md-12 psychic-readings-detail">
@@ -93,22 +94,13 @@ function EcourseDetail(props) {
                   <div className="col-md-9 top-rated ">
                     <p className=" text-left ">{eclassDetal?.title}</p>
                     <ul className="list-inline review-star text-left star-color">
-                      <li>
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li>
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li>
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li>
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li>
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li className=" text-white">5.0</li>
+                      <StarRatings
+                        rating={Math.floor(eclassDetal?.rating?.rating)}
+                        starRatedColor="yellow"
+                        numberOfStars={5}
+                        name="rating"
+                        starDimension="30px"
+                      />
                     </ul>
                   </div>
                   <div className="col-md-3 readings">
@@ -191,66 +183,20 @@ function EcourseDetail(props) {
                     />
                   </div>
                   <div className="tab-pane fade signle-tab-content" id="skills">
-                    <div>
-                      <p className="font-weight-bold">Chrissiouxsie</p>
-                      <small>Sep 30, 2021</small>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris aliquam lorem et sagittis laoreet. Morbi in
-                        sodales ante. Vivamus interdum dictum ante, vitae
-                        scelerisque velit egestas eget.
-                      </p>
-                    </div>
-                    <hr />
-                    <div>
-                      <p className="font-weight-bold">Chrissiouxsie</p>
-                      <small>Sep 30, 2021</small>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris aliquam lorem et sagittis laoreet. Morbi in
-                        sodales ante. Vivamus interdum dictum ante, vitae
-                        scelerisque velit egestas eget.
-                      </p>
-                    </div>
-                    <hr />
-                    <div>
-                      <p className="font-weight-bold">Chrissiouxsie</p>
-                      <small>Sep 30, 2021</small>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris aliquam lorem et sagittis laoreet. Morbi in
-                        sodales ante. Vivamus interdum dictum ante, vitae
-                        scelerisque velit egestas eget.
-                      </p>
-                    </div>
-                    <hr />
-                    <div>
-                      <p className="font-weight-bold">Chrissiouxsie</p>
-                      <small>Sep 30, 2021</small>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris aliquam lorem et sagittis laoreet. Morbi in
-                        sodales ante. Vivamus interdum dictum ante, vitae
-                        scelerisque velit egestas eget.
-                      </p>
-                    </div>
-                    <hr />
-                    <div>
-                      <p className="font-weight-bold">Chrissiouxsie</p>
-                      <small>Sep 30, 2021</small>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris aliquam lorem et sagittis laoreet. Morbi in
-                        sodales ante. Vivamus interdum dictum ante, vitae
-                        scelerisque velit egestas eget.
-                      </p>
-                    </div>
-                    <Link
-                      to="#"
-                      className="thm-btn w-100 uppercase margin-top-2 text-center "
-                    >
-                      Load More
-                    </Link>
+                    {eclassDetal?.ratingRview
+                      ? eclassDetal?.ratingRview.map((item, i) => (
+                          <div key={i}>
+                            <div>
+                              <p className="font-weight-bold">
+                                {item.customername}
+                              </p>
+                              <small>{item.ratingdate}</small>
+                              <p>{item.description}</p>
+                            </div>
+                            <hr />
+                          </div>
+                        ))
+                      : ""}
                   </div>
                 </div>
               </div>

@@ -62,6 +62,13 @@ class CustomController extends Controller
     public function eClassDetail($id)
     {
         $detail = Eclasses::where('id', $id)->first();
+        $detail['ratingRview'] =  Rating::leftjoin('users as customer', 'rating.userid', 'customer.id')
+            ->selecT(['customer.firstName as customername', 'rating.description', 'rating.description', DB::raw('DATE_FORMAT(rating.created_at, "%d-%b-%Y") as ratingdate')])
+            ->where('rating.eclassId', $id)
+            ->get();
+        $detail['rating'] = Rating::select(DB::raw('IF(AVG(ratingScore) > 0,AVG(ratingScore),0) as rating'))->where('rating.eclassId', $id)
+            ->groupBy('rating.eclassId')->first();
+
         return ['status' => '200', 'data' => $detail];
     }
 

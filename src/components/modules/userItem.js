@@ -32,7 +32,16 @@ function UserItem(props) {
     console.log("arraytype", arraytype);
     console.log("arrayprices", arrayprices);
 
-    return arraytype.map((item, i) => {
+    const arrayTags = [];
+    arraytype.map((type) => {
+      if (arrayTags.indexOf(type) === -1) {
+        arrayTags.push(type);
+      }
+    });
+
+    console.log("arrayTags", arrayTags);
+
+    return arrayTags.map((item, i) => {
       console.log(item);
       var Type = "Video Call";
       if (item == "text") {
@@ -141,7 +150,7 @@ function UserItem(props) {
               <p>Readings</p>
             </li>
             <li>
-              2016
+              {item.joinedYear}
               <p>Year joined</p>
             </li>
             <li>

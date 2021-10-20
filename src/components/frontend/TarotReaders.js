@@ -124,17 +124,21 @@ function TarotReaders(props) {
     localStorage.removeItem("timeMinute");
     localStorage.removeItem("timeSec");
     // history.push("/chat");
+
+    let role = localStorage.getItem("role");
     console.log(item);
-    if (item == "text") {
-      history.push(`/chat/${providerdata.id}`);
-    }
-    if (item == "video") {
-      history.push(`/video-call/${providerdata.id}`);
-      // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
-    }
-    if (item == "audio") {
-      history.push(`/audio-call/${providerdata.id}`);
-      // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+    if (role == "customer") {
+      if (item == "text") {
+        history.push(`/chat/${providerdata.id}`);
+      }
+      if (item == "video") {
+        history.push(`/video-call/${providerdata.id}`);
+        // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+      }
+      if (item == "audio") {
+        history.push(`/audio-call/${providerdata.id}`);
+        // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+      }
     }
 
     // setEditInput({

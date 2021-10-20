@@ -9,6 +9,7 @@ import icon1Img from "../../assets/frontend/img/services/icon-1.png";
 import icon2Img from "../../assets/frontend/img/services/icon-2.png";
 import icon3Img from "../../assets/frontend/img/services/icon-3.png";
 import readingsdetail1img from "../../assets/frontend/img/services/psychic-readings-detail-1.jpg";
+import StarRatings from "react-star-ratings";
 
 function PhysicReadingDetail(props) {
   const [providerDetal, setProviderDetail] = React.useState({});
@@ -27,6 +28,19 @@ function PhysicReadingDetail(props) {
     } catch (error) {
       console.log("error", error);
     }
+  };
+
+  const renderReview = () => {
+    return providerDetal?.profile?.ratingRview.map((item) => (
+      <div>
+        <div>
+          <p className="font-weight-bold">{item.customername}</p>
+          <small>{item.ratingdate}</small>
+          <p>{item.description}</p>
+        </div>
+        <hr />
+      </div>
+    ));
   };
 
   return (
@@ -216,67 +230,18 @@ function PhysicReadingDetail(props) {
                     />
                   </div>
                   <div className="tab-pane fade signle-tab-content" id="skills">
-                    <div>
-                      <p className="font-weight-bold">Chrissiouxsie</p>
-                      <small>Sep 30, 2021</small>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris aliquam lorem et sagittis laoreet. Morbi in
-                        sodales ante. Vivamus interdum dictum ante, vitae
-                        scelerisque velit egestas eget.
-                      </p>
-                    </div>
-                    <hr />
-                    <div>
-                      <p className="font-weight-bold">Chrissiouxsie</p>
-                      <small>Sep 30, 2021</small>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris aliquam lorem et sagittis laoreet. Morbi in
-                        sodales ante. Vivamus interdum dictum ante, vitae
-                        scelerisque velit egestas eget.
-                      </p>
-                    </div>
-                    <hr />
-                    <div>
-                      <p className="font-weight-bold">Chrissiouxsie</p>
-                      <small>Sep 30, 2021</small>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris aliquam lorem et sagittis laoreet. Morbi in
-                        sodales ante. Vivamus interdum dictum ante, vitae
-                        scelerisque velit egestas eget.
-                      </p>
-                    </div>
-                    <hr />
-                    <div>
-                      <p className="font-weight-bold">Chrissiouxsie</p>
-                      <small>Sep 30, 2021</small>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris aliquam lorem et sagittis laoreet. Morbi in
-                        sodales ante. Vivamus interdum dictum ante, vitae
-                        scelerisque velit egestas eget.
-                      </p>
-                    </div>
-                    <hr />
-                    <div>
-                      <p className="font-weight-bold">Chrissiouxsie</p>
-                      <small>Sep 30, 2021</small>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Mauris aliquam lorem et sagittis laoreet. Morbi in
-                        sodales ante. Vivamus interdum dictum ante, vitae
-                        scelerisque velit egestas eget.
-                      </p>
-                    </div>
-
-                    <a
-                      href="#"
-                      className="thm-btn w-100 uppercase margin-top-2 text-center "
-                    >
-                      Load More
-                    </a>
+                    {providerDetal?.profile?.ratingRview.map((item, i) => (
+                      <div key={i}>
+                        <div>
+                          <p className="font-weight-bold">
+                            {item.customername}
+                          </p>
+                          <small>{item.ratingdate}</small>
+                          <p>{item.description}</p>
+                        </div>
+                        <hr />
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
