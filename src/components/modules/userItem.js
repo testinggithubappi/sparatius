@@ -72,11 +72,7 @@ function UserItem(props) {
     let role = localStorage.getItem("role");
     console.log(data);
     if (role == "customer") {
-<<<<<<< HEAD
-      axios.post("/api/addFavourites", data).then((res) => {
-=======
       axios.post("/api/add_favorite", data).then((res) => {
->>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
         if (res.data.status == 200) {
           swal("Success", "Add Favoutite ", "success");
         } else {

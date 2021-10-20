@@ -56,7 +56,7 @@ class BookingController extends Controller
         $item->setName($request->serviceName)
             /** item name **/
             ->setCurrency('USD')
-            // ->setQuantity(1)
+            ->setQuantity(1)
             ->setPrice($request->amount);
 
         $item_list = new ItemList();
@@ -73,7 +73,7 @@ class BookingController extends Controller
         // $baseUrl = "www.google.com";
 
         $redirect_urls = new RedirectUrls();
-        $redirect_urls->setReturnUrl(URL::url('approved_status' . "/" . $request->serviceId . "/" . $request->bookingId))
+        $redirect_urls->setReturnUrl(url('approved_status' . "/" . $request->serviceId . "/" . $request->bookingId))
             /** Specify return URL **/
             ->setCancelUrl(URL::route('cancel_status'));
 
@@ -101,7 +101,7 @@ class BookingController extends Controller
             echo $ex->getData(); // Prints the detailed error message
             die($ex);
         }
-        return redirect(($payment->toArray()['links'][1])['href']);
+        return ($payment->toArray()['links'][1])['href'];
     }
 
     public function approvedStatus($serviceId, $bookingType)

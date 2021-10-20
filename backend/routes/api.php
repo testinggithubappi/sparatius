@@ -37,7 +37,7 @@ Route::get('e_class_detail/{e_classes_id}', [CustomController::class, 'eClassDet
 
 Route::get('token', [ChatController::class, 'createTokSession'])->name('token');
 
-Route::get('payment', [BookingController::class, 'payment'])->name('payment');
+Route::post('payment', [BookingController::class, 'payment'])->name('payment');
 
 $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('logout', [AuthController::class, 'Logout']);

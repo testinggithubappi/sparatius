@@ -1,7 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
-import { OTSession, OTStreams, preloadScript } from "opentok-react";
-=======
 import {
   OTPublisher,
   OTSession,
@@ -9,7 +6,6 @@ import {
   OTSubscriber,
   preloadScript,
 } from "opentok-react";
->>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
 import ConnectionStatus from "./VideoCall/ConnectionStatus";
 import Publisher from "./VideoCall/Publisher";
 import Subscriber from "./VideoCall/Subscriber";
@@ -29,10 +25,7 @@ export default class VideoChatInner extends React.Component {
     };
     this.sessionEvents = {
       sessionConnected: () => {
-<<<<<<< HEAD
-=======
         console.log("asdasdasd");
->>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
         this.setState({ connected: true });
       },
       sessionDisconnected: () => {
@@ -46,32 +39,18 @@ export default class VideoChatInner extends React.Component {
   };
 
   render() {
-<<<<<<< HEAD
-    const { apiKey, sessionId, token } = this.props;
-
-    return (
-      <div>
-        <CountDownTimer
-=======
     const { apiKey, sessionId, token, video } = this.props;
     console.log(this.props);
     return (
       <div>
         {/* <CountDownTimer
->>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
           hoursMinSecs={{
             minutes: this.state.TimerMin,
             seconds: this.state.TimerSec,
           }}
-<<<<<<< HEAD
-        />
-        {sessionId && token ? (
-          <div>
-=======
         /> */}
         {sessionId && token ? (
           <div style={{ height: 500 }}>
->>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
             <OTSession
               apiKey={apiKey}
               sessionId={sessionId}
@@ -84,14 +63,6 @@ export default class VideoChatInner extends React.Component {
               ) : null}
 
               {/* <ConnectionStatus connected={this.state.connected} /> */}
-<<<<<<< HEAD
-
-              <Publisher video={this.props.video} />
-
-              <OTStreams>
-                <Subscriber />
-              </OTStreams>
-=======
               <OTPublisher
                 eventHandlers={{
                   streamCreated: () => {
@@ -135,7 +106,6 @@ export default class VideoChatInner extends React.Component {
                 />
               </OTStreams>
               {/* <Subscriber /> */}
->>>>>>> c9d38cdbe36a0c59cb2c21cd3685b75f31c1cd29
             </OTSession>
           </div>
         ) : null}

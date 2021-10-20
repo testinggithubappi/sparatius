@@ -12,6 +12,8 @@ import shaperatingImg from "../../assets/frontend/img/resources/shape-rating.png
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
 import UserItem from "../modules/userItem";
 import PaymentModal from "../modules/PaymentModal";
+import PaymentModalViewer from "../modules/PaymentModalViewer";
+
 import { OTSession, OTPublisher, OTStreams, OTSubscriber } from "opentok-react";
 
 function TarotReaders(props) {
@@ -21,6 +23,7 @@ function TarotReaders(props) {
     getProviderList();
   }, []);
   const [checked, setChecked] = React.useState(false);
+  const [linkRender, setlinkRender] = React.useState();
   const [providerList, setproviderList] = React.useState({});
   const [editInput, setEditInput] = useState({
     showmodal: false,
@@ -118,27 +121,48 @@ function TarotReaders(props) {
     });
   };
 
-  const onHandleClickPay = (item, prices, indexProvider) => {
+  const onHandleClickPay = async (item, prices, indexProvider) => {
     var providerdata = providerList?.data[indexProvider];
     console.log(providerdata);
-    localStorage.removeItem("timeMinute");
-    localStorage.removeItem("timeSec");
-    // history.push("/chat");
 
-    let role = localStorage.getItem("role");
-    console.log(item);
-    if (role == "customer") {
-      if (item == "text") {
-        history.push(`/chat/${providerdata.id}`);
-      }
-      if (item == "video") {
-        history.push(`/video-call/${providerdata.id}`);
-        // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
-      }
-      if (item == "audio") {
-        history.push(`/audio-call/${providerdata.id}`);
-        // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
-      }
+    // localStorage.removeItem("timeMinute");
+    // localStorage.removeItem("timeSec");
+    // // history.push("/chat");
+
+    // let role = localStorage.getItem("role");
+    // console.log(item);
+    // if (role == "customer") {
+    //   if (item == "text") {
+    //     history.push(`/chat/${providerdata.id}`);
+    //   }
+    //   if (item == "video") {
+    //     history.push(`/video-call/${providerdata.id}`);
+    //     // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+    //   }
+    //   if (item == "audio") {
+    //     history.push(`/audio-call/${providerdata.id}`);
+    //     // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+    //   }
+    // }
+
+    try {
+      var data = {
+        serviceName: item,
+        amount: prices,
+        description: "one Hour Session",
+      };
+      let response = await axios
+        .post(`/api/payment`, data)
+        .then((data) => data);
+      response = await response.data;
+      console.log(response);
+      window.open(response, "_blank");
+      // setlinkRender(response);
+      // setEditInput({
+      //   showmodal: true,
+      // });
+    } catch (error) {
+      console.log("error", error);
     }
 
     // setEditInput({
@@ -154,7 +178,11 @@ function TarotReaders(props) {
           <h2>{capitalizeWords(props.match.params.slug)}</h2>
         </div>
       </section>
-      <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} />
+      <PaymentModalViewer
+        LinkRender={linkRender}
+        showmodal={editInput.showmodal}
+        closeModal={closeModal}
+      />
       <section className="sec-pad faq-page shop-sidebar sidebar-page">
         <div className="container">
           <div className="row">
