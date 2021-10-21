@@ -10,7 +10,7 @@ class Rating extends Model
     use HasFactory;
     protected $table = "rating";
     protected $fillable = [
-        'userid', 'serviceId', 'ratingScore', 'description'
+        'userid', 'serviceId', 'ratingScore', 'description', 'type', 'providerId'
     ];
 
     public function user()

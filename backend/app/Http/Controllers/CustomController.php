@@ -74,7 +74,7 @@ class CustomController extends Controller
         $providers = User::leftjoin("serviceproviderprofile as profile", 'profile.userId', 'users.id')
             ->leftjoin('serviceslookup as lookup', 'lookup.userId', 'users.id')
             ->leftjoin('rating', 'rating.providerId', 'lookup.userId')
-            ->select(DB::raw('users.*, lookup.serviceId, profile.description, Year(profile.joinedDate) as joinedYear, GROUP_CONCAT(DISTINCT(lookup.chatType)) as type, GROUP_CONCAT(lookup.price) as prices, IF(AVG(ratingScore) > 0,AVG(ratingScore),0) as rating'))
+            ->select(DB::raw('users.*,profile.videoPath ,lookup.serviceId, profile.description, Year(profile.joinedDate) as joinedYear, GROUP_CONCAT(DISTINCT(lookup.chatType)) as type, GROUP_CONCAT(lookup.price) as prices, IF(AVG(ratingScore) > 0,AVG(ratingScore),0) as rating'))
             ->where(DB::raw($where), '>', DB::raw('0'))->groupBy('lookup.userId')->paginate(2);
         return response()->json(['data' => $providers]);
     }
@@ -87,7 +87,7 @@ class CustomController extends Controller
 
     public function eClasses()
     {
-        $eclasses = Eclasses::paginate(3);
+        $eclasses = Eclasses::leftjoin('rating', 'eclasses.id', 'rating.eclassId')->select(DB::raw("eclasses.id, eclasses.eclassName,eclasses.Price, IF(AVG(ratingScore) > 0,AVG(ratingScore),0) as rating"))->groupBy('eclasses.id')->paginate(3);
         return ['status' => '200', 'data' => $eclasses];
     }
 
@@ -185,7 +185,7 @@ class CustomController extends Controller
             ->leftjoin('serviceslookup as lookup', 'lookup.userId', 'users.id')
             ->leftjoin('rating', 'rating.providerId', 'lookup.userId')
             ->select(DB::raw('users.*, lookup.serviceId, profile.description, Year(profile.joinedDate) as joinedYear, GROUP_CONCAT(lookup.chatType) as type, GROUP_CONCAT(lookup.price) as prices, IF(AVG(ratingScore) > 0,AVG(ratingScore),0) as rating'))
-            ->where('favorites.userId', Auth::user()->id)->paginate(2);
+            ->where('favorites.userId', Auth::user()->id)->groupby('favorites.providerId')->paginate(1);
         return ['status' => '200', 'data' => $fav];
     }
 }

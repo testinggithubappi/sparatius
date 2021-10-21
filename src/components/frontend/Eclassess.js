@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
+import StarRatings from "react-star-ratings";
 
 import shaperatingImg from "../../assets/frontend/img/resources/shape-rating.png";
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
@@ -60,21 +61,13 @@ function Eclassess(props) {
                     <div className="shape-rating">
                       <span>Top Rated</span>
                       <ul className="list-inline review-star">
-                        <li>
-                          <i className="fa fa-star"></i>
-                        </li>
-                        <li>
-                          <i className="fa fa-star"></i>
-                        </li>
-                        <li>
-                          <i className="fa fa-star"></i>
-                        </li>
-                        <li>
-                          <i className="fa fa-star"></i>
-                        </li>
-                        <li>
-                          <i className="fa fa-star"></i>
-                        </li>
+                        <StarRatings
+                          rating={Math.floor(item.rating)}
+                          starRatedColor="yellow"
+                          numberOfStars={5}
+                          name="rating"
+                          starDimension="30px"
+                        />
                       </ul>
                       <img
                         src={shaperatingImg}

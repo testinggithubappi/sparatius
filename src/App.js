@@ -47,7 +47,7 @@ import PublicRoute from "./routes/PublicRoute";
 
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:8000/";
+axios.defaults.baseURL = "http://202.142.180.146:90/sparatius/public";
 axios.defaults.headers.post["content-type"] = "application/json";
 axios.defaults.headers.post["accept"] = "application/json";
 axios.defaults.headers.post["accept"] = "multipart/form-data";

@@ -8,7 +8,6 @@ function PaymentModalViewer(props) {
       <div
         className={"modal fade " + (props.showmodal ? "in" : "")}
         id="exampleModal"
-        tabindex="-1"
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"

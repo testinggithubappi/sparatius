@@ -89,43 +89,27 @@ function UserItem(props) {
     <div className="col-md-4">
       <div className="reading-profile">
         <div className="reading-profile-inner">
-          <a href="#" data-toggle="modal" data-target="#exampleModal">
+          <button>
             <i className="fa fa-play-circle" aria-hidden="true"></i>
             <img
               src={readingsprofileImg}
               className="img-responsive readings-profile-img"
             />
-          </a>
+          </button>
           <div className="shape-rating">
             <span>Top Rated</span>
             <ul className="list-inline review-star">
-              {/* <li>
-                <i className="fa fa-star"></i>
-              </li>
-              <li>
-                <i className="fa fa-star"></i>
-              </li>
-              <li>
-                <i className="fa fa-star"></i>
-              </li>
-              <li>
-                <i className="fa fa-star"></i>
-              </li>
-              <li>
-                <i className="fa fa-star"></i>
-              </li> */}
-
               <StarRatings
                 rating={Math.floor(item.rating)}
                 starRatedColor="yellow"
                 numberOfStars={5}
                 name="rating"
-                starDimension="30px"
+                starDimension="15px"
               />
             </ul>
 
             <img
-              src={readingsprofileImg}
+              src={shaperatingImg}
               className="img-responsive shape-rating-img"
             />
           </div>

@@ -4,6 +4,9 @@ import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
+import fire from "../../config/firebase";
+import { getDatabase, set, ref } from "firebase/database";
+import * as firebase from "@firebase/app";
 
 function Register(props) {
   const history = useHistory();
@@ -30,6 +33,14 @@ function Register(props) {
     setRegister({ ...registerInput, [e.target.name]: e.target.value });
   };
 
+  const setUserOnlineStatus = async (user_id) => {
+    let database = getDatabase(fire);
+    await set(ref(database, "users/" + user_id), {
+      online: true,
+    });
+    history.push("/home");
+  };
+
   const registerSubmit = (e) => {
     e.preventDefault();
 
@@ -49,7 +60,7 @@ function Register(props) {
         localStorage.setItem("auth_name", res.data.name);
         localStorage.setItem("role", res.data.role);
         swal("Success", res.data.message, "success");
-        history.push("/home");
+        setUserOnlineStatus(res.data.id);
       } else {
         setRegister({
           ...registerInput,

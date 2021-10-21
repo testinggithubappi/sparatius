@@ -260,7 +260,6 @@ function Login(props) {
       <div
         className={"modal fade " + (editInput.showmodal ? "in" : "")}
         id="exampleModal"
-        tabindex="-1"
         role="dialog"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"

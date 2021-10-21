@@ -244,7 +244,7 @@ function TarotReaders(props) {
                           />
                           <label
                             className="form-check-label"
-                            for="defaultCheck1"
+                            htmlFor="defaultCheck1"
                           >
                             {" "}
                             Any{" "}
@@ -262,7 +262,7 @@ function TarotReaders(props) {
                           />
                           <label
                             className="form-check-label"
-                            for="defaultCheck2"
+                            htmlFor="defaultCheck2"
                           >
                             {" "}
                             Live chat{" "}
@@ -280,7 +280,7 @@ function TarotReaders(props) {
                           />
                           <label
                             className="form-check-label"
-                            for="defaultCheck3"
+                            htmlFor="defaultCheck3"
                           >
                             {" "}
                             Video call{" "}
@@ -298,7 +298,7 @@ function TarotReaders(props) {
                           />
                           <label
                             className="form-check-label"
-                            for="defaultCheck4"
+                            htmlFor="defaultCheck4"
                           >
                             {" "}
                             Voice call{" "}
@@ -330,7 +330,7 @@ function TarotReaders(props) {
                         <div className="form-check">
                           <label
                             className="form-check-label"
-                            for="defaultCheck1"
+                            htmlFor="defaultCheck1"
                           >
                             {" "}
                             Start{" "}
@@ -347,7 +347,7 @@ function TarotReaders(props) {
                         <div className="form-check">
                           <label
                             className="form-check-label"
-                            for="defaultCheck2"
+                            htmlFor="defaultCheck2"
                           >
                             {" "}
                             End{" "}
@@ -396,10 +396,8 @@ function TarotReaders(props) {
                   {" "}
                   <button
                     className="page-link"
-                    tabindex="-1"
                     disabled={providerList?.prev_page_url ? !true : !false}
                     onClick={() => getProviderList(providerList?.prev_page_url)}
-                    tabindex="-1"
                   >
                     Previous
                   </button>
