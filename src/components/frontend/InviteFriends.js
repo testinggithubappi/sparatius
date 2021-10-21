@@ -22,12 +22,13 @@ function InviteFriends(props) {
       email: inviteInput.email,
     };
     console.log(data);
-    axios.post("/api/invite", data).then((res) => {
+    axios.post("/api/invite_friend", data).then((res) => {
       if (res.data.status == 200) {
-        swal("Success", res.data.message, "success");
+        swal("Success", "Email Succesffully Send", "success");
         setInviteinput({
           email: "",
         });
+        swal("Success", res.data.message, "success");
       } else {
         setInviteinput({
           ...inviteInput,

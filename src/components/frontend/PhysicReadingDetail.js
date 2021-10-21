@@ -71,27 +71,22 @@ function PhysicReadingDetail(props) {
                   <div className="col-md-6 top-rated ">
                     <p className=" text-left ">Top Rated</p>
                     <ul className="list-inline review-star text-left star-color">
-                      <li>
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li>
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li>
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li>
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li>
-                        <i className="fa fa-star"></i>
-                      </li>
-                      <li className=" text-white">5.0</li>
+                      <StarRatings
+                        rating={
+                          providerDetal?.profile?.avg_rating
+                            ? Math.floor(providerDetal?.profile?.avg_rating)
+                            : 0
+                        }
+                        starRatedColor="yellow"
+                        numberOfStars={5}
+                        name="rating"
+                        starDimension="30px"
+                      />
                     </ul>
                   </div>
                   <div className="col-md-3 readings">
-                    <h3 className="">10,376</h3>
-                    <h4 className="">Readings</h4>
+                    {/* <h3 className="">10,376</h3>
+                    <h4 className="">Readings</h4> */}
                   </div>
 
                   <div className="col-md-3 readings">
@@ -126,7 +121,7 @@ function PhysicReadingDetail(props) {
                   {providerDetal?.services2?.pricechat
                     ? providerDetal?.services2?.pricechat
                     : 0}
-                  /min.{" "}
+                  /hour.{" "}
                 </button>
               </div>
             </div>
@@ -145,7 +140,7 @@ function PhysicReadingDetail(props) {
                   {providerDetal?.services2?.priceaudio
                     ? providerDetal?.services2?.priceaudio
                     : 0}
-                  /min.{" "}
+                  /hour.{" "}
                 </button>
               </div>
             </div>
@@ -163,7 +158,7 @@ function PhysicReadingDetail(props) {
                   {providerDetal?.services2?.pricevideo
                     ? providerDetal?.services2?.pricevideo
                     : 0}
-                  /min.{" "}
+                  /hour.{" "}
                 </button>
               </div>
             </div>

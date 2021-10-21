@@ -62,7 +62,7 @@ function EditAdvisorProfile(props) {
   const getEditProfile = async () => {
     let response = await axios.post(`/api/profile_data`).then((data) => data);
     let responsedata = response.data.profile;
-
+    console.log("responsedataresponsedataresponsedata", response);
     // setRegister({ firstname: responsedata.firstname });
 
     // setRegister({ ...registerInput, firstname: response.firstname });
@@ -70,6 +70,7 @@ function EditAdvisorProfile(props) {
     // getState(responsedata?.countryId);
 
     let option = response?.data?.services2;
+
     //  setserviceOption([...option]);
     setRegister({
       ...registerInput,
@@ -197,6 +198,7 @@ function EditAdvisorProfile(props) {
     };
     console.log(data);
     axios.post("/api/profile_detail", data).then((res) => {
+      console.log("resresresres1200", res);
       if (res.data.status == 200) {
         swal("Success", res.data.msg, "success");
         // history.push("/home");
@@ -210,12 +212,15 @@ function EditAdvisorProfile(props) {
   };
   const serviceSelectSubmit = (e) => {
     e.preventDefault();
+    console.log("registerInput.selectService", registerInput.selectService);
+    // return;
     axios
       .post("/api/profile_service", {
         selectService: registerInput.selectService,
         service_description: registerInput.profileService,
       })
       .then((res) => {
+        console.log("resresresres", res);
         if (res.data.status == 200) {
           swal("Success", res.data.msg, "success");
           // history.push("/home");
@@ -226,7 +231,8 @@ function EditAdvisorProfile(props) {
   const handleCallback = (childData) => {
     setServicelist(childData);
     // let option = [];
-    const option = childData.map((item) => {
+    console.log("childData 229", childData);
+    const option = childData?.map((item) => {
       var valuedata = {
         value: item.id,
         label: item.name,
@@ -357,7 +363,7 @@ function EditAdvisorProfile(props) {
                 <h2 className="font-weight-bold">My Services</h2>
 
                 <div className="form-grp bg-white">
-                  {serviceOption.length > 0 ? (
+                  {serviceOption?.length > 0 ? (
                     <Select
                       isMulti
                       name="colors"

@@ -200,12 +200,13 @@ class ServiceController extends Controller
     {
         $data = User::leftjoin('serviceproviderprofile as profile', 'profile.userId', 'users.id')
             ->select('users.*', 'profile.*')
-            ->where('users.id', $serviceId)
+            ->where('users.id', $userId)
             ->first()->makeHidden(['profile.id', 'profile.userId']);
         $data['ratingRview'] =  Rating::leftjoin('users as customer', 'rating.userid', 'customer.id')
-            ->selecT(['customer.firstName as customername', 'rating.description', 'rating.description', DB::raw('DATE_FORMAT(rating.created_at, "%d-%b-%Y") as ratingdate')])
+            ->select(['customer.firstName as customername', 'rating.ratingScore', 'rating.description', DB::raw('DATE_FORMAT(rating.created_at, "%d-%b-%Y") as ratingdate')])
             ->where('rating.providerId', $userId)
             ->get();
+        $data['avg_rating'] = Rating::where('providerId', $userId)->avg('ratingScore');
         $data['videoPathFull']  =    url('uploads') . '/' . $data->videoPath;
         $data['statelist'] =  State::where('country_id', $data->countryId)->get();
         $data['citylist'] =  City::where('state_id', $data->stateId)->get();

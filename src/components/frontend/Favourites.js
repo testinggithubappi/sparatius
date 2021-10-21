@@ -10,6 +10,7 @@ import shaperatingImg from "../../assets/frontend/img/resources/shape-rating.png
 import UserItem from "../modules/userItem";
 import PaymentModal from "../modules/PaymentModal";
 function Favourites(props) {
+  const history = useHistory();
   useEffect(() => {
     getFavouriteproviderList();
   }, []);
@@ -18,9 +19,10 @@ function Favourites(props) {
   });
   const [favouriteproviderList, setFavouriteproviderList] = React.useState([]);
 
-  const getFavouriteproviderList = async (path = `/api/favouriteproviderr`) => {
-    let response = await axios.post(`${path}`).then((data) => data);
+  const getFavouriteproviderList = async (path = `/api/get_favorite`) => {
+    let response = await axios.get(`${path}`).then((data) => data);
     response = await response.data.data;
+    console.log(response);
     setFavouriteproviderList(response);
   };
 
@@ -48,26 +50,56 @@ function Favourites(props) {
     });
   };
 
-  const onHandleClickPay = (item, prices, indexProvider) => {
+  const onHandleClickPay = async (item, prices, indexProvider) => {
     var providerdata = favouriteproviderList?.data[indexProvider];
     console.log(providerdata);
-    // history.push("/chat");
-    console.log(item);
-    // if (item == "text") {
-    //   let data = {
-    //     id: providerdata.id,
-    //   };
-    //   ChatStart(data);
-    // }
-    // if (item == "video") {
-    //   history.push(`/video-call/${providerdata.id}`);
-    //   // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
-    // }
 
-    setEditInput({
-      showmodal: true,
-    });
+    localStorage.removeItem("timeMinute");
+    localStorage.removeItem("timeSec");
+    // // history.push("/chat");
+
+    let role = localStorage.getItem("role");
+    console.log(item);
+    if (role == "customer") {
+      if (item == "text") {
+        history.push(`/chat/${providerdata.id}`);
+      }
+      if (item == "video") {
+        history.push(`/video-call/${providerdata.id}`);
+        // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+      }
+      if (item == "audio") {
+        history.push(`/audio-call/${providerdata.id}`);
+        // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+      }
+    }
+
+    try {
+      // var data = {
+      //   serviceName: item,
+      //   amount: prices,
+      //   description: "one Hour Session",
+      // };
+      // let response = await axios
+      //   .post(`/api/payment`, data)
+      //   .then((data) => data);
+      // response = await response.data;
+      // console.log(response);
+      // window.open(response, "_blank");
+      // setlinkRender(response);
+      // setEditInput({
+      //   showmodal: true,
+      // });
+    } catch (error) {
+      console.log("error", error);
+    }
+
+    // setEditInput({
+    //   showmodal: true,
+    // });
   };
+
+  console.log(favouriteproviderList);
   return (
     <div>
       <Navbar />
@@ -76,18 +108,20 @@ function Favourites(props) {
           <h2>Favourites</h2>
         </div>
       </section>
-      <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} />
+      {/* <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} /> */}
       <section className="sec-pad faq-page shop-sidebar sidebar-page">
         <div className="container">
           <div className="row">
-            {favouriteproviderList?.data?.map((item, i) => (
-              <UserItem
-                onHandleClickPay={onHandleClickPay}
-                providerList={favouriteproviderList}
-                index={i}
-                item={item}
-              />
-            ))}
+            {favouriteproviderList
+              ? favouriteproviderList?.data?.map((item, i) => (
+                  <UserItem
+                    onHandleClickPay={onHandleClickPay}
+                    providerList={favouriteproviderList}
+                    index={i}
+                    item={item}
+                  />
+                ))
+              : ""}
 
             <nav aria-label="..." className="text-center">
               <ul className="pagination font-p">

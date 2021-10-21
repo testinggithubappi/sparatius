@@ -16,7 +16,7 @@ export default class ChatInner extends React.Component {
       currentchatID: this.props.currentchatID,
       TimerMin: localStorage.getItem("timeMinute")
         ? localStorage.getItem("timeMinute")
-        : localStorage.setItem("timeMinute", 1),
+        : localStorage.setItem("timeMinute", 59),
       TimerSec: localStorage.getItem("timeSec")
         ? localStorage.getItem("timeSec")
         : localStorage.setItem("timeSec", 59),
@@ -250,12 +250,15 @@ export default class ChatInner extends React.Component {
           eventHandlers={this.sessionEventHandlers}
         />
         <div className="messaging">
-          {/* <CountDownTimer
+          <CountDownTimer
+            provider={this.props.currentchatID}
+            servicetype="text"
+            type="service"
             hoursMinSecs={{
               minutes: this.state.TimerMin,
               seconds: this.state.TimerSec,
             }}
-          /> */}
+          />
           <div className="inbox_msg">
             {/* <div className="inbox_people">
               <div className="headind_srch">

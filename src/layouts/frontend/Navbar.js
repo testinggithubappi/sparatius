@@ -26,6 +26,7 @@ function Navbar(props) {
   const getService = async () => {
     let response = await getList();
     response = await response.data.services;
+    console.log("responsesssssssss", response);
     setServicelist(response);
     if (props.parentCallback) {
       props.parentCallback(response);
@@ -35,8 +36,8 @@ function Navbar(props) {
     let response = await getNotificationCount();
     response = await response.data;
     setnotificationlist(response);
-    if (props.parentCallback) {
-      props.parentCallback(response);
+    if (props.parentCallbackNotification) {
+      props.parentCallbackNotification(response);
     }
   };
 

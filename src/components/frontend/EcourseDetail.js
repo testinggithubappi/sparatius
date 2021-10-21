@@ -95,7 +95,11 @@ function EcourseDetail(props) {
                     <p className=" text-left ">{eclassDetal?.title}</p>
                     <ul className="list-inline review-star text-left star-color">
                       <StarRatings
-                        rating={Math.floor(eclassDetal?.rating?.rating)}
+                        rating={
+                          eclassDetal?.rating?.rating
+                            ? Math.floor(eclassDetal?.rating?.rating)
+                            : 0
+                        }
                         starRatedColor="yellow"
                         numberOfStars={5}
                         name="rating"

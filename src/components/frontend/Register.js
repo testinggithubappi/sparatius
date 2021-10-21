@@ -17,7 +17,7 @@ function Register(props) {
     contactno: "",
     password_confirmation: "",
     selectdVal: "",
-    error_list: [],
+    error_list: null,
   });
 
   const handleInput = (e) => {
@@ -59,6 +59,7 @@ function Register(props) {
     });
   };
 
+  console.log(registerInput.error_list);
   return (
     <div>
       <Navbar />
@@ -150,6 +151,22 @@ function Register(props) {
           <div className="row">
             <div className="col-md-3"></div>
             <div className="col-md-6">
+              <ul>
+                {registerInput.error_list
+                  ? Object.keys(registerInput.error_list).map((key) => {
+                      return (
+                        <li style={{ color: "red" }}>
+                          {registerInput.error_list[key][0]}
+                        </li>
+                      );
+                    })
+                  : null}
+              </ul>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3"></div>
+            <div className="col-md-6">
               <form action="#" onSubmit={registerSubmit}>
                 <div className="form-grp">
                   <input
@@ -159,6 +176,7 @@ function Register(props) {
                     onChange={handleInput}
                     value={registerInput.firstname}
                     name="firstname"
+                    required
                   />
                   <i className="fa fa-user"></i>
                 </div>
@@ -171,18 +189,20 @@ function Register(props) {
                     onChange={handleInput}
                     value={registerInput.lastname}
                     name="lastname"
+                    required
                   />
                   <i className="fa fa-user"></i>
                 </div>
 
                 <div className="form-grp">
                   <input
-                    type="text"
+                    type="email"
                     className="form-control"
                     placeholder="Email Address"
                     onChange={handleInput}
                     value={registerInput.email}
                     name="email"
+                    required
                   />
                   <i className="fa fa-envelope-o"></i>
                 </div>
@@ -194,6 +214,7 @@ function Register(props) {
                     onChange={handleInput}
                     value={registerInput.password}
                     name="password"
+                    required
                   />
                   <i className="fa fa-lock"></i>
                 </div>
@@ -205,6 +226,7 @@ function Register(props) {
                     onChange={handleInput}
                     value={registerInput.password_confirmation}
                     name="password_confirmation"
+                    required
                   />
                   <i className="fa fa-lock"></i>
                 </div>
@@ -217,6 +239,7 @@ function Register(props) {
                     onChange={handleInput}
                     value={registerInput.contactno}
                     name="contactno"
+                    required
                   />
                   <i className="fa fa-user"></i>
                 </div>
@@ -227,6 +250,7 @@ function Register(props) {
                   onChange={handleChange}
                   className="form-control form-grp singup-select"
                   id="exampleFormControlSelect1"
+                  required
                 >
                   <option value="">Slect Role</option>
                   <option value="customer">Customer</option>

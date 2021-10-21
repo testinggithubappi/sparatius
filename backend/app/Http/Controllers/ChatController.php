@@ -55,8 +55,8 @@ class ChatController extends Controller
 
     public function sessionCheck(Request $request)
     {
-        $chathead = Chathead::where(['from_id' => Auth::user()->id, 'to_id' => $request->id])
-            ->orwhere(['from_id' => $request->id, 'to_id' => Auth::user()->id])
+        $user_id = Auth::user()->id;
+        $chathead = Chathead::where(DB::raw("(from_id =  $user_id AND to_id = $request->id) or (from_id = $request->id AND to_id = $user_id)"), '>', DB::raw('0'))
             ->first();
         // echo"<pre>"; print_r($tok->original); die();
         if (empty($chathead)) {
@@ -87,8 +87,7 @@ class ChatController extends Controller
                 "token" => $tok->original['session_token']
             ]);
 
-            $chathead = Chathead::where(['from_id' => Auth::user()->id, 'to_id' => $request->id])
-                ->orwhere(['from_id' => $request->id, 'to_id' => Auth::user()->id])
+            $chathead = Chathead::where(DB::raw("(from_id =  $user_id AND to_id = $request->id) or (from_id = $request->id AND to_id = $user_id)"), '>', DB::raw('0'))
                 ->first();
 
             $this->Notification($request->title, $request->msg, $request->id, $request->type, $request->customerid);
@@ -102,10 +101,10 @@ class ChatController extends Controller
 
     public function getChatSession(Request $request)
     {
-        $chathead = Chathead::where(['from_id' => Auth::user()->id, 'to_id' => $request->id])
-            ->orwhere(['from_id' => $request->id, 'to_id' => Auth::user()->id])
+        $user_id = Auth::user()->id;
+        $chathead = Chathead::where(DB::raw("(from_id =  $user_id AND to_id = $request->id) or (from_id = $request->id AND to_id = $user_id)"), '>', DB::raw('0'))
             ->first();
-        return ['status' => '200', 'data' => $chathead];
+        return ['status' => '200', 'data' => $chathead, 'id' => $user_id];
     }
 
 
@@ -140,8 +139,11 @@ class ChatController extends Controller
 
     public function allMessage(Request $request)
     {
-        $head = $this->sessionCheck($request);
-        $messages = Chatmessages::where('chathead_id', $head['data']->id)->orderBy('created_at', 'DESC')->get();
+        // $head = $this->sessionCheck($request);
+        $chathead = Chathead::where(['from_id' => Auth::user()->id, 'to_id' => $request->id])
+            ->orwhere(['from_id' => $request->id, 'to_id' => Auth::user()->id])
+            ->first();
+        $messages = Chatmessages::where('chathead_id', $chathead->id)->orderBy('created_at', 'DESC')->get();
         return response()->json(['status' => "200", "chat" => $messages, "auth_id" => Auth::user()->id]);
     }
 }

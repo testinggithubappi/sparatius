@@ -32,37 +32,39 @@ function UserItem(props) {
     console.log("arraytype", arraytype);
     console.log("arrayprices", arrayprices);
 
-    const arrayTags = [];
-    arraytype.map((type) => {
-      if (arrayTags.indexOf(type) === -1) {
-        arrayTags.push(type);
-      }
-    });
+    if (arraytype.length > 0) {
+      const arrayTags = [];
+      arraytype.map((type) => {
+        if (arrayTags.indexOf(type) === -1) {
+          arrayTags.push(type);
+        }
+      });
 
-    console.log("arrayTags", arrayTags);
+      console.log("arrayTags", arrayTags);
 
-    return arrayTags.map((item, i) => {
-      console.log(item);
-      var Type = "Video Call";
-      if (item == "text") {
-        Type = "Chat";
-      } else if (item == "audio") {
-        Type = "Audio Call";
-      }
-      return (
-        <li>
-          <button
-            onClick={() => {
-              props.onHandleClickPay(item, arrayprices[i], props.index);
-            }}
-          >
-            <i className="fa fa-comments" aria-hidden="true"></i>
-            <br />${arrayprices[i]}/min
-            <p>${Type}</p>
-          </button>
-        </li>
-      );
-    });
+      return arrayTags.map((item, i) => {
+        console.log(item);
+        var Type = "Video Call";
+        if (item == "text") {
+          Type = "Chat";
+        } else if (item == "audio") {
+          Type = "Audio Call";
+        }
+        return (
+          <li>
+            <button
+              onClick={() => {
+                props.onHandleClickPay(item, arrayprices[i], props.index);
+              }}
+            >
+              <i className="fa fa-comments" aria-hidden="true"></i>
+              <br />${arrayprices[i]}/hour
+              <p>${Type}</p>
+            </button>
+          </li>
+        );
+      });
+    }
   };
 
   const addFavouriteclick = (item) => {

@@ -72,7 +72,6 @@ function ContactUs(props) {
                   <div className="row">
                     <div className="col-md-12">
                       <input
-                        id="phone"
                         className="form-control input-1"
                         type="text"
                         placeholder="Name"
@@ -80,6 +79,7 @@ function ContactUs(props) {
                         value={contactInput.name}
                         name="name"
                         onChange={handleInput}
+                        required
                       />
                     </div>
                   </div>
@@ -87,13 +87,13 @@ function ContactUs(props) {
                   <div className="row">
                     <div className="col-md-12">
                       <input
-                        id="phone"
                         className="form-control input-1"
-                        type="text"
+                        type="email"
                         placeholder="Email Here"
                         value={contactInput.email}
                         name="email"
                         onChange={handleInput}
+                        required
                       />
                     </div>
                   </div>
@@ -101,13 +101,13 @@ function ContactUs(props) {
                   <div className="row">
                     <div className="col-md-12">
                       <input
-                        id="phone"
                         className="form-control input-1"
                         type="text"
                         placeholder="Type"
                         value={contactInput.type}
                         name="type"
                         onChange={handleInput}
+                        required
                       />
                     </div>
                   </div>
@@ -122,6 +122,7 @@ function ContactUs(props) {
                         value={contactInput.description}
                         name="description"
                         onChange={handleInput}
+                        required
                       ></textarea>
                     </div>
                   </div>

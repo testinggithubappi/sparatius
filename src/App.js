@@ -37,6 +37,7 @@ import EditAdvisorProfile from "./components/frontend/EditAdvisorProfile";
 import Settings from "./components/frontend/Settings";
 import OrderList from "./components/frontend/OrderList";
 import EcourseDetail from "./components/frontend/EcourseDetail";
+import Rating from "./components/frontend/Rating";
 
 // import Login from "./layouts/frontend/Login";
 // import Register from "./layouts/frontend/Register";
@@ -232,6 +233,7 @@ class App extends Component {
               name="OrderList"
               component={OrderList}
             />
+            <PrivateRoute path="/raitng" name="Rating" component={Rating} />
 
             <Redirect to="/home" />
 

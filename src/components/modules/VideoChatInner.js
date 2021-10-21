@@ -5,6 +5,7 @@ import {
   OTStreams,
   OTSubscriber,
   preloadScript,
+  disconnect,
 } from "opentok-react";
 import ConnectionStatus from "./VideoCall/ConnectionStatus";
 import Publisher from "./VideoCall/Publisher";
@@ -18,7 +19,7 @@ export default class VideoChatInner extends React.Component {
       connected: false,
       TimerMin: localStorage.getItem("timeMinute")
         ? localStorage.getItem("timeMinute")
-        : localStorage.setItem("timeMinute", 59),
+        : localStorage.setItem("timeMinute", 1),
       TimerSec: localStorage.getItem("timeSec")
         ? localStorage.getItem("timeSec")
         : localStorage.setItem("timeSec", 59),
@@ -26,7 +27,9 @@ export default class VideoChatInner extends React.Component {
     this.sessionEvents = {
       sessionConnected: () => {
         console.log("asdasdasd");
+
         this.setState({ connected: true });
+        // disconnect();
       },
       sessionDisconnected: () => {
         this.setState({ connected: false });
@@ -43,12 +46,15 @@ export default class VideoChatInner extends React.Component {
     console.log(this.props);
     return (
       <div>
-        {/* <CountDownTimer
+        <CountDownTimer
+          provider={this.props.currentchatID}
+          servicetype={video ? "video" : "audio"}
+          type="service"
           hoursMinSecs={{
             minutes: this.state.TimerMin,
             seconds: this.state.TimerSec,
           }}
-        /> */}
+        />
         {sessionId && token ? (
           <div style={{ height: 500 }}>
             <OTSession

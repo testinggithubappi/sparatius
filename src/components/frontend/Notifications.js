@@ -61,17 +61,20 @@ function Notifications(props) {
             <div className="col-md-12 notificationspage">
               <ul className="font-p">
                 {notificationlist.map((item) => (
-                  <li className="gray-bg ">
-                    <button
-                      style={{ border: 0 }}
-                      className="btn-block"
-                      onClick={() => {
-                        onHandleClickPay(item);
-                      }}
-                    >
-                      {item.msg}
-                    </button>
-                  </li>
+                  <div>
+                    <li className="gray-bg ">
+                      <button
+                        style={{ border: 0 }}
+                        className="btn-block"
+                        onClick={() => {
+                          onHandleClickPay(item);
+                        }}
+                      >
+                        {item.msg}
+                      </button>
+                    </li>
+                    <br />
+                  </div>
                 ))}
               </ul>
             </div>

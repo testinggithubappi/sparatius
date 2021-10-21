@@ -17,8 +17,8 @@ function Settings(props) {
     showmodal: false,
   });
   const getEditProfile = async () => {
-    let response = await axios.post(`/api/getEditProfile`).then((data) => data);
-    response = await response.data.getEditProfile;
+    let response = await axios.get(`/api/user_profile`).then((data) => data);
+    response = await response.data.data;
     setEditInput({
       email: response.email,
       id: response.id,
@@ -59,7 +59,7 @@ function Settings(props) {
       }
     }
     console.log(data);
-    axios.post("/api/login", data).then((res) => {
+    axios.post("/api/update_password", data).then((res) => {
       if (res.data.status == 200) {
         swal("Success", res.data.message, "success");
       } else {
@@ -92,7 +92,7 @@ function Settings(props) {
                   <h4 className="font-weight-bold">Email</h4>
                 </div>
                 <div className="col-md-6">
-                  <h4 className="font-weight-bold">frazerdiamond@abc.com</h4>
+                  <h4 className="font-weight-bold">{editInput.email}</h4>
                 </div>
                 <div className="col-md-6 margin-top-3">
                   <h4 className="font-weight-bold">Change Password</h4>

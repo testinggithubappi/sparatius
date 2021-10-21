@@ -71,6 +71,7 @@ class AudioCall extends Component {
                     sessionId={this.state.sessionId}
                     token={this.state.token}
                     apiKey={API_KEY}
+                    currentchatID={this.props.match.params.id}
                   />
 
                   {/* <div className="row">

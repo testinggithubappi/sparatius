@@ -71,6 +71,10 @@ $router->group(['middleware' => 'auth:api'], function () use ($router) {
     Route::post('show_chat', [ChatController::class, "allMessage"])->name('show_chat');
 
     Route::post('getChatSession', [ChatController::class, 'getChatSession'])->name('getChatSession');
+
+    Route::post('update_password', [CustomController::class, 'updatePassword'])->name('update_password');
+    Route::post('rating', [CustomController::class, 'saveRating'])->name('rating');
+    Route::get('get_favorite', [CustomController::class, 'userfavorite'])->name('get_favorite');
 });
 
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

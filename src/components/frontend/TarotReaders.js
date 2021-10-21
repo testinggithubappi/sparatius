@@ -125,38 +125,38 @@ function TarotReaders(props) {
     var providerdata = providerList?.data[indexProvider];
     console.log(providerdata);
 
-    // localStorage.removeItem("timeMinute");
-    // localStorage.removeItem("timeSec");
+    localStorage.removeItem("timeMinute");
+    localStorage.removeItem("timeSec");
     // // history.push("/chat");
 
-    // let role = localStorage.getItem("role");
-    // console.log(item);
-    // if (role == "customer") {
-    //   if (item == "text") {
-    //     history.push(`/chat/${providerdata.id}`);
-    //   }
-    //   if (item == "video") {
-    //     history.push(`/video-call/${providerdata.id}`);
-    //     // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
-    //   }
-    //   if (item == "audio") {
-    //     history.push(`/audio-call/${providerdata.id}`);
-    //     // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
-    //   }
-    // }
+    let role = localStorage.getItem("role");
+    console.log(item);
+    if (role == "customer") {
+      if (item == "text") {
+        history.push(`/chat/${providerdata.id}`);
+      }
+      if (item == "video") {
+        history.push(`/video-call/${providerdata.id}`);
+        // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+      }
+      if (item == "audio") {
+        history.push(`/audio-call/${providerdata.id}`);
+        // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+      }
+    }
 
     try {
-      var data = {
-        serviceName: item,
-        amount: prices,
-        description: "one Hour Session",
-      };
-      let response = await axios
-        .post(`/api/payment`, data)
-        .then((data) => data);
-      response = await response.data;
-      console.log(response);
-      window.open(response, "_blank");
+      // var data = {
+      //   serviceName: item,
+      //   amount: prices,
+      //   description: "one Hour Session",
+      // };
+      // let response = await axios
+      //   .post(`/api/payment`, data)
+      //   .then((data) => data);
+      // response = await response.data;
+      // console.log(response);
+      // window.open(response, "_blank");
       // setlinkRender(response);
       // setEditInput({
       //   showmodal: true,
@@ -198,27 +198,11 @@ function TarotReaders(props) {
                         placeholder="type your keyword"
                         value={registerInput.keyword}
                       />
-                      <button type="submit">
+                      <button onClick={() => getProviderList()}>
                         <i className="fa fa-search"></i>
                       </button>
                     </form>
                   </div>
-                </div>
-
-                <div className="form-group">
-                  <select
-                    className="form-control"
-                    id="exampleFormControlSelect1"
-                    name="Rating"
-                    value={registerInput.Rating}
-                    onChange={handleChange}
-                  >
-                    <option value="">Sort by</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
                 </div>
 
                 <div className="sec-title medium text-purple">
