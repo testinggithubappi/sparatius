@@ -202,15 +202,15 @@ function Settings(props) {
                   </Link>
                 </div>
                 <div className="col-md-12 margin-top-3">
-                  <Link to="terms-&-conditions.html">
+                  <Link to="/terms-condition">
                     <h4 className="font-weight-bold">Terms & Conditions</h4>
                   </Link>
                 </div>
-                <div className="col-md-12 margin-top-3">
+                {/* <div className="col-md-12 margin-top-3">
                   <Link to="login.html">
                     <h4 className="font-weight-bold">Logout</h4>
                   </Link>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="col-md-2"></div>

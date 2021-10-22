@@ -28,10 +28,12 @@ function Notifications(props) {
   };
 
   const onHandleClickPay = (item) => {
+    localStorage.removeItem("timeMinute");
+    localStorage.removeItem("timeSec");
     console.log(item);
     var type = item.type;
     if (type == "text") {
-      history.push(`/chat/${item.user_id}/${item.customer_id}`);
+      history.push(`/provider/chat/${item.user_id}/${item.customer_id}`);
     }
     if (type == "video") {
       history.push(`/provider/video-call/${item.customer_id}`);

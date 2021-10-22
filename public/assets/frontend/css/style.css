@@ -6328,3 +6328,22 @@ Hasnain
   background: #ccc !important;
   color: #fff !important;
 }
+
+.pagination > li > button {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  margin-left: -1px;
+  line-height: 1.42857143;
+  color: #262f3b;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+button.page-link.active {
+  z-index: 3;
+  color: #fff;
+  cursor: default;
+  background-color: #262f3b;
+  border-color: #262f3b;
+}

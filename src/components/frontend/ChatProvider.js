@@ -9,7 +9,7 @@ import { API_KEY } from "../../config";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-function Chat(props) {
+function ChatProvider(props) {
   const [onProviderSessionline, setProviderSession] = React.useState({
     ProviderData: "",
     sessionId: "",
@@ -27,10 +27,7 @@ function Chat(props) {
     try {
       let path = `/api/getChatSession`;
       var data = {
-        id: props.match.params.id,
-        customerid: props.match.params.customerid
-          ? props.match.params.customerid
-          : localStorage.getItem("user_id"),
+        id: props.match.params.customerid,
         title: "Text Chat",
         msg: "You Have A Text Chat",
         type: "text",
@@ -79,7 +76,7 @@ function Chat(props) {
       <div className="container">
         {onProviderSessionline.sessionId && onProviderSessionline.token ? (
           <ChatInner
-            currentchatID={props.match.params.id}
+            currentchatID={props.match.params.customerid}
             customerid={props.match.params.customerid}
             chatHeadlist={chatHeadList}
             apiKey={API_KEY}
@@ -101,4 +98,4 @@ function Chat(props) {
   );
 }
 
-export default Chat;
+export default ChatProvider;

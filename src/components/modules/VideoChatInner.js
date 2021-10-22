@@ -19,7 +19,7 @@ export default class VideoChatInner extends React.Component {
       connected: false,
       TimerMin: localStorage.getItem("timeMinute")
         ? localStorage.getItem("timeMinute")
-        : localStorage.setItem("timeMinute", 1),
+        : localStorage.setItem("timeMinute", 59),
       TimerSec: localStorage.getItem("timeSec")
         ? localStorage.getItem("timeSec")
         : localStorage.setItem("timeSec", 59),

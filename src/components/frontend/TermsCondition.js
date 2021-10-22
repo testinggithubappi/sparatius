@@ -14,7 +14,7 @@ function TermsCondition(props) {
 
   const getTermsCondition = async () => {
     let response = await axios
-      .post(`/api/getTermscondition`)
+      .get(`/api/getTermscondition`)
       .then((data) => data);
     response = await response.data.getTermscondition;
     setTermsCondtion(response);

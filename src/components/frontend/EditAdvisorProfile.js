@@ -34,7 +34,7 @@ function EditAdvisorProfile(props) {
     state: "",
     yearexperience: "",
     yearjoined: "",
-    error_list: [],
+    error_list: {},
     gender: "",
     zipcode: "",
     stateList: [],
@@ -45,6 +45,7 @@ function EditAdvisorProfile(props) {
     profileAbout: "",
     selectDate: "",
     profileService: "",
+    email: "",
   });
 
   const [arrFeilds, setFeilds] = useState([]);
@@ -77,7 +78,7 @@ function EditAdvisorProfile(props) {
       firstname: responsedata?.firstName,
       lastname: responsedata?.LastName,
       contactno: responsedata?.contactNo,
-      email: responsedata?.contactno,
+      email: responsedata?.email,
       state: responsedata?.stateId,
       country: responsedata?.countryId,
       city: responsedata?.cityId,
@@ -103,16 +104,21 @@ function EditAdvisorProfile(props) {
   };
   const handleSubmitVideos = (event) => {
     event.preventDefault();
-    const formData = new FormData();
-
+    let formData = new FormData();
     formData.append("file", selectedFile);
-
-    axios.post("/api/profile_video", formData).then((res) => {
-      if (res.data.status == 200) {
-        swal("Success", res.data.msg, "success");
-      } else {
-      }
-    });
+    axios
+      .post("/api/profile_video", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+        },
+      })
+      .then((res) => {
+        if (res.data.status == 200) {
+          swal("Success", res.data.msg, "success");
+        } else {
+        }
+      });
   };
 
   const getCountry = async () => {
@@ -172,10 +178,10 @@ function EditAdvisorProfile(props) {
         swal("Success", res.data.msg, "success");
         // history.push("/home");
       } else {
-        setRegister({
-          ...registerInput,
-          error_list: res.data.validation_erros,
-        });
+        // setRegister({
+        //   ...registerInput,
+        //   error_list: res.data.validation_erros,
+        // });
       }
     });
   };
@@ -187,7 +193,7 @@ function EditAdvisorProfile(props) {
       firstname: registerInput.firstname,
       lastname: registerInput.lastname,
       contactno: registerInput.contactno,
-      email: registerInput.contactno,
+      email: registerInput.email,
       state: registerInput.state,
       country: registerInput.country,
       city: registerInput.city,
@@ -205,7 +211,7 @@ function EditAdvisorProfile(props) {
       } else {
         setRegister({
           ...registerInput,
-          error_list: res.data.validation_erros,
+          error_list: res.data.msg,
         });
       }
     });
@@ -682,7 +688,19 @@ function EditAdvisorProfile(props) {
                     />
                   </div>
                 </div>
-
+                <div className="col-md-6">
+                  <ul>
+                    {registerInput.error_list
+                      ? Object.keys(registerInput.error_list).map((key) => {
+                          return (
+                            <li style={{ color: "red" }}>
+                              {registerInput.error_list[key][0]}
+                            </li>
+                          );
+                        })
+                      : null}
+                  </ul>
+                </div>
                 <div className="clearfix submit-box">
                   <div className="pull-right">
                     <button

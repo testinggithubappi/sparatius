@@ -14,7 +14,7 @@ function PrivacyPolicy(props) {
 
   const getPrivacyPolicydata = async () => {
     let response = await axios
-      .post(`/api/getprivacypolicy`)
+      .get(`/api/getprivacypolicy`)
       .then((data) => data);
     response = await response.data.getprivacypolicy;
     setPrivacyPolicy(response);

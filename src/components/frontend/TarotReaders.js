@@ -27,6 +27,8 @@ function TarotReaders(props) {
   const [providerList, setproviderList] = React.useState({});
   const [editInput, setEditInput] = useState({
     showmodal: false,
+    showmodalVideo: false,
+    activeIndex: undefined,
   });
   const [registerInput, setRegister] = useState({
     keyword: "",
@@ -121,6 +123,23 @@ function TarotReaders(props) {
     });
   };
 
+  const opeModalVideo = (i) => {
+    // e.persist();
+    // console.log(e);
+    setEditInput({
+      showmodalVideo: true,
+      activeIndex: i,
+    });
+  };
+  const closeModalVideo = (e) => {
+    // e.persist();
+    // console.log(e);
+    setEditInput({
+      showmodalVideo: false,
+      activeIndex: undefined,
+    });
+  };
+
   const onHandleClickPay = async (item, prices, indexProvider) => {
     var providerdata = providerList?.data[indexProvider];
     console.log(providerdata);
@@ -133,13 +152,43 @@ function TarotReaders(props) {
     console.log(item);
     if (role == "customer") {
       if (item == "text") {
+        let path = `/api/create_chathead`;
+        var data = {
+          id: providerdata.id,
+          title: "Text Chat",
+          msg: "You Have A Text Chat",
+          type: "text",
+          customerid: localStorage.getItem("user_id"),
+        };
+        await axios.post(path, data).then((data) => data);
+
         history.push(`/chat/${providerdata.id}`);
       }
       if (item == "video") {
+        let path = `/api/create_chathead`;
+        var data = {
+          id: providerdata.id,
+          title: "Video Chat",
+          msg: "You Have A Video Chat",
+          type: "video",
+          customerid: localStorage.getItem("user_id"),
+        };
+        await axios.post(path, data).then((data) => data);
+
         history.push(`/video-call/${providerdata.id}`);
         // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
       }
       if (item == "audio") {
+        let path = `/api/create_chathead`;
+        var data = {
+          id: providerdata.id,
+          title: "Video Chat",
+          msg: "You Have A Video Chat",
+          type: "video",
+          customerid: localStorage.getItem("user_id"),
+        };
+        await axios.post(path, data).then((data) => data);
+
         history.push(`/audio-call/${providerdata.id}`);
         // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
       }
@@ -387,6 +436,10 @@ function TarotReaders(props) {
                 providerList={providerList}
                 index={i}
                 item={item}
+                activeIndex={editInput.activeIndex}
+                opeModalVideo={(i) => opeModalVideo(i)}
+                closeModalVideo={closeModalVideo}
+                showmodalVideo={editInput.showmodalVideo}
               />
             ))}
 

@@ -113,9 +113,9 @@ function Home(props) {
                 data-responsive_offset="on"
                 data-start="2000"
               >
-                <a href="#" className="thm-btn uppercase btn-mobile">
+                <Link  to={`eclassess`} className="thm-btn uppercase btn-mobile">
                   Book Reading Now
-                </a>
+                </Link>
               </div>
             </li>
           </ul>
@@ -151,7 +151,7 @@ function Home(props) {
                 venenatis varius. Sed quam odio, aliquet eu dapibus ut,
                 scelerisque eget tellus. Nullam euismod condimentum tincidunt.
               </p>
-              <Link to="/#" className="thm-btn uppercase margin-top-2">
+              <Link to="/aboutus" className="thm-btn uppercase margin-top-2">
                 Read more
               </Link>
             </div>
@@ -181,7 +181,7 @@ function Home(props) {
                     standard dummy text ever since the 1500s
                   </p>
                   <Link
-                    to="/#"
+                     to={`service/tarot-readers`}
                     className="font-weight-6 text-white text-center font-p"
                   >
                     Read More
@@ -203,7 +203,7 @@ function Home(props) {
                     standard dummy text ever since the 1500s
                   </p>
                   <Link
-                    to="/#"
+                     to={`service/physic-reading`}
                     className="font-weight-6 text-white text-center font-p"
                   >
                     Read More

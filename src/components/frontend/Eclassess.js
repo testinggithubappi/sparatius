@@ -66,7 +66,7 @@ function Eclassess(props) {
                           starRatedColor="yellow"
                           numberOfStars={5}
                           name="rating"
-                          starDimension="30px"
+                          starDimension="15px"
                         />
                       </ul>
                       <img
@@ -81,7 +81,7 @@ function Eclassess(props) {
                         {item.eclassName}
                       </Link>
                     </h3>
-                    <small className="color-black">${item.Price}</small>
+                    <small className="color-black">${item.price}</small>
                   </div>
 
                   <div className="readingsContainerPrice">

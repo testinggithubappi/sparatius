@@ -7,6 +7,8 @@ import Footer from "../../layouts/frontend/Footer";
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
 import PaymentModal from "../modules/PaymentModal";
 import StarRatings from "react-star-ratings";
+import { saveAs } from "file-saver";
+import fileDownload from "js-file-download";
 
 function EcourseDetail(props) {
   const [eclassDetal, setEclassDetail] = React.useState({});
@@ -45,6 +47,29 @@ function EcourseDetail(props) {
     });
   };
 
+  const downloadFileData = async (item) => {
+    try {
+      console.log(item);
+      var data = {
+        id: item.id,
+      };
+      let response = await axios
+        .post(`/api/download_file`, data)
+        .then((data) => data);
+      response = await response.data;
+      console.log(response);
+
+      if (response.status) {
+        var fileurl = response.path;
+        saveAs(fileurl, response.name);
+      } else {
+        swal("warning", "Course Not Uploaded", "warning");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   return (
     <div>
       <Navbar />
@@ -68,8 +93,8 @@ function EcourseDetail(props) {
                         <i className="fa fa-play-circle" aria-hidden="true"></i>
                         <img
                           src={
-                            eclassDetal?.filePath
-                              ? eclassDetal?.filePath
+                            eclassDetal?.eclassImage
+                              ? eclassDetal?.eclassImage
                               : readingsprofileImg
                           }
                           className="img-responsive readings-profile-img"
@@ -112,7 +137,9 @@ function EcourseDetail(props) {
                     <button
                       className="thm-btn w-100"
                       type="submit"
-                      onClick={opeModal}
+                      onClick={() => {
+                        downloadFileData(eclassDetal);
+                      }}
                     >
                       Buy Now
                     </button>

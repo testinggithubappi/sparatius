@@ -30,7 +30,7 @@ class AudioCall extends Component {
   }
   getProviderSession = async () => {
     try {
-      let path = `/api/create_chathead`;
+      let path = `/api/getChatSession`;
       var data = {
         id: this.props.match.params.id,
         title: "Audio Chat",

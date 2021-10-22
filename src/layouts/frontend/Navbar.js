@@ -276,8 +276,10 @@ function Navbar(props) {
                 <Link to="/services">Categories</Link>
               </div>
             </li>
-
-            <li>
+ 
+           { (localStorage.getItem('role') == "customer") ? 
+           <div>
+           <li>
               <div className="text-box">
                 <Link to="/order-list">My Orders</Link>
               </div>
@@ -288,6 +290,9 @@ function Navbar(props) {
                 <Link to="/favourites">Favourite Advisor</Link>
               </div>
             </li>
+          </div>
+            :""
+}
 
             <li>
               <div className="text-box">

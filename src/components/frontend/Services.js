@@ -54,7 +54,7 @@ function Services(props) {
                       {item.description}
                     </p>
                     <Link
-                      to={item.slug}
+                      to={`service/`+item.slug}
                       className="font-weight-6 text-white text-center font-p"
                     >
                       Read More

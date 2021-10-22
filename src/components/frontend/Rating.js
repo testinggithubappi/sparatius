@@ -77,7 +77,7 @@ function Rating(props) {
                           <div className="col-md-12">
                             <StarRatings
                               rating={Ratingval}
-                              starRatedColor="blue"
+                              starRatedColor="yellow"
                               changeRating={changeRating}
                               numberOfStars={5}
                               name="rating"

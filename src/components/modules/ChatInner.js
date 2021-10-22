@@ -220,6 +220,11 @@ export default class ChatInner extends React.Component {
           }
         }
       );
+
+      this.setState({
+        txtmessage:""
+      })
+      
       let path = `/api/send_message`;
       let response = await axios
         .post(path, {
@@ -227,6 +232,8 @@ export default class ChatInner extends React.Component {
           id: this.state.currentchatID,
         })
         .then((data) => data);
+
+        
       // response = await response.data.data;
       //console.log(response);
       // this.setState({

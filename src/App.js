@@ -11,6 +11,7 @@ import Login from "./components/frontend/Login";
 import Register from "./components/frontend/Register";
 
 import Chat from "./components/frontend/Chat";
+import ChatProvider from "./components/frontend/ChatProvider";
 import ContactUs from "./components/frontend/ContactUs";
 import Eclassess from "./components/frontend/Eclassess";
 import EditProfile from "./components/frontend/EditProfile";
@@ -48,9 +49,7 @@ import PublicRoute from "./routes/PublicRoute";
 import axios from "axios";
 
 axios.defaults.baseURL = "http://202.142.180.146:90/sparatius/public";
-axios.defaults.headers.post["content-type"] = "application/json";
 axios.defaults.headers.post["accept"] = "application/json";
-axios.defaults.headers.post["accept"] = "multipart/form-data";
 axios.interceptors.request.use(function (config) {
   let token = localStorage.getItem("auth_token");
   config.headers.Authorization = token ? `Bearer ${token}` : "";
@@ -169,10 +168,11 @@ class App extends Component {
 
             <PrivateRoute path="/chat/:id" name="Chat" component={Chat} />
             <PrivateRoute
-              path="/chat/:id/:customerid"
+              path="/provider/chat/:id/:customerid"
               name="Customer"
-              component={Chat}
+              component={ChatProvider}
             />
+
             <PrivateRoute
               path="/edit-profile"
               name="EditProfile"
