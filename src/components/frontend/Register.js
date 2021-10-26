@@ -244,7 +244,7 @@ function Register(props) {
 
                 <div className="form-grp">
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     placeholder="Contact No"
                     onChange={handleInput}
@@ -263,7 +263,7 @@ function Register(props) {
                   id="exampleFormControlSelect1"
                   required
                 >
-                  <option value="">Slect Role</option>
+                  <option value="">Select Role</option>
                   <option value="customer">Customer</option>
                   <option value="provider">Provider</option>
                 </select>
@@ -276,7 +276,7 @@ function Register(props) {
                   </div>
                 </div>
                 <div className=" font-p">
-                  <p>
+                  {/* <p>
                     You must be at least 18 years old to sign up for Spiritus
                     Tarot.By signing up you agree to the{" "}
                     <Link to="privacy-policy.html"> Privacy Policy</Link> and{" "}
@@ -284,10 +284,10 @@ function Register(props) {
                     <br />
                     Already have an account?<Link to="#"> Login</Link> Or
                     Connect with
-                  </p>
+                  </p> */}
                 </div>
 
-                <Link className="col-md-6 " to="#">
+                {/* <Link className="col-md-6 " to="#">
                   <button className="btn btn-primary w-100">
                     Connect with Facebook{" "}
                   </button>
@@ -296,7 +296,7 @@ function Register(props) {
                   <button className="btn btn-danger w-100">
                     Connect with Gmail{" "}
                   </button>
-                </Link>
+                </Link> */}
               </form>
             </div>
             <div className="col-md-3"></div>

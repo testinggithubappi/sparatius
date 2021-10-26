@@ -118,7 +118,7 @@ function ContactUs(props) {
                         className="form-control input-1"
                         id="exampleFormControlTextarea1"
                         rows="4"
-                        placeholder="Enter Desdcription"
+                        placeholder="Enter Description"
                         value={contactInput.description}
                         name="description"
                         onChange={handleInput}

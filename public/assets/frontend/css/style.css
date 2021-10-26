@@ -4087,7 +4087,7 @@ a:focus {
   border: none;
   outline: none;
   height: 100%;
-  width: 70%;
+  width: 100%;
   float: left;
 }
 .login-register .form-grp i {
@@ -4095,6 +4095,7 @@ a:focus {
   color: #999999;
   float: right;
   line-height: 44px;
+  position: absolute;
 }
 .login-register .thm-btn {
   font-size: 14px;
@@ -6346,4 +6347,9 @@ button.page-link.active {
   cursor: default;
   background-color: #262f3b;
   border-color: #262f3b;
+}
+
+.btn:hover {
+  color: #fff !important;
+  text-decoration: none;
 }

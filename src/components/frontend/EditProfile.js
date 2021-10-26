@@ -113,10 +113,11 @@ function EditProfile(props) {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Enter Name"
+                    placeholder="Enter First Name"
                     name="firstname"
                     onChange={handleInput}
                     value={profileData.firstname}
+                    required
                   />
                 </div>
                 <label className="form-check-label">Last Name</label>
@@ -128,6 +129,7 @@ function EditProfile(props) {
                     name="lastname"
                     onChange={handleInput}
                     value={profileData.lastname}
+                    required
                   />
                 </div>
 
@@ -141,6 +143,7 @@ function EditProfile(props) {
                       name="contactno"
                       onChange={handleInput}
                       value={profileData.contactno}
+                      required
                     />
                   </div>
                 </div>

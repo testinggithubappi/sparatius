@@ -12,6 +12,7 @@ function Settings(props) {
   const [editInput, setEditInput] = useState({
     email: "",
     password: "",
+    currentPassword: "",
     confirmPassword: "",
     id: "",
     showmodal: false,
@@ -52,23 +53,24 @@ function Settings(props) {
       email: editInput.email,
       password: editInput.password,
       confirmPassword: editInput.confirmPassword,
+      currentPassword: editInput.currentPassword,
     };
     if (editInput.password) {
       if (editInput.password != editInput.confirmPassword) {
-        swal("Success", "Confrim Password Not Match", "success");
-      }
-    }
-    console.log(data);
-    axios.post("/api/update_password", data).then((res) => {
-      if (res.data.status == 200) {
-        swal("Success", res.data.message, "success");
+        swal("Error", "Confrim Password Not Match", "error");
       } else {
-        setEditInput({
-          ...editInput,
-          error_list: res.data.validation_erros,
+        axios.post("/api/update_password", data).then((res) => {
+          if (res.data.status == 200) {
+            swal("Success", "Successfully Changed Password", "success");
+            setEditInput({
+              showmodal: false,
+            });
+          } else {
+            swal("Error", res.data.msg, "error");
+          }
         });
       }
-    });
+    }
   };
 
   return (
@@ -105,7 +107,7 @@ function Settings(props) {
                     // className="btn-primary btn-sm w-33"
                     // data-toggle="modal"
                     // data-target="#exampleModal"
-
+                    className="login-btn"
                     onClick={opeModal}
                   >
                     Edit
@@ -136,9 +138,10 @@ function Settings(props) {
 
             <form action="#" onSubmit={registerSubmit}>
               <div className="modal-body">
-                <label>Enter Your Email</label>
+                <label> Your Email</label>
                 <div className="form-grp">
                   <input
+                    disabled
                     type="text"
                     className="form-control"
                     placeholder="Email"
@@ -147,6 +150,18 @@ function Settings(props) {
                     onChange={handleInput}
                   />
                 </div>
+                <label> Current Password</label>
+                <div className="form-grp">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Current Password"
+                    value={editInput.currentPassword}
+                    name="currentPassword"
+                    onChange={handleInput}
+                  />
+                </div>
+
                 <label className="margin-top-1">Change Password</label>
                 <div className="form-grp">
                   <input

@@ -73,7 +73,7 @@ function Navbar(props) {
           </Link>
         </li>
 
-        <li>
+        <li style={{ marginLeft: "5px" }}>
           <Link className="login-btn" to="/register">
             Sign up
           </Link>
@@ -276,23 +276,24 @@ function Navbar(props) {
                 <Link to="/services">Categories</Link>
               </div>
             </li>
- 
-           { (localStorage.getItem('role') == "customer") ? 
-           <div>
-           <li>
-              <div className="text-box">
-                <Link to="/order-list">My Orders</Link>
-              </div>
-            </li>
 
-            <li>
-              <div className="text-box">
-                <Link to="/favourites">Favourite Advisor</Link>
+            {localStorage.getItem("role") == "customer" ? (
+              <div>
+                <li>
+                  <div className="text-box">
+                    <Link to="/order-list">My Orders</Link>
+                  </div>
+                </li>
+
+                <li>
+                  <div className="text-box">
+                    <Link to="/favourites">Favourite Advisor</Link>
+                  </div>
+                </li>
               </div>
-            </li>
-          </div>
-            :""
-}
+            ) : (
+              ""
+            )}
 
             <li>
               <div className="text-box">

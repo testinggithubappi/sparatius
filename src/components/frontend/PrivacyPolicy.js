@@ -16,7 +16,8 @@ function PrivacyPolicy(props) {
     let response = await axios
       .get(`/api/getprivacypolicy`)
       .then((data) => data);
-    response = await response.data.getprivacypolicy;
+    response = await response.data.data.value;
+    console.log(response);
     setPrivacyPolicy(response);
   };
   return (
@@ -38,7 +39,13 @@ function PrivacyPolicy(props) {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <p className="font-p text-just">{getPrivacyPolicy}</p>
+              <p className="font-p text-just">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: getPrivacyPolicy,
+                  }}
+                ></div>
+              </p>
             </div>
           </div>
         </div>

@@ -6,6 +6,8 @@ import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
+import { getMonth, getYear } from "date-fns";
+import range from "lodash/range";
 import "react-datepicker/dist/react-datepicker.css";
 import VideoThumbnail from "react-video-thumbnail";
 import moment from "moment";
@@ -25,6 +27,23 @@ function EditAdvisorProfile(props) {
   const [serviceOption, setserviceOption] = useState([]);
   const [defaultserviceOption, setdefaultserviceOption] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
+
+  const years = range(1990, getYear(new Date()) + 1, 1);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   const [registerInput, setRegister] = useState({
     firstname: "",
     lastname: "",
@@ -104,21 +123,25 @@ function EditAdvisorProfile(props) {
   };
   const handleSubmitVideos = (event) => {
     event.preventDefault();
-    let formData = new FormData();
-    formData.append("file", selectedFile);
-    axios
-      .post("/api/profile_video", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-        },
-      })
-      .then((res) => {
-        if (res.data.status == 200) {
-          swal("Success", res.data.msg, "success");
-        } else {
-        }
-      });
+    if (selectedFile) {
+      let formData = new FormData();
+      formData.append("file", selectedFile);
+      axios
+        .post("/api/profile_video", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+          },
+        })
+        .then((res) => {
+          if (res.data.status == 200) {
+            swal("Success", res.data.msg, "success");
+          } else {
+          }
+        });
+    } else {
+      swal("Error", "Please Must  Select Video", "error");
+    }
   };
 
   const getCountry = async () => {
@@ -207,6 +230,10 @@ function EditAdvisorProfile(props) {
       console.log("resresresres1200", res);
       if (res.data.status == 200) {
         swal("Success", res.data.msg, "success");
+        setRegister({
+          ...registerInput,
+          error_list: {},
+        });
         // history.push("/home");
       } else {
         setRegister({
@@ -275,38 +302,7 @@ function EditAdvisorProfile(props) {
 
       setRegister({ ...registerInput, selectService: options });
     }
-
-    // for (var i = 0, l = options.length; i < l; i++) {
-    //   var valuedata = {
-    //     value: options[i].value,
-    //     label: options[i].label,
-    //     pricechat: "",
-    //     priceaudio: "",
-    //     pricevideo: "",
-    //   };
-    //   value.push(valuedata);
-    // }
-
-    // setRegister({ ...registerInput, selectService: value });
-    // setFeilds([...value]);
   };
-
-  // const dateChanged = (d) => {
-  //   const selectedDate = new Date(d); // pass in date param here
-  //   const formattedDate = `${selectedDate.getFullYear()}-${
-  //     selectedDate.getMonth() + 1
-  //   }-${selectedDate.getDate()}`;
-  //   console.log(formattedDate);
-
-  //   const formatteddddDate = moment(formattedDate).format("yyyy-MM-d");
-  //   // setRegister({ ...registerInput, selectDate: formattedDate });
-  //   // console.log(formattedDate);
-
-  //   // console.log(new Date(formattedDate));
-  //   // var momentObj = moment(formattedDate);
-
-  //   setStartDate(formatteddddDate);
-  // };
 
   const dateChanged = (value, e) => {
     console.log(value); // this will be a moment date object
@@ -337,7 +333,7 @@ function EditAdvisorProfile(props) {
                   className="form-control margin-top-2"
                   id="exampleFormControlTextarea1"
                   rows="4"
-                  placeholder="Describtion here"
+                  placeholder="Description here"
                   style={{ height: "auto" }}
                   name="profileAbout"
                   onChange={handleChange}
@@ -398,7 +394,7 @@ function EditAdvisorProfile(props) {
                     </div>
                     <div className="col-md-3">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         placeholder="Chat Price"
                         value={registerInput.selectService[index]["pricechat"]}
@@ -411,7 +407,7 @@ function EditAdvisorProfile(props) {
                     </div>
                     <div className="col-md-3">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         placeholder="Audio Call Price"
                         name="audiocallprice[]"
@@ -425,7 +421,7 @@ function EditAdvisorProfile(props) {
                     </div>
                     <div className="col-md-3">
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         placeholder="video Call Price"
                         name="videocallprice"
@@ -444,7 +440,7 @@ function EditAdvisorProfile(props) {
                   className="form-control margin-top-2"
                   id="exampleFormControlTextarea1Service"
                   rows="4"
-                  placeholder="Service Describtion here"
+                  placeholder="Service Description here"
                   style={{ height: "auto" }}
                   name="profileService"
                   onChange={handleChange}
@@ -505,7 +501,7 @@ function EditAdvisorProfile(props) {
 
                 <VideoThumbnail
                   videoUrl={registerInput.selectimageFile}
-                  thumbnailHandler={(thumbnail) => console.log(thumbnail)}
+                  thumbnailHandler={(thumbnail) => console.log("")}
                   width={200}
                   height={200}
                 />
@@ -669,7 +665,7 @@ function EditAdvisorProfile(props) {
                   <label className="form-check-label">Year of Experience</label>
                   <div className="form-grp bg-white">
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       placeholder="Year of Experience"
                       name="yearexperience"
@@ -681,10 +677,74 @@ function EditAdvisorProfile(props) {
                 <div className="col-md-6">
                   <label className="form-check-label">Year Joined</label>
                   <div className="form-grp bg-white">
+                    {/* <DatePicker
+                      renderCustomHeader={({
+                        date,
+                        changeYear,
+                        changeMonth,
+                        decreaseMonth,
+                        increaseMonth,
+                        prevMonthButtonDisabled,
+                        nextMonthButtonDisabled,
+                      }) => (
+                        <div
+                          style={{
+                            margin: 10,
+                            display: "flex",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <button
+                            onClick={decreaseMonth}
+                            disabled={prevMonthButtonDisabled}
+                          >
+                            {"<"}
+                          </button>
+                          <select
+                            value={getYear(date)}
+                            onChange={({ target: { value } }) => {
+                              setStartDate(date);
+                              changeYear(value);
+                            }}
+                          >
+                            {years.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+
+                          <select
+                            value={months[getMonth(date)]}
+                            onChange={({ target: { value } }) => {
+                              changeMonth(months.indexOf(value));
+                              console.log(date);
+                              setStartDate(date);
+                            }}
+                          >
+                            {months.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+
+                          <button
+                            onClick={increaseMonth}
+                            disabled={nextMonthButtonDisabled}
+                          >
+                            {">"}
+                          </button>
+                        </div>
+                      )}
+                      selected={startDate}
+                      onChange={(value, e) => dateChanged(value, e)}
+                    /> */}
+
                     <DatePicker
                       selected={startDate}
                       onChange={(value, e) => dateChanged(value, e)}
-                      dateFormat="d MMM yyyy"
+                      dateFormat="MMM dd  yyyy"
                     />
                   </div>
                 </div>
@@ -724,14 +784,14 @@ function EditAdvisorProfile(props) {
             <div className="col-md-8 ">
               <div className="clearfix submit-box">
                 <div className="pull-right">
-                  <button
+                  {/* <button
                     className="thm-btn margin-top-2 margin-bottom-1"
                     type="submit"
                     data-toggle="modal"
                     data-target="#exampleModal"
                   >
                     Done
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>

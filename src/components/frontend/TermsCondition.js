@@ -16,7 +16,7 @@ function TermsCondition(props) {
     let response = await axios
       .get(`/api/getTermscondition`)
       .then((data) => data);
-    response = await response.data.getTermscondition;
+    response = await response.data.data.value;
     setTermsCondtion(response);
   };
   return (
@@ -37,7 +37,13 @@ function TermsCondition(props) {
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <p className="font-p text-just">{getTermscondition}</p>
+              <p className="font-p text-just">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: getTermscondition,
+                  }}
+                ></div>
+              </p>
             </div>
           </div>
         </div>

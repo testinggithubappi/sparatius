@@ -82,6 +82,7 @@ function UserItem(props) {
         if (res.data.status == 200) {
           swal("Success", "Add Favoutite ", "success");
         } else {
+          swal("Success", res.data.msg, "success");
         }
       });
     }
@@ -154,7 +155,7 @@ function UserItem(props) {
                 {item.firstName}
               </Link>
             </h3>
-            <small className="color-black">Leading UK Tarot Readings</small>
+            {/* <small className="color-black">Leading UK Tarot Readings</small> */}
           </div>
           <div className="readingsContainer">
             <ul>
