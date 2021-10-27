@@ -28,12 +28,9 @@ function InviteFriends(props) {
         setInviteinput({
           email: "",
         });
-        swal("Success", res.data.message, "success");
+        swal("Success", res.data.msg, "success");
       } else {
-        setInviteinput({
-          ...inviteInput,
-          error_list: res.data.validation_erros,
-        });
+        swal("Error", res.data.msg, "error");
       }
     });
   };

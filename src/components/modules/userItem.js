@@ -13,6 +13,7 @@ import ReactPlayer from "react-player";
 import Modal from "./Modal";
 
 function UserItem(props) {
+  console.log("USER ITEM Render");
   const [online, setOnline] = React.useState(false);
   const [ModalVideo, setModalVideo] = React.useState({});
 
@@ -22,11 +23,15 @@ function UserItem(props) {
   }, []);
 
   const checkUseronline = (userId) => {
+    console.log("checkuserOnline", userId);
     let database = getDatabase(fire);
     let dbref = ref(database, `users/${userId}`);
     onValue(dbref, (snapshot) => {
       const onlineDB = snapshot.val();
-      setOnline(onlineDB.online);
+      // console.log(onlineDB.online);
+      if (onlineDB) {
+        setOnline(onlineDB.online);
+      }
     });
   };
 
@@ -97,7 +102,7 @@ function UserItem(props) {
         modalbody={
           <ReactPlayer
             style={{ position: "absolute", top: 0, left: 0 }}
-            playing={true}
+            playing={false}
             width="100%"
             height="200px"
             url={item.videoPath}

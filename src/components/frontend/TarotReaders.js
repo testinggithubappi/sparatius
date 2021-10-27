@@ -149,7 +149,8 @@ function TarotReaders(props) {
     // // history.push("/chat");
 
     let role = localStorage.getItem("role");
-    console.log(item);
+    console.log("clcikc item", item);
+
     if (role == "customer") {
       if (item == "text") {
         let path = `/api/create_chathead`;
@@ -182,9 +183,9 @@ function TarotReaders(props) {
         let path = `/api/create_chathead`;
         var data = {
           id: providerdata.id,
-          title: "Video Chat",
-          msg: "You Have A Video Chat",
-          type: "video",
+          title: "Audio Chat",
+          msg: "You Have A Audio Chat",
+          type: "audio",
           customerid: localStorage.getItem("user_id"),
         };
         await axios.post(path, data).then((data) => data);
@@ -219,6 +220,7 @@ function TarotReaders(props) {
     // });
   };
 
+  console.log("providerListproviderListproviderList", providerList);
   return (
     <div>
       <Navbar />
@@ -365,7 +367,7 @@ function TarotReaders(props) {
                       className="collapsed"
                       aria-expanded="false"
                     >
-                      Price Range (pm)
+                      Price Range
                     </a>
 
                     <div
@@ -386,7 +388,7 @@ function TarotReaders(props) {
                           </label>
                           <input
                             className="form-control price"
-                            type="text"
+                            type="number"
                             value={registerInput.RangeStart}
                             onChange={handleInput}
                             name="RangeStart"
@@ -403,7 +405,7 @@ function TarotReaders(props) {
                           </label>
                           <input
                             className="price form-control"
-                            type="text"
+                            type="number"
                             value={registerInput.RangeEnd}
                             name="RangeEnd"
                             onChange={handleInput}
@@ -434,6 +436,7 @@ function TarotReaders(props) {
               <UserItem
                 onHandleClickPay={onHandleClickPay}
                 providerList={providerList}
+                key={item.id}
                 index={i}
                 item={item}
                 activeIndex={editInput.activeIndex}

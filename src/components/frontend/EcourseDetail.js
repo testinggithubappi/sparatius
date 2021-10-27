@@ -11,10 +11,16 @@ import { saveAs } from "file-saver";
 import fileDownload from "js-file-download";
 
 function EcourseDetail(props) {
+  const history = useHistory();
+  const [RatingData, setRatingData] = useState({
+    description: "",
+  });
+  const [Ratingval, setRatingval] = useState(0);
   const [eclassDetal, setEclassDetail] = React.useState({});
   const [editInput, setEditInput] = useState({
     showmodal: false,
   });
+  const [review, setreview] = useState(true);
 
   useEffect(() => {
     getEclassDetail();
@@ -70,6 +76,38 @@ function EcourseDetail(props) {
     }
   };
 
+  const handleInput = (e) => {
+    e.persist();
+    setRatingData({ ...RatingData, [e.target.name]: e.target.value });
+  };
+
+  const changeRating = (newRating, name) => {
+    console.log(newRating);
+    setRatingval(newRating);
+  };
+
+  const submitProfile = (e) => {
+    e.preventDefault();
+
+    const data = {
+      description: RatingData.description,
+      rating: Ratingval,
+      provider: "",
+      servicetype: "",
+      type: "eclass",
+      eclass: props.match.params.id,
+    };
+    console.log(data);
+
+    axios.post("/api/rating", data).then((res) => {
+      if (res.data.status == 200) {
+        swal("Success", "Review Save Succesfully", "success");
+        // history.push(`/home`);
+      } else {
+      }
+    });
+  };
+
   return (
     <div>
       <Navbar />
@@ -77,7 +115,7 @@ function EcourseDetail(props) {
         className="inner-banner has-dot-pattern sec-title text-center"
         style={{ paddingBottom: "0px" }}
       >
-        <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} />
+        {/* <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} /> */}
         <div className="container">
           <div className="row">
             <div className="col-md-12 psychic-readings-detail">
@@ -228,6 +266,49 @@ function EcourseDetail(props) {
                           </div>
                         ))
                       : ""}
+
+                    {review ? (
+                      <section className="sec-pad ">
+                        <div className="container">
+                          <div className="row">
+                            <div className="col-md-12 login-register font-p left-side">
+                              <form onSubmit={submitProfile} action="#">
+                                <label className="form-check-label">
+                                  Your Rating
+                                </label>
+                                <StarRatings
+                                  rating={Ratingval}
+                                  starRatedColor="yellow"
+                                  changeRating={changeRating}
+                                  numberOfStars={5}
+                                  name="rating"
+                                />
+
+                                <textarea
+                                  row="10"
+                                  onChange={handleInput}
+                                  name="description"
+                                  className="form-control"
+                                >
+                                  {RatingData.description}
+                                </textarea>
+
+                                <div className="">
+                                  <button
+                                    className="thm-btn margin-top-2 w-100"
+                                    type="submit"
+                                  >
+                                    Submit Reviews
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </section>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </div>

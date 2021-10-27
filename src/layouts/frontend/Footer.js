@@ -14,22 +14,22 @@ function Footer(props) {
           <div className="social pull-right">
             <ul className="list-inline">
               <li>
-                <Link to="/#">
+                <Link to="/facebook">
                   <i className="fa fa-facebook"></i>
                 </Link>
               </li>
               <li>
-                <Link to="/#">
+                <Link to="/twitter">
                   <i className="fa fa-twitter"></i>
                 </Link>
               </li>
               <li>
-                <Link to="/#">
+                <Link to="/google-plus">
                   <i className="fa fa-google-plus"></i>
                 </Link>
               </li>
               <li>
-                <Link to="/#">
+                <Link to="/linkedin">
                   <i className="fa fa-linkedin"></i>
                 </Link>
               </li>

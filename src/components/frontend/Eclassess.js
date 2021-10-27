@@ -43,12 +43,8 @@ function Eclassess(props) {
               <div className="col-md-4">
                 <div className="reading-profile">
                   <div className="reading-profile-inner">
-                    <Link
-                      to="#"
-                      data-toggle="modal"
-                      data-target="#exampleModal"
-                    >
-                      <i className="fa fa-play-circle" aria-hidden="true"></i>
+                    <Link to={`/ecourse-detail/` + item.id}>
+                      {/* <i className="fa fa-play-circle" aria-hidden="true"></i> */}
                       <img
                         src={
                           item.eclassImage

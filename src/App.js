@@ -39,6 +39,7 @@ import Settings from "./components/frontend/Settings";
 import OrderList from "./components/frontend/OrderList";
 import EcourseDetail from "./components/frontend/EcourseDetail";
 import Rating from "./components/frontend/Rating";
+import ForgetPassword from "./components/frontend/ForgetPassword";
 
 // import Login from "./layouts/frontend/Login";
 // import Register from "./layouts/frontend/Register";
@@ -158,6 +159,12 @@ class App extends Component {
               name="EcourseDetail"
               component={EcourseDetail}
             />
+            <PublicRoute
+              restricted={false}
+              path="/forget-password/:keylink"
+              name="ForgetPassword"
+              component={ForgetPassword}
+            />
 
             <Route path="/login">
               <Login />
@@ -234,6 +241,35 @@ class App extends Component {
               component={OrderList}
             />
             <PrivateRoute path="/raitng" name="Rating" component={Rating} />
+
+            <Route
+              path="/facebook"
+              component={() => {
+                window.location.href = "https://facebook.com";
+                return null;
+              }}
+            />
+            <Route
+              path="/twitter"
+              component={() => {
+                window.location.href = "https://twitter.com";
+                return null;
+              }}
+            />
+            <Route
+              path="/google-plus"
+              component={() => {
+                window.location.href = "https://googleplus.com";
+                return null;
+              }}
+            />
+            <Route
+              path="/linkedin"
+              component={() => {
+                window.location.href = "https://linkedin.com";
+                return null;
+              }}
+            />
 
             <Redirect to="/home" />
 

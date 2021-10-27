@@ -54,7 +54,7 @@ function Login(props) {
         localStorage.setItem("auth_name", res.data.name);
         localStorage.setItem("role", res.data.role);
         localStorage.setItem("user_id", res.data.id);
-        swal("Success", res.data.message, "success");
+        // swal("Success", res.data.message, "success");
         setUserOnlineStatus(res.data.id);
       } else {
         swal("warning", "Invalid Email and Password", "warning");
@@ -189,7 +189,7 @@ function Login(props) {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Email Address*"
+                    placeholder="Email Address"
                     onChange={handleInput}
                     value={registerInput.email}
                     name="email"

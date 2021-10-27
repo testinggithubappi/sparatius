@@ -36,7 +36,7 @@ function EditProfile(props) {
     };
     axios.post("/api/edit_profile", data).then((res) => {
       if (res.data.status == 200) {
-        swal("Success", "Update Succesfully", "success");
+        swal("Success", "Update Successfully", "success");
         // history.push("/home");
       } else {
       }
@@ -137,7 +137,7 @@ function EditProfile(props) {
                   <label className="form-check-label">Phone</label>
                   <div className="form-grp bg-white">
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       placeholder="Phone No"
                       name="contactno"

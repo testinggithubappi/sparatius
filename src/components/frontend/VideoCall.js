@@ -94,7 +94,7 @@ class VideoCall extends Component {
                 </div>
               </div>
 
-              <div className="col-md-4">
+              {/* <div className="col-md-4">
                 <div className="reading-profile">
                   <div className="reading-profile-inner">
                     <Link
@@ -168,7 +168,7 @@ class VideoCall extends Component {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>

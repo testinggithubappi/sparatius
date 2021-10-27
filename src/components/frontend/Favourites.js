@@ -50,6 +50,23 @@ function Favourites(props) {
     });
   };
 
+  const opeModalVideo = (i) => {
+    // e.persist();
+    // console.log(e);
+    setEditInput({
+      showmodalVideo: true,
+      activeIndex: i,
+    });
+  };
+  const closeModalVideo = (e) => {
+    // e.persist();
+    // console.log(e);
+    setEditInput({
+      showmodalVideo: false,
+      activeIndex: undefined,
+    });
+  };
+
   const onHandleClickPay = async (item, prices, indexProvider) => {
     var providerdata = favouriteproviderList?.data[indexProvider];
     console.log(providerdata);
@@ -117,8 +134,13 @@ function Favourites(props) {
                   <UserItem
                     onHandleClickPay={onHandleClickPay}
                     providerList={favouriteproviderList}
+                    key={item.id}
                     index={i}
                     item={item}
+                    activeIndex={editInput.activeIndex}
+                    opeModalVideo={(i) => opeModalVideo(i)}
+                    closeModalVideo={closeModalVideo}
+                    showmodalVideo={editInput.showmodalVideo}
                   />
                 ))
               : ""}

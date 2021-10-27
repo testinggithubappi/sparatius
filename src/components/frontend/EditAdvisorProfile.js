@@ -493,7 +493,14 @@ function EditAdvisorProfile(props) {
                         </p> */}
                       </div>
                     ) : (
-                      <p>Select a file to show details</p>
+                      <p>
+                        {registerInput.selectimageFile
+                          ? registerInput.selectimageFile.replace(
+                              /^.*[\\\/]/,
+                              ""
+                            )
+                          : "Select a file to show details"}
+                      </p>
                     )}
                     <div></div>
                   </div>
@@ -561,7 +568,7 @@ function EditAdvisorProfile(props) {
                   <label className="form-check-label">Phone</label>
                   <div className="form-grp bg-white">
                     <input
-                      type="text"
+                      type="number"
                       className="form-control"
                       placeholder="Phone No"
                       name="contactno"
@@ -677,7 +684,7 @@ function EditAdvisorProfile(props) {
                 <div className="col-md-6">
                   <label className="form-check-label">Year Joined</label>
                   <div className="form-grp bg-white">
-                    {/* <DatePicker
+                    <DatePicker
                       renderCustomHeader={({
                         date,
                         changeYear,
@@ -739,13 +746,13 @@ function EditAdvisorProfile(props) {
                       )}
                       selected={startDate}
                       onChange={(value, e) => dateChanged(value, e)}
-                    /> */}
+                    />
 
-                    <DatePicker
+                    {/* <DatePicker
                       selected={startDate}
                       onChange={(value, e) => dateChanged(value, e)}
                       dateFormat="MMM dd  yyyy"
-                    />
+                    /> */}
                   </div>
                 </div>
                 <div className="col-md-6">

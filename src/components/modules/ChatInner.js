@@ -9,6 +9,7 @@ export default class ChatInner extends React.Component {
 
     this.state = {
       error: null,
+      name: "",
       connection: "Connecting",
       publishVideo: true,
       chatHeadMessageList: [],
@@ -59,8 +60,20 @@ export default class ChatInner extends React.Component {
     // };
   }
 
+  messagesEndRef = React.createRef();
+
+  scrollToBottom = () => {
+    this.state.chatHeadMessageList.current.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
+  componentDidUpdate() {
+    // this.scrollToBottom();
+  }
   componentDidMount() {
     this.LoadMesageByChat();
+
     this.tok_session.sessionHelper.session.on("signal", (event) => {
       console.log(this.state.chatHeadMessageList);
       this.setState({
@@ -70,6 +83,7 @@ export default class ChatInner extends React.Component {
         ],
       });
     });
+    // this.scrollToBottom();
   }
 
   onSessionError = (error) => {
@@ -147,6 +161,7 @@ export default class ChatInner extends React.Component {
       console.log("sss", resdata);
       this.setState({
         chatHeadMessageList: [...resdata.chat],
+        name: [...resdata.name],
       });
     } catch (error) {
       console.log("error", error);
@@ -161,7 +176,7 @@ export default class ChatInner extends React.Component {
             <div className="outgoing_msg">
               <div className="sent_msg">
                 <p>{item.message}</p>
-                <span className="time_date"> 11:01 AM | June 9</span>{" "}
+                <span className="time_date"> {item.send_date}</span>{" "}
               </div>
             </div>
           ) : (
@@ -176,7 +191,7 @@ export default class ChatInner extends React.Component {
               <div className="received_msg">
                 <div className="received_withd_msg">
                   <p>{item.message}</p>
-                  <span className="time_date"> 11:01 AM | June 9</span>
+                  <span className="time_date"> {item.send_date}</span>
                 </div>
               </div>
             </div>
@@ -191,8 +206,25 @@ export default class ChatInner extends React.Component {
       txtmessage: e.target.value,
     });
   };
+
+  formatAMPM = (date) => {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    var strTime = hours + ":" + minutes + " " + ampm;
+    return strTime;
+  };
+
   SendMessage = async () => {
     try {
+      var d = new Date();
+      var date = d.getDate();
+      var month = new Date().toLocaleString("en-us", { month: "short" });
+      var dateFormatTime = `${date} ${month} | ${this.formatAMPM(d)} `;
+
       let data = {
         message: this.state.txtmessage,
         id: this.state.currentchatID,
@@ -206,6 +238,7 @@ export default class ChatInner extends React.Component {
             : 1,
         to_id: this.state.currentchatID,
         updated_at: new Date().toISOString(),
+        send_date: dateFormatTime,
       };
       this.tok_session.sessionHelper.session.signal(
         {
@@ -222,9 +255,9 @@ export default class ChatInner extends React.Component {
       );
 
       this.setState({
-        txtmessage:""
-      })
-      
+        txtmessage: "",
+      });
+
       let path = `/api/send_message`;
       let response = await axios
         .post(path, {
@@ -233,7 +266,6 @@ export default class ChatInner extends React.Component {
         })
         .then((data) => data);
 
-        
       // response = await response.data.data;
       //console.log(response);
       // this.setState({
@@ -291,18 +323,22 @@ export default class ChatInner extends React.Component {
             <div className="mesgs">
               <div className="user-name">
                 <div className="row">
-                  <div className="col-md-10">User Name</div>
+                  <div className="col-md-10">{this.state.name}</div>
                   <div className="col-md-2">
-                    <a href="#">
+                    {/* <a href="#">
                       <i className="fa fa-video-camera" aria-hidden="true"></i>
                     </a>
                     <a href="#">
                       <i className="fa fa-phone" aria-hidden="true"></i>
-                    </a>
+                    </a> */}
                   </div>
                 </div>
               </div>
-              <div className="msg_history">{this.RenderMessage()}</div>
+              <div className="msg_history">
+                {this.RenderMessage()}
+                <div ref={this.messagesEndRef} />
+              </div>
+
               <div className="type_msg">
                 <div className="input_msg_write">
                   <input
@@ -312,6 +348,11 @@ export default class ChatInner extends React.Component {
                     onChange={this.handleChange.bind(this)}
                     name="txtmessage"
                     value={this.state.txtmessage}
+                    onKeyPress={(event) => {
+                      if (event.key === "Enter") {
+                        this.SendMessage();
+                      }
+                    }}
                   />
                   <button
                     onClick={this.SendMessage.bind(this)}

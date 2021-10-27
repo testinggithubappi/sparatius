@@ -114,7 +114,7 @@ function Home(props) {
                 data-start="2000"
               >
                 <Link  to={`eclassess`} className="thm-btn uppercase btn-mobile">
-                  Book Reading Now
+                 { (localStorage.getItem("role") != "provider") ?' Book Reading Now':''}
                 </Link>
               </div>
             </li>

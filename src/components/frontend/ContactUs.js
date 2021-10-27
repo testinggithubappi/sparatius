@@ -31,7 +31,7 @@ function ContactUs(props) {
     console.log(data);
     axios.post("/api/contact_us", data).then((res) => {
       if (res.status == 200) {
-        swal("Success", "Contact Save Successfully", "success");
+        swal("Success", "Contact Send Successfully", "success");
         setContactInput({
           name: "",
           email: "",

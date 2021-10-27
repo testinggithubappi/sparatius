@@ -34,16 +34,12 @@ function Settings(props) {
   const opeModal = (e) => {
     e.persist();
     console.log(e);
-    setEditInput({
-      showmodal: true,
-    });
+    setEditInput({ ...editInput, showmodal: true });
   };
   const closeModal = (e) => {
     e.persist();
     console.log(e);
-    setEditInput({
-      showmodal: false,
-    });
+    setEditInput({ ...editInput, showmodal: false });
   };
 
   const registerSubmit = (e) => {
@@ -57,7 +53,7 @@ function Settings(props) {
     };
     if (editInput.password) {
       if (editInput.password != editInput.confirmPassword) {
-        swal("Error", "Confrim Password Not Match", "error");
+        swal("Error", "Confirm Password Not Match", "error");
       } else {
         axios.post("/api/update_password", data).then((res) => {
           if (res.data.status == 200) {
@@ -73,6 +69,7 @@ function Settings(props) {
     }
   };
 
+  console.log(editInput.email);
   return (
     <div>
       <Navbar />
@@ -90,28 +87,34 @@ function Settings(props) {
               <h2 className="font-weight-bold">Account</h2>
 
               <div className="col-md-12 bg-white gapping">
-                <div className="col-md-6">
-                  <h4 className="font-weight-bold">Email</h4>
+                <div className="row">
+                  <div className="col-md-6">
+                    <h4 className="font-weight-bold">Email</h4>
+                  </div>
+                  <div className="col-md-6">
+                    <h4 className="font-weight-bold">{editInput.email}</h4>
+                  </div>
                 </div>
-                <div className="col-md-6">
-                  <h4 className="font-weight-bold">{editInput.email}</h4>
+                <div className="row">
+                  <div className="col-md-6 margin-top-3">
+                    <h4 className="font-weight-bold">Change Password</h4>
+                  </div>
+                  <div className="col-md-6 margin-top-3">
+                    <h4 className="font-weight-bold">*************</h4>
+                  </div>
                 </div>
-                <div className="col-md-6 margin-top-3">
-                  <h4 className="font-weight-bold">Change Password</h4>
-                </div>
-                <div className="col-md-6 margin-top-3">
-                  <h4 className="font-weight-bold">*************</h4>
-                </div>
-                <div className="col-md-6 margin-top-3">
-                  <button
-                    // className="btn-primary btn-sm w-33"
-                    // data-toggle="modal"
-                    // data-target="#exampleModal"
-                    className="login-btn"
-                    onClick={opeModal}
-                  >
-                    Edit
-                  </button>
+                <div className="row">
+                  <div className="col-md-6 margin-top-3">
+                    <button
+                      // className="btn-primary btn-sm w-33"
+                      // data-toggle="modal"
+                      // data-target="#exampleModal"
+                      className="btn-primary"
+                      onClick={opeModal}
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -147,7 +150,7 @@ function Settings(props) {
                     placeholder="Email"
                     value={editInput.email}
                     name="email"
-                    onChange={handleInput}
+                    // onChange={handleInput}
                   />
                 </div>
                 <label> Current Password</label>
@@ -159,6 +162,7 @@ function Settings(props) {
                     value={editInput.currentPassword}
                     name="currentPassword"
                     onChange={handleInput}
+                    required
                   />
                 </div>
 
@@ -171,6 +175,7 @@ function Settings(props) {
                     value={editInput.password}
                     name="password"
                     onChange={handleInput}
+                    required
                   />
                 </div>
 
@@ -183,6 +188,7 @@ function Settings(props) {
                     value={editInput.confirmPassword}
                     name="confirmPassword"
                     onChange={handleInput}
+                    required
                   />
                 </div>
               </div>
