@@ -9,6 +9,7 @@ import shaperatingImg from "../../assets/frontend/img/resources/shape-rating.png
 import videocallImg from "../../assets/frontend/img/video-call-img.jpg";
 import { API_KEY } from "../../config";
 import VideoChatInner from "../modules/VideoChatInner";
+import Loadercomp from "../modules/Loadercomp";
 
 class AudioCall extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class AudioCall extends Component {
       apiKey: API_KEY,
       sessionId: "",
       token: "",
+      startloader: "none",
     };
   }
 
@@ -30,6 +32,7 @@ class AudioCall extends Component {
   }
   getProviderSession = async () => {
     try {
+      this.setState({ startloader: "block" });
       let path = `/api/getChatSession`;
       var data = {
         id: this.props.match.params.id,
@@ -41,6 +44,7 @@ class AudioCall extends Component {
       let response = await axios.post(path, data).then((data) => data);
       response = await response.data.data;
       console.log(response);
+      this.setState({ startloader: "none" });
       this.setState({
         ProviderData: response,
         sessionId: response.session_id,
@@ -60,7 +64,7 @@ class AudioCall extends Component {
             <h2>Audio Call</h2>
           </div>
         </section>
-
+        <Loadercomp startloader={this.state.startloader} />
         <section className="sec-pad faq-page shop-sidebar sidebar-page">
           <div className="container">
             <div className="row">

@@ -10,8 +10,10 @@ import icon2Img from "../../assets/frontend/img/services/icon-2.png";
 import icon3Img from "../../assets/frontend/img/services/icon-3.png";
 import readingsdetail1img from "../../assets/frontend/img/services/psychic-readings-detail-1.jpg";
 import StarRatings from "react-star-ratings";
+import Loadercomp from "../modules/Loadercomp";
 
 function PhysicReadingDetail(props) {
+  const [startloader, setloader] = React.useState("none");
   const [providerDetal, setProviderDetail] = React.useState({});
 
   useEffect(() => {
@@ -20,10 +22,12 @@ function PhysicReadingDetail(props) {
 
   const getProviderDetail = async () => {
     try {
+      setloader("block");
       let path = `/api/provider_detail/${props.match.params.userid}/${props.match.params.serviceid}`;
       let response = await axios.get(path).then((data) => data);
       response = await response.data;
       console.log(response);
+      setloader("none");
       setProviderDetail(response);
     } catch (error) {
       console.log("error", error);
@@ -43,9 +47,98 @@ function PhysicReadingDetail(props) {
     ));
   };
 
+  const onHandleClickPay = async (item, prices, id) => {
+    localStorage.removeItem("timeMinute");
+    localStorage.removeItem("timeSec");
+    // // history.push("/chat");
+    let path = `/api/payment`;
+    var data = {};
+    let role = localStorage.getItem("role");
+    console.log(item);
+    if (role == "customer") {
+      setloader("block");
+      if (item == "text") {
+        data = {
+          id: id,
+          title: "Text Chat",
+          msg: "You Have A Text Chat",
+          type: "text",
+          customerid: localStorage.getItem("user_id"),
+          path: `/chat/${id}`,
+          serviceName: item,
+          amount: prices,
+          description: "one Hour Session",
+        };
+        // history.push(`/chat/${providerdata.id}`);
+      }
+      if (item == "video") {
+        data = {
+          id: id,
+          title: "Video Chat",
+          msg: "You Have A Video Chat",
+          type: "video",
+          customerid: localStorage.getItem("user_id"),
+          path: `/video-call/${id}`,
+          serviceName: item,
+          amount: prices,
+          description: "one Hour Session",
+        };
+
+        // history.push(`/video-call/${providerdata.id}`);
+        // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+      }
+      if (item == "audio") {
+        data = {
+          id: id,
+          title: "Audio Chat",
+          msg: "You Have A Audio Chat",
+          type: "audio",
+          customerid: localStorage.getItem("user_id"),
+          path: `/audio-call/${id}`,
+          serviceName: item,
+          amount: prices,
+          description: "one Hour Session",
+        };
+
+        // history.push(`/audio-call/${providerdata.id}`);
+        // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
+      }
+
+      let response = await axios.post(path, data).then((data) => data);
+      response = await response.data;
+      setloader("none");
+      window.open(response, "_blank");
+    }
+
+    try {
+      // var data = {
+      //   serviceName: item,
+      //   amount: prices,
+      //   description: "one Hour Session",
+      // };
+      // let response = await axios
+      //   .post(`/api/payment`, data)
+      //   .then((data) => data);
+      // response = await response.data;
+      // console.log(response);
+      // window.open(response, "_blank");
+      // setlinkRender(response);
+      // setEditInput({
+      //   showmodal: true,
+      // });
+    } catch (error) {
+      console.log("error", error);
+    }
+
+    // setEditInput({
+    //   showmodal: true,
+    // });
+  };
+
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section
         className="inner-banner has-dot-pattern sec-title text-center"
         style={{ paddingBottom: "0px" }}
@@ -113,6 +206,15 @@ function PhysicReadingDetail(props) {
                 <p className=" margin-top-2">Get a live text reading now</p>
 
                 <button
+                  onClick={() => {
+                    if (providerDetal?.services2?.pricechat) {
+                      onHandleClickPay(
+                        "text",
+                        providerDetal?.services2?.pricechat,
+                        props.match.params.userid
+                      );
+                    }
+                  }}
                   className="btn  bg-purple text-white w-33"
                   disabled={providerDetal?.services2?.pricechat ? false : true}
                 >
@@ -132,6 +234,15 @@ function PhysicReadingDetail(props) {
                 <p className=" margin-top-2">Get a live text reading now</p>
 
                 <button
+                  onClick={() => {
+                    if (providerDetal?.services2?.priceaudio) {
+                      onHandleClickPay(
+                        "audio",
+                        providerDetal?.services2?.priceaudio,
+                        props.match.params.userid
+                      );
+                    }
+                  }}
                   className="btn  bg-purple text-white w-33"
                   disabled={providerDetal?.services2?.priceaudio ? false : true}
                 >
@@ -150,6 +261,15 @@ function PhysicReadingDetail(props) {
                 <h2 className="text-purple">Video Calls</h2>
                 <p className=" margin-top-2">Get a live text reading now</p>
                 <button
+                  onClick={() => {
+                    if (providerDetal?.services2?.pricevideo) {
+                      onHandleClickPay(
+                        "video",
+                        providerDetal?.services2?.pricevideo,
+                        props.match.params.userid
+                      );
+                    }
+                  }}
                   className="btn  bg-purple text-white w-33"
                   disabled={providerDetal?.services2?.pricevideo ? false : true}
                 >

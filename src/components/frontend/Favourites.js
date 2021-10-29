@@ -9,8 +9,12 @@ import readingsprofileImg from "../../assets/frontend/img/resources/readings-pro
 import shaperatingImg from "../../assets/frontend/img/resources/shape-rating.png";
 import UserItem from "../modules/userItem";
 import PaymentModal from "../modules/PaymentModal";
+import Loadercomp from "../modules/Loadercomp";
+
 function Favourites(props) {
   const history = useHistory();
+  const [startloader, setloader] = React.useState("none");
+
   useEffect(() => {
     getFavouriteproviderList();
   }, []);
@@ -20,9 +24,11 @@ function Favourites(props) {
   const [favouriteproviderList, setFavouriteproviderList] = React.useState([]);
 
   const getFavouriteproviderList = async (path = `/api/get_favorite`) => {
+    setloader("block");
     let response = await axios.get(`${path}`).then((data) => data);
     response = await response.data.data;
     console.log(response);
+    setloader("none");
     setFavouriteproviderList(response);
   };
 
@@ -74,21 +80,63 @@ function Favourites(props) {
     localStorage.removeItem("timeMinute");
     localStorage.removeItem("timeSec");
     // // history.push("/chat");
-
+    let path = `/api/payment`;
+    var data = {};
     let role = localStorage.getItem("role");
     console.log(item);
     if (role == "customer") {
+      setloader("block");
       if (item == "text") {
-        history.push(`/chat/${providerdata.id}`);
+        data = {
+          id: providerdata.id,
+          title: "Text Chat",
+          msg: "You Have A Text Chat",
+          type: "text",
+          customerid: localStorage.getItem("user_id"),
+          path: `/chat/${providerdata.id}`,
+          serviceName: item,
+          amount: prices,
+          description: "one Hour Session",
+        };
+        // history.push(`/chat/${providerdata.id}`);
       }
       if (item == "video") {
-        history.push(`/video-call/${providerdata.id}`);
+        data = {
+          id: providerdata.id,
+          title: "Video Chat",
+          msg: "You Have A Video Chat",
+          type: "video",
+          customerid: localStorage.getItem("user_id"),
+          path: `/video-call/${providerdata.id}`,
+          serviceName: item,
+          amount: prices,
+          description: "one Hour Session",
+        };
+
+        // history.push(`/video-call/${providerdata.id}`);
         // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
       }
       if (item == "audio") {
-        history.push(`/audio-call/${providerdata.id}`);
+        data = {
+          id: providerdata.id,
+          title: "Audio Chat",
+          msg: "You Have A Audio Chat",
+          type: "audio",
+          customerid: localStorage.getItem("user_id"),
+          path: `/audio-call/${providerdata.id}`,
+          serviceName: item,
+          amount: prices,
+          description: "one Hour Session",
+        };
+
+        // history.push(`/audio-call/${providerdata.id}`);
         // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
       }
+
+      let response = await axios.post(path, data).then((data) => data);
+      response = await response.data;
+      setloader("none");
+      window.open(response, "_blank");
     }
 
     try {
@@ -116,10 +164,30 @@ function Favourites(props) {
     // });
   };
 
+  const addFavouriteclick = (item) => {
+    setloader("block");
+    const data = {
+      id: item.id,
+    };
+    let role = localStorage.getItem("role");
+    console.log(data);
+    if (role == "customer") {
+      axios.post("/api/add_favorite", data).then((res) => {
+        setloader("none");
+        if (res.data.status == 200) {
+          swal("Success", "Add Favoutite ", "success");
+        } else {
+          swal("Success", res.data.msg, "success");
+        }
+      });
+    }
+  };
+
   console.log(favouriteproviderList);
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="inner-banner has-dot-pattern text-center">
         <div className="container sec-title">
           <h2>Favourites</h2>
@@ -132,6 +200,7 @@ function Favourites(props) {
             {favouriteproviderList
               ? favouriteproviderList?.data?.map((item, i) => (
                   <UserItem
+                    addFavouriteclick={addFavouriteclick}
                     onHandleClickPay={onHandleClickPay}
                     providerList={favouriteproviderList}
                     key={item.id}

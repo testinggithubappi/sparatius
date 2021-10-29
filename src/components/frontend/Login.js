@@ -7,9 +7,11 @@ import Footer from "../../layouts/frontend/Footer";
 import fire from "../../config/firebase";
 import { getDatabase, set, ref } from "firebase/database";
 import * as firebase from "@firebase/app";
+import Loadercomp from "../modules/Loadercomp";
 
 function Login(props) {
   const history = useHistory();
+  const [startloader, setloader] = React.useState("none");
   const [editInput, setEditInput] = useState({
     showmodal: false,
   });
@@ -41,7 +43,7 @@ function Login(props) {
 
   const registerSubmit = (e) => {
     e.preventDefault();
-
+    setloader("block");
     const data = {
       email: registerInput.email,
       password: registerInput.password,
@@ -49,6 +51,7 @@ function Login(props) {
     console.log(data);
     axios.post("/api/login", data).then((res) => {
       console.log(res);
+      setloader("none");
       if (res.data.status == 200) {
         localStorage.setItem("auth_token", res.data.token);
         localStorage.setItem("auth_name", res.data.name);
@@ -69,18 +72,21 @@ function Login(props) {
     e.preventDefault();
 
     console.log("sss");
+
+    setloader("block");
     const data = {
       email: registerInput.forgetemail,
     };
     console.log(data);
     axios.post("/api/forgetpassword", data).then((res) => {
+      setloader("none");
       if (res.data.status == 200) {
-        swal("Success", res.data.message, "success");
-      } else {
-        setRegister({
-          ...registerInput,
-          error_list: res.data.validation_erros,
+        swal("Success", res.data.msg, "success");
+        setEditInput({
+          showmodal: false,
         });
+      } else {
+        swal("Error", res.data.msg, "error");
       }
     });
   };
@@ -97,6 +103,7 @@ function Login(props) {
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="hidden-sidebar collapse" id="sidebarCollapse">
         <button
           className="close-button"
@@ -276,14 +283,20 @@ function Login(props) {
               <div className="modal-body">
                 <div className="form-grp">
                   <input
-                    type="text"
+                    required
+                    type="email"
                     className="form-control"
                     placeholder="Email"
+                    name="forgetemail"
+                    onChange={handleInput}
+                    value={registerInput.forgetemail}
                   />
                 </div>
               </div>
               <div className="modal-footer">
-                <button onClick={closeModal}>Close</button>
+                <button type="button" onClick={closeModal}>
+                  Close
+                </button>
                 <button type="submit" className="btn bg-purple text-white">
                   Submit
                 </button>

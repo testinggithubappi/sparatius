@@ -13,6 +13,7 @@ import readingsprofileImg from "../../assets/frontend/img/resources/readings-pro
 import UserItem from "../modules/userItem";
 import PaymentModal from "../modules/PaymentModal";
 import PaymentModalViewer from "../modules/PaymentModalViewer";
+import Loadercomp from "../modules/Loadercomp";
 
 import { OTSession, OTPublisher, OTStreams, OTSubscriber } from "opentok-react";
 
@@ -22,6 +23,7 @@ function TarotReaders(props) {
   useEffect(() => {
     getProviderList();
   }, []);
+  const [startloader, setloader] = React.useState("none");
   const [checked, setChecked] = React.useState(false);
   const [linkRender, setlinkRender] = React.useState();
   const [providerList, setproviderList] = React.useState({});
@@ -42,6 +44,7 @@ function TarotReaders(props) {
   });
 
   const getProviderList = async (path = "/api/providers") => {
+    setloader("block");
     let data = {
       slug: props.match.params.slug,
       keyword: registerInput.keyword,
@@ -57,6 +60,7 @@ function TarotReaders(props) {
     try {
       let response = await axios.post(`${path}`, data).then((data) => data);
       response = await response.data.data;
+      setloader("none");
       console.log(response);
       setproviderList(response);
     } catch (error) {
@@ -150,49 +154,61 @@ function TarotReaders(props) {
 
     let role = localStorage.getItem("role");
     console.log("clcikc item", item);
-
+    let path = `/api/payment`;
+    var data = {};
     if (role == "customer") {
+      setloader("block");
       if (item == "text") {
-        let path = `/api/create_chathead`;
-        var data = {
+        data = {
           id: providerdata.id,
           title: "Text Chat",
           msg: "You Have A Text Chat",
           type: "text",
           customerid: localStorage.getItem("user_id"),
+          path: `/chat/${providerdata.id}`,
+          serviceName: item,
+          amount: prices,
+          description: "one Hour Session",
         };
-        await axios.post(path, data).then((data) => data);
-
-        history.push(`/chat/${providerdata.id}`);
+        // history.push(`/chat/${providerdata.id}`);
       }
       if (item == "video") {
-        let path = `/api/create_chathead`;
-        var data = {
+        data = {
           id: providerdata.id,
           title: "Video Chat",
           msg: "You Have A Video Chat",
           type: "video",
           customerid: localStorage.getItem("user_id"),
+          path: `/video-call/${providerdata.id}`,
+          serviceName: item,
+          amount: prices,
+          description: "one Hour Session",
         };
-        await axios.post(path, data).then((data) => data);
 
-        history.push(`/video-call/${providerdata.id}`);
+        // history.push(`/video-call/${providerdata.id}`);
         // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
       }
       if (item == "audio") {
-        let path = `/api/create_chathead`;
-        var data = {
+        data = {
           id: providerdata.id,
           title: "Audio Chat",
           msg: "You Have A Audio Chat",
           type: "audio",
           customerid: localStorage.getItem("user_id"),
+          path: `/audio-call/${providerdata.id}`,
+          serviceName: item,
+          amount: prices,
+          description: "one Hour Session",
         };
-        await axios.post(path, data).then((data) => data);
 
-        history.push(`/audio-call/${providerdata.id}`);
+        // history.push(`/audio-call/${providerdata.id}`);
         // history.push({ pathname: "/video-call", state: "data_you_need_to_pass" });
       }
+
+      let response = await axios.post(path, data).then((data) => data);
+      response = await response.data;
+      setloader("none");
+      window.open(response, "_blank");
     }
 
     try {
@@ -220,6 +236,25 @@ function TarotReaders(props) {
     // });
   };
 
+  const addFavouriteclick = (item) => {
+    setloader("block");
+    const data = {
+      id: item.id,
+    };
+    let role = localStorage.getItem("role");
+    console.log(data);
+    if (role == "customer") {
+      axios.post("/api/add_favorite", data).then((res) => {
+        setloader("none");
+        if (res.data.status == 200) {
+          swal("Success", "Add Favoutite ", "success");
+        } else {
+          swal("Success", res.data.msg, "success");
+        }
+      });
+    }
+  };
+
   console.log("providerListproviderListproviderList", providerList);
   return (
     <div>
@@ -234,6 +269,7 @@ function TarotReaders(props) {
         showmodal={editInput.showmodal}
         closeModal={closeModal}
       />
+      <Loadercomp startloader={startloader} />
       <section className="sec-pad faq-page shop-sidebar sidebar-page">
         <div className="container">
           <div className="row">
@@ -248,8 +284,13 @@ function TarotReaders(props) {
                         type="text"
                         placeholder="type your keyword"
                         value={registerInput.keyword}
+                        onKeyPress={(event) => {
+                          if (event.key === "Enter") {
+                            this.getProviderList();
+                          }
+                        }}
                       />
-                      <button onClick={() => getProviderList()}>
+                      <button type="button" onClick={() => getProviderList()}>
                         <i className="fa fa-search"></i>
                       </button>
                     </form>
@@ -416,7 +457,7 @@ function TarotReaders(props) {
                   </div>
                   <div className="panel panel-default">
                     <button
-                      href="#"
+                      type="button"
                       className="thm-btn uppercase margin-top-2 col-md-6 text-center "
                       onClick={() => getProviderList()}
                     >
@@ -434,6 +475,7 @@ function TarotReaders(props) {
             </div>
             {providerList?.data?.map((item, i) => (
               <UserItem
+                addFavouriteclick={addFavouriteclick}
                 onHandleClickPay={onHandleClickPay}
                 providerList={providerList}
                 key={item.id}
