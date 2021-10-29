@@ -165,22 +165,31 @@ function Favourites(props) {
   };
 
   const addFavouriteclick = (item) => {
-    setloader("block");
-    const data = {
-      id: item.id,
-    };
     let role = localStorage.getItem("role");
-    console.log(data);
     if (role == "customer") {
-      axios.post("/api/add_favorite", data).then((res) => {
-        setloader("none");
-        if (res.data.status == 200) {
-          swal("Success", "Add Favoutite ", "success");
-        } else {
-          swal("Success", res.data.msg, "success");
-        }
-      });
+      setloader("block");
+
+      const data = {
+        id: item.id,
+      };
+      let role = localStorage.getItem("role");
+      console.log(data);
+      if (role == "customer") {
+        axios.post("/api/add_favorite", data).then((res) => {
+          setloader("none");
+          if (res.data.status == 200) {
+            swal("Success", "Add Favoutite ", "success");
+          } else {
+            getFavouriteproviderList();
+            swal("Success", res.data.msg, "success");
+          }
+        });
+      }
     }
+  };
+
+  const removePeople = (e) => {
+    // favouriteproviderList
   };
 
   console.log(favouriteproviderList);
