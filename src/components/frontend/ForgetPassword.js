@@ -6,6 +6,7 @@ import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
 
 function ForgetPassword(props) {
+  const history = useHistory();
   const [registerInput, setRegister] = useState({
     email: "",
     password: "",
@@ -21,9 +22,9 @@ function ForgetPassword(props) {
     e.preventDefault();
 
     const data = {
-      key: registerInput.keylink,
+      code: registerInput.keylink,
       password: registerInput.password,
-      confirmpassword: registerInput.confirmpassword,
+      password_confirmation: registerInput.confirmpassword,
     };
     if (registerInput.password) {
       if (registerInput.password != registerInput.confirmpassword) {
@@ -33,8 +34,11 @@ function ForgetPassword(props) {
         axios.post("/api/changePassword", data).then((res) => {
           console.log(res);
           if (res.data.status == 200) {
+            swal("Success", res.data.msg, "success");
+
+            history.push(`/login`);
           } else {
-            swal("warning", "Invalid Change Password Link", "warning");
+            swal("warning", res.data.msg, "warning");
           }
         });
       }

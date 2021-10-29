@@ -7,9 +7,11 @@ import Footer from "../../layouts/frontend/Footer";
 import fire from "../../config/firebase";
 import { getDatabase, set, ref } from "firebase/database";
 import * as firebase from "@firebase/app";
+import Loadercomp from "../modules/Loadercomp";
 
 function Register(props) {
   const history = useHistory();
+  const [startloader, setloader] = React.useState("none");
   const [selectedOption, setSelectedOption] = useState({ value: "" });
 
   const [registerInput, setRegister] = useState({
@@ -43,7 +45,7 @@ function Register(props) {
 
   const registerSubmit = (e) => {
     e.preventDefault();
-
+    setloader("block");
     const data = {
       firstname: registerInput.firstname,
       lastname: registerInput.lastname,
@@ -55,6 +57,7 @@ function Register(props) {
     };
     console.log(data);
     axios.post("/api/register", data).then((res) => {
+      setloader("none");
       if (res.data.status == 200) {
         localStorage.setItem("auth_token", res.data.token);
         localStorage.setItem("auth_name", res.data.name);
@@ -74,6 +77,7 @@ function Register(props) {
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="hidden-sidebar collapse" id="sidebarCollapse">
         <button
           className="close-button"

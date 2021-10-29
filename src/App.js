@@ -40,6 +40,7 @@ import OrderList from "./components/frontend/OrderList";
 import EcourseDetail from "./components/frontend/EcourseDetail";
 import Rating from "./components/frontend/Rating";
 import ForgetPassword from "./components/frontend/ForgetPassword";
+import EcourseGet from "./components/frontend/EcourseGet";
 
 // import Login from "./layouts/frontend/Login";
 // import Register from "./layouts/frontend/Register";
@@ -165,6 +166,12 @@ class App extends Component {
               name="ForgetPassword"
               component={ForgetPassword}
             />
+            <PublicRoute
+              restricted={false}
+              path="/e-course/:id"
+              name="EcourseGet"
+              component={EcourseGet}
+            />
 
             <Route path="/login">
               <Login />
@@ -271,7 +278,7 @@ class App extends Component {
               }}
             />
 
-            <Redirect to="/home" />
+            {/* <Redirect to="/home" /> */}
 
             {/* <Route path="/login" name="Login" component={Login} />
             <Route path="/register" name="Register" component={Register} /> */}

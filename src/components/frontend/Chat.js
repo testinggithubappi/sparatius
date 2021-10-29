@@ -6,8 +6,7 @@ import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
 import ChatInner from "../modules/ChatInner";
 import { API_KEY } from "../../config";
-import Loader from "react-loader-spinner";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loadercomp from "../modules/Loadercomp";
 
 function Chat(props) {
   const [onProviderSessionline, setProviderSession] = React.useState({
@@ -15,7 +14,7 @@ function Chat(props) {
     sessionId: "",
     token: "",
   });
-
+  const [startloader, setloader] = React.useState("none");
   const [chatHeadList, setchatHeadList] = React.useState([]);
 
   useEffect(async () => {
@@ -25,6 +24,7 @@ function Chat(props) {
 
   const getProviderSession = async () => {
     try {
+      setloader("block");
       let path = `/api/getChatSession`;
       var data = {
         id: props.match.params.id,
@@ -38,6 +38,7 @@ function Chat(props) {
       let response = await axios.post(path, data).then((data) => data);
       response = await response.data.data;
       console.log(response);
+      setloader("none");
       setProviderSession({
         ...onProviderSessionline,
         ProviderData: response,
@@ -65,6 +66,7 @@ function Chat(props) {
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="inner-banner has-dot-pattern text-center">
         <div className="container sec-title">
           <h2>Chat</h2>
@@ -87,13 +89,7 @@ function Chat(props) {
             token={onProviderSessionline.token}
           />
         ) : (
-          <Loader
-            type="Puff"
-            color="#00BFFF"
-            height={100}
-            width={200}
-            timeout={3000} //3 secs
-          />
+          ""
         )}
       </div>
       <Footer />

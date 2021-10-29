@@ -17,7 +17,9 @@ function OrderList(props) {
 
   const getOrderLIst = async (path = `/api/order_history`) => {
     let response = await axios.get(`${path}`).then((data) => data);
-    response = await response.data.data;
+    response = await response.data.history;
+
+    console.log("response Order list", response);
     SetOrderList(response);
   };
 
@@ -42,22 +44,36 @@ function OrderList(props) {
             <div className="col-md-8 left-side">
               {OrderList?.data?.map((item) => (
                 <div className="col-md-12 bg-white margin-top-1">
-                  <h4 className="font-weight-bold">Order # 1235</h4>
-                  <p>28 Sept 2021, 08:42 PM</p>
+                  <h4 className="font-weight-bold">Order # {item.book_id}</h4>
+                  <p>{item.book_date}</p>
                   <div className="col-md-3 margin-top-2">
                     <img src={colImg2} className="img-responsive" />
                   </div>
                   <div className="col-md-6">
-                    <h2 className="font-weight-bold">Psychic Readers</h2>
+                    <h2 className="font-weight-bold">
+                      {item.provider_name
+                        ? item.provider_name
+                        : item.eclass_name}{" "}
+                      &nbsp; (
+                      {item.service_name ? item.service_name : "E Class"})
+                    </h2>
                     <small>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing
+                      {item.service_description ? (
+                        item.service_description
+                      ) : (
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: item.e_class_description,
+                          }}
+                        />
+                      )}
                     </small>
-                    <p className="font-weight-bold">$10.00</p>
+                    <p className="font-weight-bold">${item.total_price}</p>
                   </div>
 
                   <div className="col-md-3 margin-top-2">
                     <a href="#">
-                      <button className="thm-btn">Reoder</button>
+                      {/* <button className="thm-btn">Reoder</button> */}
                     </a>
                   </div>
                 </div>

@@ -9,13 +9,14 @@ import fire from "../../config/firebase";
 import { Link, useHistory } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 import ReactPlayer from "react-player";
-
+import Loadercomp from "../modules/Loadercomp";
 import Modal from "./Modal";
 
 function UserItem(props) {
   console.log("USER ITEM Render");
   const [online, setOnline] = React.useState(false);
   const [ModalVideo, setModalVideo] = React.useState({});
+  const [startloader, setloader] = React.useState("none");
 
   useEffect(() => {
     var providerdata = props.providerList?.data[props.index];
@@ -72,23 +73,6 @@ function UserItem(props) {
             </button>
           </li>
         );
-      });
-    }
-  };
-
-  const addFavouriteclick = (item) => {
-    const data = {
-      id: item.id,
-    };
-    let role = localStorage.getItem("role");
-    console.log(data);
-    if (role == "customer") {
-      axios.post("/api/add_favorite", data).then((res) => {
-        if (res.data.status == 200) {
-          swal("Success", "Add Favoutite ", "success");
-        } else {
-          swal("Success", res.data.msg, "success");
-        }
       });
     }
   };
@@ -165,7 +149,7 @@ function UserItem(props) {
           <div className="readingsContainer">
             <ul>
               <li>
-                10,376
+                {item.readings}
                 <p>Readings</p>
               </li>
               <li>
@@ -175,7 +159,7 @@ function UserItem(props) {
               <li>
                 <i
                   onClick={() => {
-                    addFavouriteclick(item);
+                    props.addFavouriteclick(item);
                   }}
                   className="fa fa-heart"
                   aria-hidden="true"
@@ -183,7 +167,7 @@ function UserItem(props) {
                 <p>
                   <button
                     onClick={() => {
-                      addFavouriteclick(item);
+                      props.addFavouriteclick(item);
                     }}
                   >
                     Favorite

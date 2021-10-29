@@ -8,17 +8,19 @@ import StarRatings from "react-star-ratings";
 
 import shaperatingImg from "../../assets/frontend/img/resources/shape-rating.png";
 import readingsprofileImg from "../../assets/frontend/img/resources/readings-profile-img.jpg";
-
+import Loadercomp from "../modules/Loadercomp";
 function Eclassess(props) {
+  const [startloader, setloader] = React.useState("none");
   const [getElassessList, setElassessList] = React.useState([]);
   useEffect(() => {
     getEClassessList();
   }, []);
   const getEClassessList = async (path = "/api/e_classes") => {
     // $data = {};
-
+    setloader("block");
     let response = await axios.post(`${path}`).then((data) => data);
     response = await response.data.data;
+    setloader("none");
     setElassessList(response);
   };
 
@@ -30,6 +32,7 @@ function Eclassess(props) {
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="inner-banner has-dot-pattern text-center">
         <div className="container sec-title">
           <h2>E-Classes</h2>

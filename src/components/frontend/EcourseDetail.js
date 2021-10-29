@@ -9,9 +9,11 @@ import PaymentModal from "../modules/PaymentModal";
 import StarRatings from "react-star-ratings";
 import { saveAs } from "file-saver";
 import fileDownload from "js-file-download";
+import Loadercomp from "../modules/Loadercomp";
 
 function EcourseDetail(props) {
   const history = useHistory();
+  const [startloader, setloader] = React.useState("none");
   const [RatingData, setRatingData] = useState({
     description: "",
   });
@@ -28,10 +30,12 @@ function EcourseDetail(props) {
 
   const getEclassDetail = async () => {
     try {
+      setloader("block");
       let path = `/api/e_class_detail/` + props.match.params.id;
       let response = await axios.get(path).then((data) => data);
       response = await response.data.data;
       console.log(response);
+      setloader("none");
       setEclassDetail(response);
     } catch (error) {
       console.log("error", error);
@@ -56,21 +60,27 @@ function EcourseDetail(props) {
   const downloadFileData = async (item) => {
     try {
       console.log(item);
+      setloader("block");
       var data = {
-        id: item.id,
+        eclassId: item.id,
+        serviceName: "eclass",
+        amount: item.Price,
+        description: "Session Download",
       };
       let response = await axios
-        .post(`/api/download_file`, data)
+        .post(`/api/payment`, data)
         .then((data) => data);
-      response = await response.data;
-      console.log(response);
 
-      if (response.status) {
-        var fileurl = response.path;
-        saveAs(fileurl, response.name);
-      } else {
-        swal("warning", "Course Not Uploaded", "warning");
-      }
+      response = await response.data;
+      setloader("none");
+      window.open(response, "_blank");
+
+      // if (response.status) {
+      //   var fileurl = response.path;
+      //   saveAs(fileurl, response.name);
+      // } else {
+      //   swal("warning", "Course Not Uploaded", "warning");
+      // }
     } catch (error) {
       console.log("error", error);
     }
@@ -115,6 +125,7 @@ function EcourseDetail(props) {
         className="inner-banner has-dot-pattern sec-title text-center"
         style={{ paddingBottom: "0px" }}
       >
+        <Loadercomp startloader={startloader} />
         {/* <PaymentModal showmodal={editInput.showmodal} closeModal={closeModal} /> */}
         <div className="container">
           <div className="row">
