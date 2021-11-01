@@ -4,8 +4,10 @@ import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
+import Loadercomp from "../modules/Loadercomp";
 
 function InviteFriends(props) {
+  const [startloader, setloader] = React.useState("none");
   const [inviteInput, setInviteinput] = useState({
     email: "",
   });
@@ -17,7 +19,7 @@ function InviteFriends(props) {
 
   const registerSubmit = (e) => {
     e.preventDefault();
-
+    setloader("block");
     const data = {
       email: inviteInput.email,
     };
@@ -32,11 +34,13 @@ function InviteFriends(props) {
       } else {
         swal("Error", res.data.msg, "error");
       }
+      setloader("none");
     });
   };
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="inner-banner has-dot-pattern sec-title text-center">
         <div className="container">
           <h2>Invite Friends</h2>
@@ -56,12 +60,13 @@ function InviteFriends(props) {
               <form action="#" onSubmit={registerSubmit}>
                 <div className="form-grp">
                   <input
-                    type="text"
+                    type="email"
                     className="form-control"
                     placeholder="Enter Email"
                     name="email"
                     onChange={handleInput}
                     value={inviteInput.email}
+                    required
                   />
                   <i className="fa fa-envelope-o"></i>
                 </div>

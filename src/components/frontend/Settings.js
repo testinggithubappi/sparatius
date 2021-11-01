@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
+import Loadercomp from "../modules/Loadercomp";
 
 function Settings(props) {
   useEffect(() => {
     getEditProfile();
   }, []);
+  const [startloader, setloader] = React.useState("none");
   const [editInput, setEditInput] = useState({
     email: "",
     password: "",
@@ -18,8 +20,10 @@ function Settings(props) {
     showmodal: false,
   });
   const getEditProfile = async () => {
+    setloader("block");
     let response = await axios.get(`/api/user_profile`).then((data) => data);
     response = await response.data.data;
+    setloader("none");
     setEditInput({
       email: response.email,
       id: response.id,
@@ -55,6 +59,7 @@ function Settings(props) {
       if (editInput.password != editInput.confirmPassword) {
         swal("Error", "Confirm Password Not Match", "error");
       } else {
+        setloader("block");
         axios.post("/api/update_password", data).then((res) => {
           if (res.data.status == 200) {
             swal("Success", "Successfully Changed Password", "success");
@@ -64,6 +69,7 @@ function Settings(props) {
           } else {
             swal("Error", res.data.msg, "error");
           }
+          setloader("none");
         });
       }
     }
@@ -73,6 +79,7 @@ function Settings(props) {
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="inner-banner has-dot-pattern text-center">
         <div className="container sec-title">
           <h2>Settings</h2>

@@ -98,7 +98,7 @@ function EcourseDetail(props) {
 
   const submitProfile = (e) => {
     e.preventDefault();
-
+    setloader("block");
     const data = {
       description: RatingData.description,
       rating: Ratingval,
@@ -112,9 +112,11 @@ function EcourseDetail(props) {
     axios.post("/api/rating", data).then((res) => {
       if (res.data.status == 200) {
         swal("Success", "Review Save Succesfully", "success");
+        getEclassDetail();
         // history.push(`/home`);
       } else {
       }
+      setloader("none");
     });
   };
 

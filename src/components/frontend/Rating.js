@@ -5,12 +5,14 @@ import axios from "axios";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
+import Loadercomp from "../modules/Loadercomp";
 
 function Rating(props) {
   const history = useHistory();
   const [RatingData, setRatingData] = useState({
     description: "",
   });
+  const [startloader, setloader] = React.useState("none");
   const [Ratingval, setRatingval] = useState(0);
 
   const handleInput = (e) => {
@@ -25,6 +27,7 @@ function Rating(props) {
 
   const submitProfile = (e) => {
     e.preventDefault();
+    setloader("block");
     var Ratingobj = JSON.parse(localStorage.getItem("RatingData"));
     const data = {
       description: RatingData.description,
@@ -45,12 +48,14 @@ function Rating(props) {
         localStorage.removeItem("RatingData");
       } else {
       }
+      setloader("none");
     });
   };
 
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="inner-banner has-dot-pattern text-center">
         <div className="container sec-title">
           <h2>Review And Rating</h2>

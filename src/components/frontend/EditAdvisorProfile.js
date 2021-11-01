@@ -11,6 +11,7 @@ import range from "lodash/range";
 import "react-datepicker/dist/react-datepicker.css";
 import VideoThumbnail from "react-video-thumbnail";
 import moment from "moment";
+import Loadercomp from "../modules/Loadercomp";
 import {
   getCountrytList,
   getStatetList,
@@ -19,6 +20,7 @@ import {
 
 function EditAdvisorProfile(props) {
   const history = useHistory();
+  const [startloader, setloader] = React.useState("none");
   const [CountryList, setCountryList] = useState([]);
   const [selectedFile, setSelectedFile] = useState();
   // const [isFilePicked, setIsFilePicked] = useState(false);
@@ -80,6 +82,7 @@ function EditAdvisorProfile(props) {
   // }, [registerInput.stateList]);
 
   const getEditProfile = async () => {
+    setloader("block");
     let response = await axios.post(`/api/profile_data`).then((data) => data);
     let responsedata = response.data.profile;
     console.log("responsedataresponsedataresponsedata", response);
@@ -115,6 +118,7 @@ function EditAdvisorProfile(props) {
 
     setdefaultserviceOption(response?.data?.services2);
     setStartDate(new Date(responsedata?.joinedDate));
+    setloader("none");
   };
 
   const changeHandler = (event) => {
@@ -124,6 +128,7 @@ function EditAdvisorProfile(props) {
   const handleSubmitVideos = (event) => {
     event.preventDefault();
     if (selectedFile) {
+      setloader("block");
       let formData = new FormData();
       formData.append("file", selectedFile);
       axios
@@ -138,6 +143,7 @@ function EditAdvisorProfile(props) {
             swal("Success", res.data.msg, "success");
           } else {
           }
+          setloader("none");
         });
     } else {
       swal("Error", "Please Must  Select Video", "error");
@@ -193,6 +199,7 @@ function EditAdvisorProfile(props) {
 
   const aboutSubmit = (e) => {
     e.preventDefault();
+    setloader("block");
     const data = {
       profileAbout: registerInput.profileAbout,
     };
@@ -206,12 +213,13 @@ function EditAdvisorProfile(props) {
         //   error_list: res.data.validation_erros,
         // });
       }
+      setloader("none");
     });
   };
 
   const personalDetailSubmit = (e) => {
     e.preventDefault();
-
+    setloader("block");
     const data = {
       firstname: registerInput.firstname,
       lastname: registerInput.lastname,
@@ -241,10 +249,12 @@ function EditAdvisorProfile(props) {
           error_list: res.data.msg,
         });
       }
+      setloader("none");
     });
   };
   const serviceSelectSubmit = (e) => {
     e.preventDefault();
+    setloader("block");
     console.log("registerInput.selectService", registerInput.selectService);
     // return;
     axios
@@ -258,6 +268,7 @@ function EditAdvisorProfile(props) {
           swal("Success", res.data.msg, "success");
           // history.push("/home");
         }
+        setloader("none");
       });
   };
 
@@ -317,6 +328,7 @@ function EditAdvisorProfile(props) {
   return (
     <div>
       <Navbar parentCallback={handleCallback} />
+      <Loadercomp startloader={startloader} />
       <section className="inner-banner has-dot-pattern sec-title text-center">
         <div className="container">
           <h2>Edit Advisor Profile</h2>

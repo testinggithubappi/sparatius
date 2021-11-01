@@ -6400,3 +6400,31 @@ input[type="number"] {
   font-size: 37px;
   font-weight: bold;
 }
+.single-sidebar .search-widget .search-widget-div input {
+  float: left;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  height: 100%;
+  width: 70%;
+  padding-left: 15px;
+}
+.single-sidebar .search-widget .search-widget-div {
+  width: 100%;
+  max-width: 430px;
+  height: 50px;
+  border: 1px solid #e6e9f4;
+  background: #fff;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}
+.single-sidebar .search-widget .search-widget-div button {
+  float: right;
+  width: 50px;
+  height: 50px;
+  background: #262f3b;
+  color: #fff;
+  border: none;
+  outline: none;
+}

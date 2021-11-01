@@ -5,20 +5,23 @@ import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
 import psychicReadingImg from "../../assets/frontend/img/services/psychic-readings-detail-1.jpg";
+import Loadercomp from "../modules/Loadercomp";
 
 function EditProfile(props) {
   useEffect(() => {
     getEditCustomerProfile();
   }, []);
+  const [startloader, setloader] = React.useState("none");
   const [profileData, setProfileData] = useState({
     firstname: "",
     lastname: "",
     contactno: "",
   });
   const getEditCustomerProfile = async () => {
+    setloader("block");
     let response = await axios.get(`/api/user_profile`).then((data) => data);
     let responsedata = response.data.data;
-
+    setloader("none");
     setProfileData({
       ...profileData,
       firstname: responsedata?.firstName,
@@ -29,6 +32,7 @@ function EditProfile(props) {
 
   const submitProfile = (e) => {
     e.preventDefault();
+    setloader("block");
     const data = {
       firstName: profileData.firstname,
       LastName: profileData.lastname,
@@ -40,6 +44,7 @@ function EditProfile(props) {
         // history.push("/home");
       } else {
       }
+      setloader("none");
     });
   };
 
@@ -50,6 +55,7 @@ function EditProfile(props) {
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section
         className="inner-banner has-dot-pattern sec-title text-center"
         style={{ paddingBottom: "0px" }}

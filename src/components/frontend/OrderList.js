@@ -8,18 +8,22 @@ import Footer from "../../layouts/frontend/Footer";
 import colImg1 from "../../assets/frontend/img/services/col-img-1.jpg";
 import colImg2 from "../../assets/frontend/img/services/col-img-2.jpg";
 
+import Loadercomp from "../modules/Loadercomp";
+
 function OrderList(props) {
   useEffect(() => {
     getOrderLIst();
   }, []);
-
+  const [startloader, setloader] = React.useState("none");
   const [OrderList, SetOrderList] = useState([]);
 
   const getOrderLIst = async (path = `/api/order_history`) => {
+    setloader("block");
     let response = await axios.get(`${path}`).then((data) => data);
     response = await response.data.history;
 
     console.log("response Order list", response);
+    setloader("none");
     SetOrderList(response);
   };
 
@@ -31,6 +35,7 @@ function OrderList(props) {
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="inner-banner has-dot-pattern text-center">
         <div className="container sec-title">
           <h2>Order List</h2>

@@ -4,8 +4,10 @@ import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
+import Loadercomp from "../modules/Loadercomp";
 
 function ContactUs(props) {
+  const [startloader, setloader] = React.useState("none");
   const [contactInput, setContactInput] = useState({
     name: "",
     email: "",
@@ -21,7 +23,7 @@ function ContactUs(props) {
 
   const registerSubmit = (e) => {
     e.preventDefault();
-
+    setloader("block");
     const data = {
       name: contactInput.name,
       email: contactInput.email,
@@ -30,6 +32,7 @@ function ContactUs(props) {
     };
     console.log(data);
     axios.post("/api/contact_us", data).then((res) => {
+      setloader("none");
       if (res.status == 200) {
         swal("Success", "Contact Send Successfully", "success");
         setContactInput({
@@ -50,6 +53,7 @@ function ContactUs(props) {
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="inner-banner has-dot-pattern text-center">
         <div className="container sec-title">
           <h2>Contact Us</h2>

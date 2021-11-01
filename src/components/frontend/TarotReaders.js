@@ -280,7 +280,8 @@ function TarotReaders(props) {
               <div className="left-side">
                 <div className="single-sidebar">
                   <div className="search-widget">
-                    <form action="#">
+                   
+                    <div className="search-widget-div">
                       <input
                         name="keyword"
                         onChange={handleInput}
@@ -289,14 +290,15 @@ function TarotReaders(props) {
                         value={registerInput.keyword}
                         onKeyPress={(event) => {
                           if (event.key === "Enter") {
-                            this.getProviderList();
+                            getProviderList();
                           }
                         }}
                       />
                       <button type="button" onClick={() => getProviderList()}>
                         <i className="fa fa-search"></i>
                       </button>
-                    </form>
+                    </div>
+                  
                   </div>
                 </div>
 

@@ -4,25 +4,29 @@ import { Link, useHistory } from "react-router-dom";
 import swal from "sweetalert";
 import Navbar from "../../layouts/frontend/Navbar";
 import Footer from "../../layouts/frontend/Footer";
+import Loadercomp from "../modules/Loadercomp";
 
 function PrivacyPolicy(props) {
   useEffect(() => {
     getPrivacyPolicydata();
   }, []);
-
+  const [startloader, setloader] = React.useState("none");
   const [getPrivacyPolicy, setPrivacyPolicy] = React.useState([]);
 
   const getPrivacyPolicydata = async () => {
+    setloader("block");
     let response = await axios
       .get(`/api/getprivacypolicy`)
       .then((data) => data);
     response = await response.data.data.value;
     console.log(response);
+    setloader("none");
     setPrivacyPolicy(response);
   };
   return (
     <div>
       <Navbar />
+      <Loadercomp startloader={startloader} />
       <section className="inner-banner has-dot-pattern text-center">
         <div className="container sec-title">
           <h2>Privacy Policy</h2>
